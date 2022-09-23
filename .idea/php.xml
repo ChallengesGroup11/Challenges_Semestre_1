@@ -117,6 +117,11 @@
       <path value="$PROJECT_DIR$/api/vendor/fakerphp/faker" />
       <path value="$PROJECT_DIR$/api/vendor/doctrine/doctrine-fixtures-bundle" />
       <path value="$PROJECT_DIR$/api/vendor/doctrine/data-fixtures" />
+      <path value="$PROJECT_DIR$/api/vendor/namshi/jose" />
+      <path value="$PROJECT_DIR$/api/vendor/lexik/jwt-authentication-bundle" />
+      <path value="$PROJECT_DIR$/api/vendor/gedmo/doctrine-extensions" />
+      <path value="$PROJECT_DIR$/api/vendor/stof/doctrine-extensions-bundle" />
+      <path value="$PROJECT_DIR$/api/vendor/behat/transliterator" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1" />

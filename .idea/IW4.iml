@@ -121,6 +121,9 @@
       <excludeFolder url="file://$MODULE_DIR$/api/vendor/fakerphp/faker" />
       <excludeFolder url="file://$MODULE_DIR$/api/vendor/doctrine/doctrine-fixtures-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/api/vendor/doctrine/data-fixtures" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/gedmo/doctrine-extensions" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/stof/doctrine-extensions-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/behat/transliterator" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

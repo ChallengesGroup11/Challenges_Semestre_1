@@ -12,7 +12,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation\Blameable;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Unique;
 
 #[ApiResource()]
 #[Get(
@@ -23,12 +28,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 #[Post(
     denormalizationContext: ['groups' => ['pizza_write']],
-    normalizationContext: ['groups' => ['pizza_get']]
+    normalizationContext: ['groups' => ['pizza_get']],
+    security: 'is_granted("ROLE_DIRECTOR")'
 )]
 #[Patch(
-    denormalizationContext: ['groups' => ['pizza_write']]
+    denormalizationContext: ['groups' => ['pizza_write']],
+    security: 'is_granted("ROLE_ADMIN") or object.getOwner() == user'
 )]
 #[ORM\Entity(repositoryClass: PizzaRepository::class)]
+#[UniqueEntity('name', message: 'Le nom de pizza {{ value }} existe déjà.')]
 class Pizza
 {
     #[ORM\Id]
@@ -38,6 +46,8 @@ class Pizza
 
     #[ORM\Column(length: 255)]
     #[Groups(['pizza_get', 'pizza_cget', 'pizza_write'])]
+    #[NotBlank]
+    #[Length(min: 5, max: 50)]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -50,6 +60,10 @@ class Pizza
 
     #[ORM\OneToMany(mappedBy: 'pizza', targetEntity: Detail::class)]
     private Collection $details;
+
+    #[ORM\ManyToOne]
+    #[Blameable(on: 'create')]
+    private ?User $owner = null;
 
     public function __construct()
     {
@@ -136,6 +150,18 @@ class Pizza
                 $detail->setPizza(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
 
         return $this;
     }
