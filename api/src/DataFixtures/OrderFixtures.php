@@ -20,7 +20,9 @@ class OrderFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < 10; $i++) {
             $object = (new Order())
                 ->setDatetime($faker->dateTime())
-                ->setCustomer($faker->randomElement($customers));
+                ->setCustomer($faker->randomElement($customers))
+                ->setTotal(0)
+            ;
 
             $manager->persist($object);
         }

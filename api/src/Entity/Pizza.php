@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Odm\Filter\OrderFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -35,6 +38,8 @@ use Symfony\Component\Validator\Constraints\Unique;
     denormalizationContext: ['groups' => ['pizza_write']],
     security: 'is_granted("ROLE_ADMIN") or object.getOwner() == user'
 )]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'name' => 'partial', 'description' => 'partial'])]
+#[ApiFilter(OrderFilter::class, properties: ['name'], arguments: ['orderParameterName' => 'order'])]
 #[ORM\Entity(repositoryClass: PizzaRepository::class)]
 #[UniqueEntity('name', message: 'Le nom de pizza {{ value }} existe déjà.')]
 class Pizza

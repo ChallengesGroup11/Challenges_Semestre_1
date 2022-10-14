@@ -19,7 +19,7 @@ class DetailFixtures extends Fixture implements DependentFixtureInterface
         $pizzas = $manager->getRepository(Pizza::class)->findAll();
         $orders = $manager->getRepository(Order::class)->findAll();
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 200; $i++) {
             $object = (new Detail())
                 ->setOrderDelivery($faker->randomElement($orders))
                 ->setPizza($faker->randomElement($pizzas))

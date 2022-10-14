@@ -3,15 +3,18 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource]
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
+#[Post(denormalizationContext: ['groups' => ['order_post']])]
 class Order
 {
     #[ORM\Id]
@@ -20,13 +23,19 @@ class Order
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups('order_post')]
     private ?\DateTimeInterface $datetime = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
+    #[Groups('order_post')]
     private ?Customer $customer = null;
 
-    #[ORM\OneToMany(mappedBy: 'orderDelivery', targetEntity: Detail::class)]
+    #[ORM\OneToMany(mappedBy: 'orderDelivery', targetEntity: Detail::class, cascade: ['persist', 'remove'])]
+    #[Groups('order_post')]
     private Collection $details;
+
+    #[ORM\Column(options: ['default' => '0'])]
+    private ?float $total = null;
 
     public function __construct()
     {
@@ -88,6 +97,18 @@ class Order
                 $detail->setOrderDelivery(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTotal(): ?float
+    {
+        return $this->total;
+    }
+
+    public function setTotal(float $total): self
+    {
+        $this->total = $total;
 
         return $this;
     }
