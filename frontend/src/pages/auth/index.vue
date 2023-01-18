@@ -1,29 +1,28 @@
 <script setup lang="ts">
+import AuthSigninComp from '~/components/AuthSigninComp.vue'
+import AuthSignupStudentComp from '~/components/AuthSignupStudentComp.vue'
+
 const router = useRouter()
-const enum SignupOrLogin {
+
+enum EnumTab {
+  SCHOOL_DRIVING = 'school-driving',
+  STUDENT = 'student',
+}
+
+const enum EnumSignupOrLogin {
   SIGNUP = 'signup',
   LOGIN = 'login',
 }
+
 const state = reactive({
-  form: {
-    email: '',
-    password: '',
-    passwordSecond: '',
-  },
-  signupOrLogin: SignupOrLogin.LOGIN as SignupOrLogin,
+  signupOrLogin: EnumSignupOrLogin.LOGIN as EnumSignupOrLogin,
+  currentTab: EnumTab.STUDENT as EnumTab,
 })
 
 const fn = {
-  onClickSignup() {
-    state.signupOrLogin = state.signupOrLogin === SignupOrLogin.SIGNUP ? SignupOrLogin.LOGIN : SignupOrLogin.SIGNUP
-  },
-  createAccount() {
-    console.log('createAccount')
-  },
-
-  login() {
-    console.log('login')
-    router.push('/dashboard')
+  changeToSignupOrLogin() {
+    state.signupOrLogin =
+      state.signupOrLogin === EnumSignupOrLogin.LOGIN ? EnumSignupOrLogin.SIGNUP : EnumSignupOrLogin.LOGIN
   },
 }
 </script>
@@ -36,49 +35,39 @@ const fn = {
           <h2 class="text-h5 text-white q-my-md">DRIVING SHCOOL</h2>
         </div>
         <div class="row">
-          <q-tabs v-model="tab" inline-label class="bg-purple text-white shadow-2">
-            <q-tab name="mails" icon="mail" label="Mails" />
-            <q-tab name="alarms" icon="alarm" label="Alarms" />
-            <q-tab name="movies" icon="movie" label="Movies" />
-          </q-tabs>
           <q-card square bordered class="q-pa-lg shadow-1">
-            <h2 v-if="state.signupOrLogin === SignupOrLogin.LOGIN">Connection</h2>
-            <h2 v-if="state.signupOrLogin === SignupOrLogin.SIGNUP">Création de compte</h2>
-            <q-card-section>
-              <q-form class="q-gutter-md">
-                <q-input v-model="state.form.email" square filled clearable type="email" label="email" />
-                <q-input v-model="state.form.password" square filled clearable type="password" label="password" />
-                <q-input
-                  v-if="state.signupOrLogin === SignupOrLogin.SIGNUP"
-                  v-model="state.form.passwordSecond"
-                  square
-                  filled
-                  clearable
-                  type="password"
-                  label="Confirmer le mot de passe"
-                />
-              </q-form>
-            </q-card-section>
-            <q-card-actions class="q-px-md">
-              <q-btn
-                v-if="state.signupOrLogin === SignupOrLogin.LOGIN"
-                unelevated
-                color="light-green-7"
-                size="lg"
-                class="full-width"
-                label="Se connecter"
-              />
-              <q-btn
-                v-if="state.signupOrLogin === SignupOrLogin.SIGNUP"
-                unelevated
-                color="light-green-7"
-                size="lg"
-                class="full-width"
-                label="Créer un compte"
-              />
-            </q-card-actions>
+            <h2>Vous êtes ?</h2>
+            <q-tabs v-model="state.currentTab" inline-label class="bg-purple text-white shadow-2">
+              <q-tab :name="EnumTab.STUDENT" label="Eleve" />
+              <q-tab :name="EnumTab.SCHOOL_DRIVING" label="Gérant d'auto-école" />
+            </q-tabs>
+            <template v-if="state.signupOrLogin === EnumSignupOrLogin.LOGIN">
+              <h2>Se connecter en tant que {{ state.currentTab === EnumTab.SCHOOL_DRIVING ? 'Gérant' : 'Eleve' }}</h2>
+              <AuthSigninComp />
+            </template>
+            <template v-if="state.signupOrLogin === EnumSignupOrLogin.SIGNUP">
+              <h2>
+                Créer un compte en tant que
+                {{ state.currentTab === EnumTab.SCHOOL_DRIVING ? 'Gérant' : 'Eleve' }}
+              </h2>
+              <AuthSignupDirectorComp v-if="state.currentTab === EnumTab.SCHOOL_DRIVING" />
+              <AuthSignupStudentComp v-if="state.currentTab === EnumTab.STUDENT" />
+            </template>
             <q-card-section class="text-center q-pa-none">
-              <p class="text-grey-6 hover:bg-black" @click="fn.onClickSignup">Pas de compte ? Créez en un.</p>
+              <p
+                v-if="state.signupOrLogin === EnumSignupOrLogin.LOGIN"
+                @click="fn.changeToSignupOrLogin"
+                class="text-grey-6"
+              >
+                Pas encore de compte ? En créer un.
+              </p>
+              <p
+                v-else-if="state.signupOrLogin === EnumSignupOrLogin.SIGNUP"
+                @click="fn.changeToSignupOrLogin"
+                class="text-grey-6"
+              >
+                Se connecter à son compte.
+              </p>
             </q-card-section>
           </q-card>
         </div>
