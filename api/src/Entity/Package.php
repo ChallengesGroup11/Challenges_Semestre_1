@@ -3,11 +3,19 @@
 namespace App\Entity;
 
 use App\Repository\PackageRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Traits\Timer;
+use ApiPlatform\Metadata\ApiResource;
+
 
 #[ORM\Entity(repositoryClass: PackageRepository::class)]
+#[ApiResource]
 class Package
 {
+    use Timer;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
@@ -24,6 +32,14 @@ class Package
 
     #[ORM\Column]
     private ?float $price = null;
+
+    #[ORM\OneToMany(mappedBy: 'packageId', targetEntity: Payment::class)]
+    private Collection $payments;
+
+    public function __construct()
+    {
+        $this->payments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -74,6 +90,36 @@ class Package
     public function setPrice(float $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Payment>
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function addPayment(Payment $payment): self
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments[] = $payment;
+            $payment->setPackageId($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayment(Payment $payment): self
+    {
+        if ($this->payments->removeElement($payment)) {
+            // set the owning side to null (unless already changed)
+            if ($payment->getPackageId() === $this) {
+                $payment->setPackageId(null);
+            }
+        }
 
         return $this;
     }

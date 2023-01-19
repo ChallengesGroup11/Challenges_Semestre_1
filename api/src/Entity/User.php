@@ -5,7 +5,10 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Patch;
 use App\Controller\ResetPasswordController;
+use App\Entity\Traits\Timer;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -21,6 +24,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+
+    use Timer;
+
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
@@ -43,6 +50,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private ?bool $status = null;
+
+    #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'])]
+    private ?Student $student = null;
+
+    #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'])]
+    private ?Director $director = null;
+
+    #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'])]
+    private ?Monitor $monitor = null;
+
+    #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Payment::class)]
+    private Collection $payments;
+
+    public function __construct()
+    {
+        $this->payments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -134,6 +158,87 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setStatus(bool $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getStudent(): ?Student
+    {
+        return $this->student;
+    }
+
+    public function setStudent(Student $student): self
+    {
+        // set the owning side of the relation if necessary
+        if ($student->getUserId() !== $this) {
+            $student->setUserId($this);
+        }
+
+        $this->student = $student;
+
+        return $this;
+    }
+
+    public function getDirector(): ?Director
+    {
+        return $this->director;
+    }
+
+    public function setDirector(Director $director): self
+    {
+        // set the owning side of the relation if necessary
+        if ($director->getUserId() !== $this) {
+            $director->setUserId($this);
+        }
+
+        $this->director = $director;
+
+        return $this;
+    }
+
+    public function getMonitor(): ?Monitor
+    {
+        return $this->monitor;
+    }
+
+    public function setMonitor(Monitor $monitor): self
+    {
+        // set the owning side of the relation if necessary
+        if ($monitor->getUserId() !== $this) {
+            $monitor->setUserId($this);
+        }
+
+        $this->monitor = $monitor;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Payment>
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function addPayment(Payment $payment): self
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments[] = $payment;
+            $payment->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayment(Payment $payment): self
+    {
+        if ($this->payments->removeElement($payment)) {
+            // set the owning side to null (unless already changed)
+            if ($payment->getUserId() === $this) {
+                $payment->setUserId(null);
+            }
+        }
 
         return $this;
     }

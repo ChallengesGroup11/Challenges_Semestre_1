@@ -3,11 +3,18 @@
 namespace App\Entity;
 
 use App\Repository\DrivingSchoolRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\Traits\Timer;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
 
 #[ORM\Entity(repositoryClass: DrivingSchoolRepository::class)]
+#[ApiResource]
 class DrivingSchool
 {
+    use Timer;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
@@ -36,6 +43,21 @@ class DrivingSchool
 
     #[ORM\Column]
     private ?bool $status = null;
+
+    #[ORM\OneToOne(mappedBy: 'drivingSchoolId', cascade: ['persist', 'remove'])]
+    private ?Director $director = null;
+
+    #[ORM\OneToMany(mappedBy: 'drivingSchoolId', targetEntity: Monitor::class)]
+    private Collection $monitors;
+
+    #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'drivingSchoolId')]
+    private Collection $bookings;
+
+    public function __construct()
+    {
+        $this->monitors = new ArrayCollection();
+        $this->bookings = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -134,6 +156,80 @@ class DrivingSchool
     public function setStatus(bool $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getDirector(): ?Director
+    {
+        return $this->director;
+    }
+
+    public function setDirector(Director $director): self
+    {
+        // set the owning side of the relation if necessary
+        if ($director->getDrivingSchoolId() !== $this) {
+            $director->setDrivingSchoolId($this);
+        }
+
+        $this->director = $director;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Monitor>
+     */
+    public function getMonitors(): Collection
+    {
+        return $this->monitors;
+    }
+
+    public function addMonitor(Monitor $monitor): self
+    {
+        if (!$this->monitors->contains($monitor)) {
+            $this->monitors[] = $monitor;
+            $monitor->setDrivingSchoolId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMonitor(Monitor $monitor): self
+    {
+        if ($this->monitors->removeElement($monitor)) {
+            // set the owning side to null (unless already changed)
+            if ($monitor->getDrivingSchoolId() === $this) {
+                $monitor->setDrivingSchoolId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Booking>
+     */
+    public function getBookings(): Collection
+    {
+        return $this->bookings;
+    }
+
+    public function addBooking(Booking $booking): self
+    {
+        if (!$this->bookings->contains($booking)) {
+            $this->bookings[] = $booking;
+            $booking->addDrivingSchoolId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBooking(Booking $booking): self
+    {
+        if ($this->bookings->removeElement($booking)) {
+            $booking->removeDrivingSchoolId($this);
+        }
 
         return $this;
     }
