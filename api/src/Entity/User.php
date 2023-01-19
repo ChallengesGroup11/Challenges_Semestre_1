@@ -42,7 +42,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $token = null;
 
     #[ORM\Column]
-    private ?bool $state = null;
+    private ?bool $status = null;
 
     public function getId(): ?int
     {
@@ -126,14 +126,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isState(): ?bool
+    public function isStatus(): ?bool
     {
-        return $this->state;
+        return $this->status;
     }
 
-    public function setState(bool $state): self
+    public function setStatus(bool $status): self
     {
-        $this->state = $state;
+        $this->status = $status;
 
         return $this;
     }
