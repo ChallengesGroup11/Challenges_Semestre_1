@@ -1,9 +1,11 @@
 import { z } from 'zod'
+import { isUndefined } from '~/utils/booleanUtil'
+import { throwErr } from '~/utils/errorUtil'
 import { objUtil } from '~/utils/objectUtil'
-import { Base } from '~/utils/type'
+import { ModelBase } from '~/utils/type'
 import { ModelBasic } from './basicModel'
 import { Package, SchemaModelPackage } from './packageModel'
-import { UserSchema, User } from './user'
+import { UserSchema, User } from './userModel'
 
 export const SchemaModelPayment = z.object({
   user: UserSchema,
@@ -14,9 +16,15 @@ export class ModelPayment extends ModelBasic {
   user!: User
   package!: Package
 
-  protected constructor(obj?: Base<ModelPayment>) {
-    if (!objUtil.isObject(obj)) return
-    super(obj)
-    objUtil.hydrate(this, SchemaModelPayment.parse(obj))
+  protected constructor(obj?: ModelBase<ModelPayment>) {
+    if (isUndefined(obj)) {
+      super()
+      return
+    } else if (!objUtil.isObject(obj)) {
+      throwErr('obj is not an object')
+    } else {
+      super(obj)
+      objUtil.hydrate(this, SchemaModelPayment.parse(obj))
+    }
   }
 }

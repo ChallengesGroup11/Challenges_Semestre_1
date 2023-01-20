@@ -1,36 +1,32 @@
-import type { AnyObject, Base, BaseUndefinable, Class, Undefinable } from '~/utils/type'
-import { ModelBasic, EnumModel } from './basicModel'
+import { isUndefined } from './../utils/booleanUtil'
+import { isUndefined } from 'util'
 import { z } from 'zod'
-import { Monitor, SchemaMonitor } from './monitorModel'
-import { DrivingSchool, SchemaDrivingSchool } from './drivingSchoolModel'
+import { throwErr } from '~/utils/errorUtil'
 import { objUtil } from '~/utils/objectUtil'
-import { SchemaModelStudent, Student } from './studentModel'
-import { throwErr } from '../utils/errorUtil'
-
-import * as R from 'ramda'
-import { boolUtil } from '~/utils/booleanUtil'
-import { isUndefined } from '../utils/booleanUtil'
-import { Model } from '../utils/type'
-import { ModelUser } from './userModel'
+import { ModelBase } from '~/utils/type'
+import { ModelBasic } from './basicModel'
+import { ModelMonitor, SchemaMonitorModel } from './monitorModel'
+import { ModelStudent, SchemaModelStudent } from './studentModel'
+import { ModelDrivingSchool, SchemaDrivingSchoolModel } from './drivingSchoolModel'
 
 export const SchemaModelBooking = z.object({
   student: SchemaModelStudent,
-  monitor: SchemaMonitor,
-  drivingSchool: SchemaDrivingSchool,
+  monitor: SchemaMonitorModel,
+  drivingSchool: SchemaDrivingSchoolModel,
   slotBegin: z.date(),
   slotEnd: z.date(),
   comment: z.string(),
 })
 
 export class ModelBooking extends ModelBasic {
-  student!: Student
-  monitor!: Monitor
-  drivingSchool!: DrivingSchool
+  student!: ModelStudent
+  monitor!: ModelMonitor
+  drivingSchool!: ModelDrivingSchool
   slotBegin = new Date()
   slotEnd = new Date()
   comment = ''
 
-  protected constructor(obj?: Base<ModelBooking>) {
+  protected constructor(obj?: ModelBase<ModelBooking>) {
     if (isUndefined(obj)) {
       super()
       return
@@ -41,21 +37,4 @@ export class ModelBooking extends ModelBasic {
       objUtil.hydrate(this, SchemaModelBooking.parse(obj))
     }
   }
-
-  // static make = (obj: Base<BookingModel>): Undefinable<BookingModel> => {
-  //   if (!obj) return undefined
-  //   try {
-  //     return new BookingModel(obj)
-  //   } catch (e) {
-  //     return undefined
-  //   }
-  // }
 }
-
-// pipe char
-
-export const make = <T extends Model>(Model: Model, obj: AnyObject): T | undefined => {
-  return R.tryCatch(() => new Model(obj), R.always(undefined))()
-}
-
-const user = make<ModelUser>(ModelUser, { name: 'John' })

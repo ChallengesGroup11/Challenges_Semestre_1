@@ -1,19 +1,28 @@
+import { isUndefined } from './../utils/booleanUtil'
 import { z } from 'zod'
 import { objUtil } from '../utils/objectUtil'
-import { User } from './user'
-import type { Base } from '~/utils/type'
-import { DrivingSchool, SchemaDrivingSchool } from './drivingSchool'
+import { ModelUser, User } from './userModel'
+import type { ModelBase } from '~/utils/type'
+import { DrivingSchool, ModelDrivingSchool, SchemaDrivingSchool } from './drivingSchoolModel'
+import { throwErr } from '~/utils/errorUtil'
+import { isUndefined } from 'util'
 
-export const SchemaDirector = z.object({
+export const SchemaModelDirector = z.object({
   DrivingSchool: z.undefined().or(SchemaDrivingSchool),
 })
 
-export class DirectorModel extends User {
-  DrivingSchool?: DrivingSchool = undefined
+export class ModelDirector extends ModelUser {
+  DrivingSchool?: ModelDrivingSchool = undefined
 
-  protected constructor(obj?: Base<DirectorModel>) {
-    if (!objUtil.isObject(obj)) return
-    super(obj)
-    objUtil.hydrate(this, SchemaDirector.parse(obj))
+  protected constructor(obj?: ModelBase<ModelDirector>) {
+    if (isUndefined(obj)) {
+      super()
+      return
+    } else if (!objUtil.isObject(obj)) {
+      throwErr('obj is not an object')
+    } else {
+      super(obj)
+      objUtil.hydrate(this, SchemaModelDirector.parse(obj))
+    }
   }
 }

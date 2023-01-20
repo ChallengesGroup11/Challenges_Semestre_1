@@ -1,6 +1,8 @@
 import { z } from 'zod'
+import { isUndefined } from '~/utils/booleanUtil'
+import { throwErr } from '~/utils/errorUtil'
 import { objUtil } from '~/utils/objectUtil'
-import { Base } from '~/utils/type'
+import { ModelBase } from '~/utils/type'
 import { ModelBasic } from './basicModel'
 
 export const SchemaDrivingSchoolModel = z.object({
@@ -13,7 +15,7 @@ export const SchemaDrivingSchoolModel = z.object({
   kbisUrl: z.string().url(),
 })
 
-export class DrivingSchoolModel extends ModelBasic {
+export class ModelDrivingSchool extends ModelBasic {
   name = ''
   address = ''
   city = ''
@@ -22,9 +24,15 @@ export class DrivingSchoolModel extends ModelBasic {
   phoneNumber = ''
   kbisUrl = ''
 
-  protected constructor(obj?: Base<DrivingSchoolModel>) {
-    if (!objUtil.isObject(obj)) return
-    super(obj)
-    objUtil.hydrate(this, SchemaDrivingSchool.parse(obj))
+  protected constructor(obj?: ModelBase<ModelDrivingSchool>) {
+    if (isUndefined(obj)) {
+      super()
+      return
+    } else if (!objUtil.isObject(obj)) {
+      throwErr('obj is not an object')
+    } else {
+      super(obj)
+      objUtil.hydrate(this, SchemaDrivingSchoolModel.parse(obj))
+    }
   }
 }

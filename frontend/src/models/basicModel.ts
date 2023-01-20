@@ -1,14 +1,6 @@
-import { MonitorModel } from './monitorModel'
-import { DrivingSchoolModel } from './drivingSchoolModel'
 import { z } from 'zod'
 import { objUtil } from '~/utils/objectUtil'
-import type { Base } from '~/utils/type'
-import { ModelBooking } from './bookingModel'
-import { DirectorModel } from './directorModel'
-import { UserModel } from './user'
-import { ModelStudent } from './student'
-import { ModelPayment } from './payment'
-import { ModelPackage } from './packageModel'
+import type { InterfaceBasicModel, ModelBase } from '~/utils/type'
 
 const SchemaModelBasic = z.object({
   id: z.number(),
@@ -16,25 +8,22 @@ const SchemaModelBasic = z.object({
   updatedAt: z.date(),
 })
 
-export class ModelBasic {
+export class ModelBasic implements InterfaceBasicModel {
   id = 0
   createdAt = new Date()
   updatedAt = new Date()
 
-  protected constructor(obj?: Base<ModelBasic>) {
+  protected constructor(obj?: ModelBase<ModelBasic>) {
     if (!objUtil.isObject(obj)) return
     objUtil.hydrate(this, SchemaModelBasic.parse(obj))
   }
-}
 
-// export const EnumModel = {
-//   BASIC_MODEL: BasicModel,
-//   BOOKING: BookingModel,
-//   DIRECTOR: DirectorModel,
-//   DRIVING_SCHOOL: DrivingSchoolModel,
-//   MONITOR: MonitorModel,
-//   PACKAGE: PackageModel,
-//   PAYMENT: PaymentModel,
-//   STUDENT: StudentModel,
-//   USER: UserModel,
-// } as const
+  static make<T>(obj?: ModelBase<any>): T | undefined {
+    if (!obj) return undefined
+    try {
+      return new this(obj) as T
+    } catch (e) {
+      return undefined
+    }
+  }
+}

@@ -1,7 +1,9 @@
 import { ModelBasic } from './basicModel'
 import { z } from 'zod'
 import { objUtil } from '../utils/objectUtil'
-import type { Base } from '~/utils/type'
+import type { ModelBase } from '~/utils/type'
+import { isUndefined } from '~/utils/booleanUtil'
+import { throwErr } from '~/utils/errorUtil'
 
 enum EnumState {
   WAITING_VALIDATION = 'WAITING_VALIDATION',
@@ -31,8 +33,15 @@ export class ModelUser extends ModelBasic {
   role = EnumRole.STUDENT
   state = EnumState.WAITING_VALIDATION
 
-  protected constructor(obj?: Base<UserModel>) {
-    if (!objUtil.isObject(obj)) return
-    objUtil.hydrate(this, UserSchema.parse(obj))
+  protected constructor(obj?: ModelBase<ModelUser>) {
+    if (isUndefined(obj)) {
+      super()
+      return
+    } else if (!objUtil.isObject(obj)) {
+      throwErr('obj is not an object')
+    } else {
+      super(obj)
+      objUtil.hydrate(this, SchemaModelUser.parse(obj))
+    }
   }
 }
