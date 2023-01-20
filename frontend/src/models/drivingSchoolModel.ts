@@ -5,7 +5,7 @@ import { objUtil } from '~/utils/objectUtil'
 import { ModelBase } from '~/utils/type'
 import { ModelBasic } from './basicModel'
 
-export const SchemaDrivingSchoolModel = z.object({
+export const SchemaModelDrivingSchool = z.object({
   name: z.string(),
   address: z.string(),
   city: z.string(),
@@ -32,7 +32,7 @@ export class ModelDrivingSchool extends ModelBasic {
       throwErr('obj is not an object')
     } else {
       super(obj)
-      objUtil.hydrate(this, SchemaDrivingSchoolModel.parse(obj))
+      objUtil.hydrate(this, SchemaModelDrivingSchool.parse(obj))
     }
   }
 }

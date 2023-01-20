@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { isUndefined } from '~/utils/booleanUtil'
 import { throwErr } from '~/utils/errorUtil'
 import { objUtil } from '~/utils/objectUtil'
-import { ModelUser, User } from './userModel'
+import { ModelUser } from './userModel'
 
 export const SchemaModelStudent = z.object({
   nbHourDone: z.number(),

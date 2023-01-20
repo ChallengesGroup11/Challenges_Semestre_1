@@ -4,17 +4,17 @@ import { throwErr } from '~/utils/errorUtil'
 import { objUtil } from '~/utils/objectUtil'
 import { ModelBase } from '~/utils/type'
 import { ModelBasic } from './basicModel'
-import { Package, SchemaModelPackage } from './packageModel'
-import { UserSchema, User } from './userModel'
+import { ModelPackage, SchemaModelPackage } from './packageModel'
+import { ModelUser, SchemaModelUser } from './userModel'
 
 export const SchemaModelPayment = z.object({
-  user: UserSchema,
+  user: SchemaModelUser,
   package: SchemaModelPackage,
 })
 
 export class ModelPayment extends ModelBasic {
-  user!: User
-  package!: Package
+  user!: ModelUser
+  package!: ModelPackage
 
   protected constructor(obj?: ModelBase<ModelPayment>) {
     if (isUndefined(obj)) {

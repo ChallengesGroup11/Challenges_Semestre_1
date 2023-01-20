@@ -1,18 +1,18 @@
 import { isUndefined } from './../utils/booleanUtil'
 import { z } from 'zod'
 import { objUtil } from '../utils/objectUtil'
-import { ModelUser, User } from './userModel'
-import type { ModelBase } from '~/utils/type'
-import { DrivingSchool, ModelDrivingSchool, SchemaDrivingSchool } from './drivingSchoolModel'
+
 import { throwErr } from '~/utils/errorUtil'
-import { isUndefined } from 'util'
+import { ModelDrivingSchool, SchemaModelDrivingSchool } from './drivingSchoolModel'
+import { ModelUser } from './userModel'
+import { ModelBase } from '~/utils/type'
 
 export const SchemaModelDirector = z.object({
-  DrivingSchool: z.undefined().or(SchemaDrivingSchool),
+  drivingSchool: z.undefined().or(SchemaModelDrivingSchool),
 })
 
 export class ModelDirector extends ModelUser {
-  DrivingSchool?: ModelDrivingSchool = undefined
+  drivingSchool?: ModelDrivingSchool = undefined
 
   protected constructor(obj?: ModelBase<ModelDirector>) {
     if (isUndefined(obj)) {

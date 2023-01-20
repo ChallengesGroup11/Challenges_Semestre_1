@@ -1,9 +1,9 @@
-import { ModelBasic } from './basicModel'
 import { z } from 'zod'
 import { objUtil } from '../utils/objectUtil'
 import type { ModelBase } from '~/utils/type'
 import { isUndefined } from '~/utils/booleanUtil'
 import { throwErr } from '~/utils/errorUtil'
+import { ModelBasic } from './basicModel'
 
 enum EnumState {
   WAITING_VALIDATION = 'WAITING_VALIDATION',

@@ -3,15 +3,15 @@ import { isUndefined } from '~/utils/booleanUtil'
 import { throwErr } from '~/utils/errorUtil'
 import { objUtil } from '~/utils/objectUtil'
 import { ModelBase } from '~/utils/type'
-import { DrivingSchool, SchemaDrivingSchool } from './drivingSchoolModel'
-import { ModelUser, User } from './userModel'
+import { ModelDrivingSchool, SchemaModelDrivingSchool } from './drivingSchoolModel'
+import { ModelUser } from './userModel'
 
-export const SchemaMonitorModel = z.object({
-  drivingSchool: SchemaDrivingSchool,
+export const SchemaModelMonitor = z.object({
+  drivingSchool: SchemaModelDrivingSchool,
 })
 
 export class ModelMonitor extends ModelUser {
-  drivingSchool?: DrivingSchool = undefined
+  drivingSchool?: ModelDrivingSchool = undefined
 
   protected constructor(obj?: ModelBase<ModelMonitor>) {
     if (isUndefined(obj)) {
@@ -21,7 +21,7 @@ export class ModelMonitor extends ModelUser {
       throwErr('obj is not an object')
     } else {
       super(obj)
-      objUtil.hydrate(this, SchemaMonitorModel.parse(obj))
+      objUtil.hydrate(this, SchemaModelMonitor.parse(obj))
     }
   }
 }
