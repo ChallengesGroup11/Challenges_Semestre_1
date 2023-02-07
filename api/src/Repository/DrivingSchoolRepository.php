@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\Detail;
+use App\Entity\DrivingSchool;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Detail>
+ * @extends ServiceEntityRepository<DrivingSchool>
  *
- * @method Detail|null find($id, $lockMode = null, $lockVersion = null)
- * @method Detail|null findOneBy(array $criteria, array $orderBy = null)
- * @method Detail[]    findAll()
- * @method Detail[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method DrivingSchool|null find($id, $lockMode = null, $lockVersion = null)
+ * @method DrivingSchool|null findOneBy(array $criteria, array $orderBy = null)
+ * @method DrivingSchool[]    findAll()
+ * @method DrivingSchool[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class DetailRepository extends ServiceEntityRepository
+class DrivingSchoolRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Detail::class);
+        parent::__construct($registry, DrivingSchool::class);
     }
 
-    public function add(Detail $entity, bool $flush = false): void
+    public function add(DrivingSchool $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class DetailRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Detail $entity, bool $flush = false): void
+    public function remove(DrivingSchool $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class DetailRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return Detail[] Returns an array of Detail objects
+//     * @return DrivingSchool[] Returns an array of DrivingSchool objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class DetailRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Detail
+//    public function findOneBySomeField($value): ?DrivingSchool
 //    {
 //        return $this->createQueryBuilder('d')
 //            ->andWhere('d.exampleField = :val')
