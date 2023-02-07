@@ -2,6 +2,10 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use App\Repository\BookingRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,9 +13,28 @@ use App\Entity\Traits\Timer;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: BookingRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['get']],
+)]
+#[Get(
+    normalizationContext: ['groups' => ['booking_get']]
+)]
+#[GetCollection(
+    normalizationContext: ['groups' => ['booking_cget']]
+)]
+#[Post(
+    normalizationContext: ['groups' => ['booking_get']],
+    denormalizationContext: ['groups' => ['booking_write']],
+    security: 'is_granted("ROLE_DIRECTOR")'
+)]
+#[Patch(
+    denormalizationContext: ['groups' => ['booking_write']],
+    security: 'is_granted("ROLE_MODERATOR","ROLE_DIRECTOR")'
+)]
+// #[GET(normalizationContext: ['groups' => ['booking:read']])]
 class Booking
 {
     use Timer;
@@ -19,30 +42,39 @@ class Booking
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
+    #[Groups(['booking_get'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['booking_get', 'booking_write','get','booking_cget'])]
     private ?\DateTimeInterface $slotBegin = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['booking_get', 'booking_write','get','booking_cget'])]
     private ?\DateTimeInterface $slotEnd = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['booking_get', 'booking_write','get', 'booking_cget'])]
     private ?string $comment = null;
 
     #[ORM\Column]
+    #[Groups(['booking_get', 'booking_write','get','booking_cget'])]
     private ?bool $statusValidate = null;
 
     #[ORM\Column]
+    #[Groups(['booking_get', 'booking_write','get','booking_cget'])]
     private ?bool $statusDone = null;
 
     #[ORM\ManyToMany(targetEntity: Student::class, inversedBy: 'bookings')]
+    #[Groups(['booking_get', 'booking_cget'])]
     private Collection $studentId;
 
     #[ORM\ManyToMany(targetEntity: Monitor::class, inversedBy: 'bookings')]
+    #[Groups(['booking_get', 'booking_cget'])]
     private Collection $monitorId;
 
     #[ORM\ManyToMany(targetEntity: DrivingSchool::class, inversedBy: 'bookings')]
+    #[Groups(['booking_get', 'booking_cget'])]
     private Collection $drivingSchoolId;
 
     public function __construct()

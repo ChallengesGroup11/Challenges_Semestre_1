@@ -3,13 +3,16 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use App\Repository\StudentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
 #[ApiResource]
+#[Get(normalizationContext: ['groups' => ['director_get']])]
 class Student
 {
     #[ORM\Id]
@@ -28,6 +31,7 @@ class Student
 
     #[ORM\OneToOne(inversedBy: 'student', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['booking_get','booking_cget'])]
     private ?User $userId = null;
 
     #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'studentId')]

@@ -2,12 +2,16 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Get;
 use App\Repository\DirectorRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: DirectorRepository::class)]
 #[ApiResource]
+#[Get(normalizationContext: ['groups' => ['director_get']])]
+
 class Director
 {
     #[ORM\Id]
@@ -21,6 +25,7 @@ class Director
 
     #[ORM\OneToOne(inversedBy: 'director', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['director_get'])]
     private ?DrivingSchool $drivingSchoolId = null;
 
     public function getId(): ?int

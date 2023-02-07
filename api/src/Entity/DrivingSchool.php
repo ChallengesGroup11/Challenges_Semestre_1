@@ -2,15 +2,40 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use App\Repository\DrivingSchoolRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use App\Entity\Traits\Timer;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: DrivingSchoolRepository::class)]
 #[ApiResource]
+#[GetCollection(
+    normalizationContext: ['groups' => ['driving_school_cget']],
+    security: 'is_granted("ROLE_ADMIN")'
+)]
+#[Get(
+    normalizationContext: ['groups' => ['driving_school_get']]
+)]
+#[Post(
+    normalizationContext: ['groups' => ['driving_school_get']],
+    denormalizationContext: ['groups' => ['driving_school_write']],
+    security: 'is_granted("ROLE_DIRECTOR,ROLE_ADMIN")'
+)]
+#[Patch(
+    denormalizationContext: ['groups' => ['driving_school_patch']],
+    security: 'is_granted("ROLE_DIRECTOR") and object.getDirector() == user'
+)]
+#[Delete(
+    security: 'is_granted("ROLE_ADMIN")'
+)]
 class DrivingSchool
 {
     use Timer;
@@ -21,27 +46,35 @@ class DrivingSchool
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['booking_get','booking_cget','user_get','driving_school_patch','driving_school_cget','driving_school_get','driving_school_write'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['director_get','driving_school_patch','driving_school_cget','driving_school_get','driving_school_write'])]
     private ?string $address;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['director_get','driving_school_patch','driving_school_cget','driving_school_get','driving_school_write'])]
     private ?string $city;
 
     #[ORM\Column(length: 5)]
+    #[Groups(['director_get','driving_school_patch','driving_school_cget','driving_school_get','driving_school_write'])]
     private ?string $zipcode;
 
     #[ORM\Column(length: 14)]
+    #[Groups(['director_get','driving_school_cget','driving_school_get','driving_school_write'])]
     private ?string $siret = null;
 
     #[ORM\Column(length: 10)]
+    #[Groups(['director_get','driving_school_patch','driving_school_cget','driving_school_get','driving_school_write'])]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['driving_school_cget','driving_school_write'])]
     private ?string $urlKbis = null;
 
     #[ORM\Column]
+    #[Groups(['driving_school_cget'])]
     private ?bool $status = null;
 
     #[ORM\OneToOne(mappedBy: 'drivingSchoolId', cascade: ['persist', 'remove'])]

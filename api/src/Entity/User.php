@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use App\Controller\ResetPasswordController;
 use App\Entity\Traits\Timer;
@@ -10,18 +13,37 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-#[ApiResource]
-#[Patch]
+#[ApiResource()]
+#[GetCollection(
+    normalizationContext: ['groups' => ['user_cget']],
+    security: 'is_granted("ROLE_ADMIN")'
+)]
+#[Get(
+    normalizationContext: ['groups' => ['user_get','director_get']],
+    security: 'object.getId() == user.getId()'
+)]
+#[Patch(
+    denormalizationContext: ['groups' => ['user_patch']],
+    security: 'object.getId() == user.getId()'
+)]
 #[Patch(
     uriTemplate: '/users/reset/password',
     controller: ResetPasswordController::class,
+    security: 'object.getId() == user.getId()',
     name: 'reset-password'
 )]
+#[Delete(
+    security: 'is_granted("ROLE_ADMIN")'
+)]
+#[UniqueEntity('email', message: 'L\'email {{ value }} existe déjà.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
@@ -34,9 +56,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+
+    #[Groups(['user_get', 'user_cget'])]
+    #[NotBlank]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups(['user_get', 'user_cget'])]
     private array $roles = [];
 
     /**
@@ -49,19 +75,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $token = null;
 
     #[ORM\Column]
+    #[Groups(['user_get', 'user_cget'])]
     private ?bool $status = null;
 
     #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'])]
+    #[Groups(['user_get', 'user_cget'])]
     private ?Student $student = null;
 
     #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'])]
+    #[Groups(['user_get', 'user_cget'])]
     private ?Director $director = null;
 
     #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'])]
+    #[Groups(['user_get', 'user_cget'])]
     private ?Monitor $monitor = null;
 
     #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Payment::class)]
+    #[Groups([ 'user_cget'])]
     private Collection $payments;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['booking_get','user_get','booking_cget','user_cget','user_patch'])]
+    private ?string $firstname = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['booking_get','user_get','booking_cget','user_cget','user_patch'])]
+    private ?string $lastname = null;
 
     public function __construct()
     {
@@ -239,6 +278,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $payment->setUserId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
 
         return $this;
     }

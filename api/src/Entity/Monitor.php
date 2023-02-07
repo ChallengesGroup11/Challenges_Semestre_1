@@ -2,14 +2,17 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Get;
 use App\Repository\MonitorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: MonitorRepository::class)]
 #[ApiResource]
+#[Get(normalizationContext: ['groups' => ['director_get']])]
 class Monitor
 {
     #[ORM\Id]
@@ -19,6 +22,7 @@ class Monitor
 
     #[ORM\OneToOne(inversedBy: 'monitor', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['booking_get','booking_cget'])]
     private ?User $userId = null;
 
     #[ORM\ManyToOne(inversedBy: 'monitors')]

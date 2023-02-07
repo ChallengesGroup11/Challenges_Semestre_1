@@ -2,13 +2,22 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use App\Entity\Traits\Timer;
 use App\Repository\PaymentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 
 #[ORM\Entity(repositoryClass: PaymentRepository::class)]
-#[ApiResource]
+#[ApiResource()]
+#[GetCollection(normalizationContext: ['groups' => ['payment_cget']],security: 'is_granted("ADMIN")')]
+#[Get(normalizationContext: ['groups' => ['payment_get']])]
+#[Post(
+    normalizationContext: ['groups' => ['payment_get']],
+    denormalizationContext: ['groups' => ['payment_write']],
+)]
 class Payment
 {
     use Timer;
