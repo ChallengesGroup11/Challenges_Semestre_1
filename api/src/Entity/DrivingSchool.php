@@ -44,7 +44,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     normalizationContext: ['groups' => ['driving_school_get']]
 )]
 #[Put(
-    security: 'is_granted("ROLE_ADMIN")'
+//    security: 'is_granted("ROLE_ADMIN")'
 )]
 #[Patch(
         security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR") and object.getDirector() == user'
@@ -59,7 +59,7 @@ class DrivingSchool
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
-    #[Groups(['driving_school_cget'])]
+    #[Groups(['driving_school_cget','driving_school_get'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]

@@ -16,11 +16,11 @@ const drivingSchool = reactive({
 onMounted(async () => {
   const {params} = useRoute();
   const {id} = params;
-  await fetchOneDrivingSchool();
+  await fetchOneDrivingSchool(id);
 });
 
-const fetchOneDrivingSchool = async () => {
-  return fetch('https://localhost/driving_schools/6')
+const fetchOneDrivingSchool = async (id: string | string[]) => {
+  return fetch('https://localhost/driving_schools/'+id)
     .then((response) => response.json())
     .then((data) => {
       console.log(data)
@@ -38,8 +38,9 @@ const fetchOneDrivingSchool = async () => {
     })
 };
 
-const onSubmit = async () => {
-  const response = await fetch('https://localhost/driving_schools/6', {
+const onSubmit = async (id: string) => {
+  console.log(id)
+  const response = await fetch('https://localhost/driving_schools/'+id, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -58,7 +59,7 @@ const onSubmit = async () => {
   <q-page class="bg-light-grey  items-center">
       <div class="q-pa-md" style="max-width: 400px">
         <q-form
-          @submit="onSubmit"
+          @submit="onSubmit(drivingSchool.id)"
           class="q-gutter-md"
         >
           <q-input

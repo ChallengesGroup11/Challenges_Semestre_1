@@ -18,9 +18,12 @@ const fetchDrivingSchool = async () => {
 };
 
 const editDrivingSchool=(id: string)=>{
-  router.push('/admin/drivingSchoolEdit')
+  router.push('/admin/drivingSchoolEdit/'+id)
 }
 
+const addDrivingSchool=()=>{
+  router.push('/admin/drivingSchoolAdd')
+}
 
 console.log(drivingSchool);
 </script>
@@ -35,6 +38,13 @@ console.log(drivingSchool);
 
 
           <div class="text-h4 q-ml-md">Liste des auto-écoles</div>
+        <q-btn
+          color="primary"
+          text-color="white"
+          label="Ajouter une auto-école"
+          icon="add"
+          @click="addDrivingSchool()"
+        />
 
       </th>
     </tr>

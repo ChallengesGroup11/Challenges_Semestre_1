@@ -11,7 +11,6 @@ declare module '@vue/runtime-core' {
     ChangePassword: typeof import('./components/ChangePassword.vue')['default']
     Chat: typeof import('./components/Chat.vue')['default']
     Counter: typeof import('./components/Counter.vue')['default']
-    DrivingSchoolEdit: typeof import('./pages/admin/DrivingSchoolEdit.vue')['default']
     DrivingSchoolList: typeof import('./components/admin/DrivingSchool/DrivingSchoolList.vue')['default']
     EssentialLink: typeof import('./components/EssentialLink.vue')['default']
     FileUploader: typeof import('./components/FileUploader.vue')['default']
