@@ -1,9 +1,16 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+
+
+</script>
 
 <template>
+  <q-page class="bg-light-grey  items-center">
   <div class="container">
-    <h1>Admin</h1>
+
+    <DrivingSchoolList />
   </div>
+
+  </q-page>
 </template>
 
 <route lang="yaml">
