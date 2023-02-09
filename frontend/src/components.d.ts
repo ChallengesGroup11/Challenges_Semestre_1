@@ -15,6 +15,7 @@ declare module '@vue/runtime-core' {
     ChangePassword: typeof import('./components/ChangePassword.vue')['default']
     Chat: typeof import('./components/Chat.vue')['default']
     Counter: typeof import('./components/Counter.vue')['default']
+    DrivingSchoolList: typeof import('./components/admin/DrivingSchool/DrivingSchoolList.vue')['default']
     EssentialLink: typeof import('./components/EssentialLink.vue')['default']
     FileUploader: typeof import('./components/FileUploader.vue')['default']
     Footer: typeof import('./components/Footer.vue')['default']
@@ -36,5 +37,6 @@ declare module '@vue/runtime-core' {
     README: typeof import('./components/README.md')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    UserList: typeof import('./components/admin/UserList.vue')['default']
   }
 }

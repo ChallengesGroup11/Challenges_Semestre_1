@@ -1,5 +1,6 @@
 controllers:
     resource: ../src/Controller/
+    exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
     type: annotation
 
 kernel:
