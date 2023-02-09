@@ -17,10 +17,12 @@ class Director
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
+    #[Groups(['user_get'])]
     private ?int $id = null;
 
     #[ORM\OneToOne(inversedBy: 'director', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['driving_school_cget','user_get'])]
     private ?User $userId = null;
 
     #[ORM\OneToOne(inversedBy: 'director', cascade: ['persist', 'remove'])]

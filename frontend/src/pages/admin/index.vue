@@ -1,9 +1,18 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+
+import DrivingSchoolList from "~/components/admin/DrivingSchoolList.vue";
+</script>
 
 <template>
+  <q-page class="bg-light-grey  items-center">
   <div class="container">
-    <h1>Admin</h1>
+<!--  Créer un   Menu avec des sous composant-->
+
+        <DrivingSchoolList />
+
+
   </div>
+  </q-page>
 </template>
 
 <route lang="yaml">

@@ -7,6 +7,9 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use App\Controller\DrivingSchoolEditStatusController;
+use App\DTO\DrivingSchoolDTO;
 use App\Repository\DrivingSchoolRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -16,22 +19,35 @@ use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: DrivingSchoolRepository::class)]
-#[ApiResource]
+#[ApiResource(operations:[
+    new Patch(
+        uriTemplate: '/driving_schools/{id}/edit_status',
+        controller: DrivingSchoolEditStatusController::class,
+        openapiContext: [
+            'summary' => 'Editer le status d\'une auto-école',
+        ],
+        denormalizationContext: ['groups' => ['driving_school_patch']],
+        name: 'driving_school_edit_status'
+//    security: 'is_granted("ROLE_DIRECTOR") and object.getDirector() == user'
+    )
+])]
 #[GetCollection(
     normalizationContext: ['groups' => ['driving_school_cget']],
-    security: 'is_granted("ROLE_ADMIN")'
-)]
-#[Get(
-    normalizationContext: ['groups' => ['driving_school_get']]
+//    security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR")'
 )]
 #[Post(
     normalizationContext: ['groups' => ['driving_school_get']],
     denormalizationContext: ['groups' => ['driving_school_write']],
     security: 'is_granted("ROLE_DIRECTOR,ROLE_ADMIN")'
 )]
+#[Get(
+    normalizationContext: ['groups' => ['driving_school_get']]
+)]
+#[Put(
+    security: 'is_granted("ROLE_ADMIN")'
+)]
 #[Patch(
-    denormalizationContext: ['groups' => ['driving_school_patch']],
-    security: 'is_granted("ROLE_DIRECTOR") and object.getDirector() == user'
+        security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR") and object.getDirector() == user'
 )]
 #[Delete(
     security: 'is_granted("ROLE_ADMIN")'
@@ -43,22 +59,23 @@ class DrivingSchool
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
+    #[Groups(['driving_school_cget'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['booking_get','booking_cget','user_get','driving_school_patch','driving_school_cget','driving_school_get','driving_school_write'])]
+    #[Groups(['booking_get','booking_cget','user_get','driving_school_cget','driving_school_get','driving_school_write'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['director_get','driving_school_patch','driving_school_cget','driving_school_get','driving_school_write'])]
+    #[Groups(['director_get','driving_school_cget','driving_school_get','driving_school_write'])]
     private ?string $address;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['director_get','driving_school_patch','driving_school_cget','driving_school_get','driving_school_write'])]
+    #[Groups(['director_get','driving_school_cget','driving_school_get','driving_school_write'])]
     private ?string $city;
 
     #[ORM\Column(length: 5)]
-    #[Groups(['director_get','driving_school_patch','driving_school_cget','driving_school_get','driving_school_write'])]
+    #[Groups(['director_get','driving_school_cget','driving_school_get','driving_school_write'])]
     private ?string $zipcode;
 
     #[ORM\Column(length: 14)]
@@ -66,7 +83,7 @@ class DrivingSchool
     private ?string $siret = null;
 
     #[ORM\Column(length: 10)]
-    #[Groups(['director_get','driving_school_patch','driving_school_cget','driving_school_get','driving_school_write'])]
+    #[Groups(['director_get','driving_school_cget','driving_school_get','driving_school_write'])]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(length: 255)]
@@ -75,9 +92,10 @@ class DrivingSchool
 
     #[ORM\Column]
     #[Groups(['driving_school_cget'])]
-    private ?bool $status = null;
+    private ?bool $status = false;
 
     #[ORM\OneToOne(mappedBy: 'drivingSchoolId', cascade: ['persist', 'remove'])]
+    #[Groups(['driving_school_cget'])]
     private ?Director $director = null;
 
     #[ORM\OneToMany(mappedBy: 'drivingSchoolId', targetEntity: Monitor::class)]
