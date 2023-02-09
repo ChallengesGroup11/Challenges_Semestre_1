@@ -1,10 +1,12 @@
 <script setup lang="ts">
+const router = useRouter()
 import { onMounted, reactive } from 'vue';
 const drivingSchool = reactive({ value: [] });
 
 onMounted(async () => {
   await fetchDrivingSchool();
 });
+
 
 const fetchDrivingSchool = async () => {
   return fetch('https://localhost/driving_schools')
@@ -14,6 +16,11 @@ const fetchDrivingSchool = async () => {
       console.log(drivingSchool.value);
     });
 };
+
+const editDrivingSchool=(id: string)=>{
+  router.push('/admin/drivingSchoolEdit')
+}
+
 
 console.log(drivingSchool);
 </script>
@@ -87,7 +94,6 @@ console.log(drivingSchool);
 
 <style>
 
-
-
-
 </style>
+
+
