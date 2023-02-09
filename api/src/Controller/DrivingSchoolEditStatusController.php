@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\DTO\DrivingSchoolDTO;
 use App\Entity\DrivingSchool;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;

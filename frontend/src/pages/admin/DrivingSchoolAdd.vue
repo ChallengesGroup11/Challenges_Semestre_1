@@ -3,7 +3,7 @@
 import { ref, reactive } from 'vue'
 const router = useRouter()
 
-const director = reactive({value:[]})
+// const director = reactive({ value: [] });
 
 const name = ref('')
 const address = ref('')
@@ -15,7 +15,7 @@ const kbis = ref('')
 
 
 onMounted(async () => {
-  await fetchDirector()
+  // await fetchDirector()
 })
 const onSubmit = async () => {
   const response = await fetch('https://localhost/driving_schools', {
@@ -30,8 +30,8 @@ const onSubmit = async () => {
       city: city.value,
       phoneNumber: phoneNumber.value,
       siret: siret.value,
-      kbis: kbis.value,
-      director: director.value,
+      urlKbis: kbis.value,
+      // director: director,
     }),
   })
   const data = await response.json()
@@ -39,20 +39,18 @@ const onSubmit = async () => {
   await router.push('/admin')
 }
 
-const fetchDirector = async () => {
-  return fetch('https://localhost/users')
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data)
-      director.value = data["hydra:member"].filter(
-        (user) => user.director !== null
-      )
-    })
-    .catch((error) => {
-      console.error('Error:', error)
-    })
-}
-console.log(director.value)
+// const fetchDirector = async () => {
+//   return fetch('https://localhost/directors')
+//     .then((response) => response.json())
+//     .then((data) => {
+//       console.log(data['hydra:member'].id)
+//       director.value = data['hydra:member']
+//     })
+//     .catch((error) => {
+//       console.error('Error:', error)
+//     })
+// }
+// console.log(director.value)
 
 </script>
 
@@ -68,51 +66,67 @@ console.log(director.value)
           filled
           lazy-rules
           :rules="[val => val.length > 0 || 'Veuillez saisir un nom']"
-         model-value=""/>
+          v-model="name"
+         />
         <q-input
           label="Adresse"
           filled
           lazy-rules
           :rules="[val => val.length > 0 || 'Veuillez saisir une adresse']"
-         model-value=""/>
+          v-model="address"
+        />
         <q-input
           label="Code postal"
           filled
           lazy-rules
           :rules="[val => val.length > 0 || 'Veuillez saisir un code postal']"
-         model-value=""/>
+          v-model="zipcode"
+        />
         <q-input
           label="Ville"
           filled
           lazy-rules
           :rules="[val => val.length > 0 || 'Veuillez saisir une ville']"
-         model-value=""/>
+          v-model="city"
+        />
         <q-input
           label="Numéro de téléphone"
           filled
           lazy-rules
           :rules="[val => val.length > 0 || 'Veuillez saisir un numéro de téléphone']"
-         model-value=""/>
+          v-model="phoneNumber"
+        />
         <q-input
           label="Numéro de SIRET"
           filled
           lazy-rules
           :rules="[val => val.length > 0 || 'Veuillez saisir un numéro de SIRET']"
-         model-value=""/>
+          v-model="siret"
+        />
         <q-input
           label="Numéro de KBIS"
           filled
           lazy-rules
           :rules="[val => val.length > 0 || 'Veuillez saisir un numéro de KBIS']"
-         model-value=""/>
-        <q-select
-          filled
-          label="Directeur"
-          :options="director"
-          :option-value="director"
-          option-label="firstName"
-          v-model="director"
+          v-model="kbis"
         />
+
+<!--        <q-select-->
+<!--          filled-->
+<!--          label="Directeur"-->
+<!--          :options="director.value"-->
+<!--          :option-value="opt => Object(opt) === opt && 'userId' in opt ? opt.id : null"-->
+<!--          option-label="firstName"-->
+<!--          v-model="director"-->
+<!--        >-->
+<!--          <template v-slot:option="scope">-->
+<!--            <q-item v-bind="scope.itemProps">-->
+<!--              <q-item-section>-->
+<!--                <q-item-label>{{ scope.opt.userId.firstname }}</q-item-label>-->
+<!--              </q-item-section>-->
+<!--            </q-item>-->
+<!--          </template>-->
+<!--        </q-select>-->
         <div>
           <q-btn label="Valider" type="submit" color="primary" />
         </div>

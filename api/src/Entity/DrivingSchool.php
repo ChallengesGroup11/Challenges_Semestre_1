@@ -9,7 +9,6 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\DrivingSchoolEditStatusController;
-use App\DTO\DrivingSchoolDTO;
 use App\Repository\DrivingSchoolRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -38,7 +37,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[Post(
     normalizationContext: ['groups' => ['driving_school_get']],
     denormalizationContext: ['groups' => ['driving_school_write']],
-    security: 'is_granted("ROLE_DIRECTOR,ROLE_ADMIN")'
+//    security: 'is_granted("ROLE_DIRECTOR,ROLE_ADMIN")'
 )]
 #[Get(
     normalizationContext: ['groups' => ['driving_school_get']]
