@@ -1,9 +1,10 @@
 <script setup lang='ts'>
 
-import { ref, reactive } from 'vue'
+import {ref} from 'vue'
+
 const router = useRouter()
 
-const director = reactive({value:[]})
+// const director = reactive({value:[]})
 
 const name = ref('')
 const address = ref('')
@@ -11,55 +12,52 @@ const zipcode = ref('')
 const city = ref('')
 const phoneNumber = ref('')
 const siret = ref('')
-const kbis = ref('')
+const filePath = ref()
 
 
 onMounted(async () => {
-  await fetchDirector()
+  // await fetchDirector()
 })
 const onSubmit = async () => {
+  const formData = new FormData();
+  formData.append('file', filePath.value[0]);
+  formData.append('name', name.value);
+  formData.append('address', address.value);
+  formData.append('zipcode', zipcode.value);
+  formData.append('city', city.value);
+  formData.append('phoneNumber', phoneNumber.value);
+  formData.append('siret', siret.value);
+
   const response = await fetch('https://localhost/driving_schools', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      name: name.value,
-      address: address.value,
-      zipcode: zipcode.value,
-      city: city.value,
-      phoneNumber: phoneNumber.value,
-      siret: siret.value,
-      kbis: kbis.value,
-      director: director.value,
-    }),
+    body: formData
   })
   const data = await response.json()
   console.log('Success:', data)
-  await router.push('/admin')
+  await router.push('/admin/drivingSchool')
 }
 
-const fetchDirector = async () => {
-  return fetch('https://localhost/users')
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data)
-      director.value = data["hydra:member"].filter(
-        (user) => user.director !== null
-      )
-    })
-    .catch((error) => {
-      console.error('Error:', error)
-    })
-}
-console.log(director.value)
+// const fetchDirector = async () => {
+//   return fetch('https://localhost/users')
+//     .then((response) => response.json())
+//     .then((data) => {
+//       console.log(data)
+//       director.value = data["hydra:member"].filter(
+//         (user) => user.director !== null
+//       )
+//     })
+//     .catch((error) => {
+//       console.error('Error:', error)
+//     })
+// }
+// console.log(director.value)
 
 </script>
 
 <template>
   <q-page class="bg-light-grey  items-center">
     <div class="q-pa-md" style="max-width: 400px">
-        <q-form
+      <q-form
         @submit.prevent="onSubmit"
         class="q-gutter-md"
       >
@@ -68,7 +66,8 @@ console.log(director.value)
           filled
           lazy-rules
           :rules="[val => val.length > 0 || 'Veuillez saisir un nom']"
-         model-value=""/>
+          v-model="name"
+        />
         <q-input
           label="Adresse"
           filled
@@ -100,21 +99,30 @@ console.log(director.value)
           :rules="[val => val.length > 0 || 'Veuillez saisir un numéro de SIRET']"
          model-value=""/>
         <q-input
-          label="Numéro de KBIS"
+          @update:model-value="val => { file = val[0] }"
           filled
-          lazy-rules
-          :rules="[val => val.length > 0 || 'Veuillez saisir un numéro de KBIS']"
-         model-value=""/>
-        <q-select
-          filled
-          label="Directeur"
-          :options="director"
-          :option-value="director"
-          option-label="firstName"
-          v-model="director"
+          type="file"
+          v-model="filePath"
         />
+
+        <!--        <q-select-->
+        <!--          filled-->
+        <!--          label="Directeur"-->
+        <!--          :options="director.value"-->
+        <!--          :option-value="opt => Object(opt) === opt && 'userId' in opt ? opt.id : null"-->
+        <!--          option-label="firstName"-->
+        <!--          v-model="director"-->
+        <!--        >-->
+        <!--          <template v-slot:option="scope">-->
+        <!--            <q-item v-bind="scope.itemProps">-->
+        <!--              <q-item-section>-->
+        <!--                <q-item-label>{{ scope.opt.userId.firstname }}</q-item-label>-->
+        <!--              </q-item-section>-->
+        <!--            </q-item>-->
+        <!--          </template>-->
+        <!--        </q-select>-->
         <div>
-          <q-btn label="Valider" type="submit" color="primary" />
+          <q-btn label="Valider" type="submit" color="primary"/>
         </div>
       </q-form>
     </div>

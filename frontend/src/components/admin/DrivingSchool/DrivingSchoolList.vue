@@ -18,11 +18,11 @@ const fetchDrivingSchool = async () => {
 };
 
 const editDrivingSchool=(id: string)=>{
-  router.push('/admin/drivingSchoolEdit/'+id)
+  router.push('/admin/drivingSchool/Edit/'+id)
 }
 
 const addDrivingSchool=()=>{
-  router.push('/admin/drivingSchoolAdd')
+  router.push('/admin/drivingSchool/Add/DrivingSchool')
 }
 
 console.log(drivingSchool);
@@ -71,8 +71,16 @@ console.log(drivingSchool);
       <td>{{ driving.city }}</td>
       <td>{{ driving.phoneNumber }}</td>
       <td>{{ driving.siret }}</td>
-      <td>{{ driving.kbis }}</td>
-      <td v-if="driving.director">{{ driving.director.userId.firstname }}</td>
+      <td>
+        <q-img
+          :src="driving.filePath"
+          spinner-color="white"
+          style="height: 140px; max-width: 150px"
+        />
+      </td>
+      <td v-if="driving.director">
+        {{ driving.director.userId.firstname }}
+      </td>
       <td v-else>Non renseigné</td>
       <td>
         <q-btn

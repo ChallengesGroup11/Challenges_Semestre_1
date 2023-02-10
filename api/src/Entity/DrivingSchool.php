@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\DrivingSchoolAddKbisController;
 use App\Controller\DrivingSchoolEditStatusController;
 use App\DTO\DrivingSchoolDTO;
 use App\Repository\DrivingSchoolRepository;
@@ -17,9 +19,15 @@ use App\Entity\Traits\Timer;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\OpenApi\Model;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\File;
 
+
+#[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: DrivingSchoolRepository::class)]
-#[ApiResource(operations:[
+#[ApiResource(operations: [
     new Patch(
         uriTemplate: '/driving_schools/{id}/edit_status',
         controller: DrivingSchoolEditStatusController::class,
@@ -29,16 +37,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
         denormalizationContext: ['groups' => ['driving_school_patch']],
         name: 'driving_school_edit_status'
 //    security: 'is_granted("ROLE_DIRECTOR") and object.getDirector() == user'
-    )
-])]
+    ),
+
+    new Post(
+        inputFormats: ['multipart' => ['multipart/form-data']],
+        normalizationContext: ['groups' => ['driving_school_get']],
+        denormalizationContext: ['groups' => ['driving_school_write']],
+        security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR")',
+    ),
+],
+)]
 #[GetCollection(
     normalizationContext: ['groups' => ['driving_school_cget']],
 //    security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR")'
-)]
-#[Post(
-    normalizationContext: ['groups' => ['driving_school_get']],
-    denormalizationContext: ['groups' => ['driving_school_write']],
-    security: 'is_granted("ROLE_DIRECTOR,ROLE_ADMIN")'
 )]
 #[Get(
     normalizationContext: ['groups' => ['driving_school_get']]
@@ -47,7 +58,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 //    security: 'is_granted("ROLE_ADMIN")'
 )]
 #[Patch(
-        security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR") and object.getDirector() == user'
+    security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR") and object.getDirector() == user'
 )]
 #[Delete(
     security: 'is_granted("ROLE_ADMIN")'
@@ -59,36 +70,44 @@ class DrivingSchool
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
-    #[Groups(['driving_school_cget','driving_school_get'])]
+    #[Groups(['driving_school_cget', 'driving_school_get'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['booking_get','booking_cget','user_get','driving_school_cget','driving_school_get','driving_school_write'])]
+    #[Groups(['booking_get', 'booking_cget', 'user_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['director_get','driving_school_cget','driving_school_get','driving_school_write'])]
+    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write'])]
     private ?string $address;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['director_get','driving_school_cget','driving_school_get','driving_school_write'])]
+    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write'])]
     private ?string $city;
 
     #[ORM\Column(length: 5)]
-    #[Groups(['director_get','driving_school_cget','driving_school_get','driving_school_write'])]
+    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write'])]
     private ?string $zipcode;
 
     #[ORM\Column(length: 14)]
-    #[Groups(['director_get','driving_school_cget','driving_school_get','driving_school_write'])]
+    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write'])]
     private ?string $siret = null;
 
     #[ORM\Column(length: 10)]
-    #[Groups(['director_get','driving_school_cget','driving_school_get','driving_school_write'])]
+    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write'])]
     private ?string $phoneNumber = null;
 
-    #[ORM\Column(length: 255)]
-    #[Groups(['driving_school_cget','driving_school_write'])]
-    private ?string $urlKbis = null;
+    #[ApiProperty(types: ['https://schema.org/contentUrl'])]
+    #[Groups(['driving_school_get'])]
+    public ?string $contentUrl = null;
+
+    #[Vich\UploadableField(mapping: "media_object", fileNameProperty: "filePath")]
+    #[Groups(['driving_school_write'])]
+    public ?File $file = null;
+
+    #[ORM\Column(nullable: true)]
+    public ?string $filePath = null;
+
 
     #[ORM\Column]
     #[Groups(['driving_school_cget'])]
@@ -187,18 +206,6 @@ class DrivingSchool
         return $this;
     }
 
-    public function getUrlKbis(): ?string
-    {
-        return $this->urlKbis;
-    }
-
-    public function setUrlKbis(string $urlKbis): self
-    {
-        $this->urlKbis = $urlKbis;
-
-        return $this;
-    }
-
     public function isStatus(): ?bool
     {
         return $this->status;
@@ -283,5 +290,21 @@ class DrivingSchool
         }
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFilePath(): ?string
+    {
+        return $this->filePath;
+    }
+
+    /**
+     * @param string|null $filePath
+     */
+    public function setFilePath(?string $filePath): void
+    {
+        $this->filePath = $filePath;
     }
 }

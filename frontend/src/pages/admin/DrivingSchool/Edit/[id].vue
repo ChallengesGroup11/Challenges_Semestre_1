@@ -48,7 +48,7 @@ const onSubmit = async (id: string) => {
     body: JSON.stringify(drivingSchool),
   });
   const data = await response.json();
-  await router.push('/admin')
+  await router.push('/admin/drivingSchool')
   console.log('Success:', data);
 };
 // console.log(drivingSchool);
