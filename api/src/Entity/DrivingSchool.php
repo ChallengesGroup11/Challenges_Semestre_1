@@ -9,7 +9,6 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use App\Controller\DrivingSchoolAddKbisController;
 use App\Controller\DrivingSchoolEditStatusController;
 use App\Repository\DrivingSchoolRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -42,7 +41,7 @@ use Symfony\Component\HttpFoundation\File\File;
         inputFormats: ['multipart' => ['multipart/form-data']],
         normalizationContext: ['groups' => ['driving_school_get']],
         denormalizationContext: ['groups' => ['driving_school_write']],
-        security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR")',
+//        security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR")',
     ),
 ],
 )]
@@ -60,7 +59,7 @@ use Symfony\Component\HttpFoundation\File\File;
     security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR") and object.getDirector() == user'
 )]
 #[Delete(
-    security: 'is_granted("ROLE_ADMIN")'
+//    security: 'is_granted("ROLE_ADMIN")'
 )]
 class DrivingSchool
 {

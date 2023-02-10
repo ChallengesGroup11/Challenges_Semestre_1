@@ -25,6 +25,16 @@ const addDrivingSchool=()=>{
   router.push('/admin/drivingSchool/Add/DrivingSchool')
 }
 
+const deleteDrivingSchool = async (id: string) => {
+  const response = await fetch('https://localhost/driving_schools/' + id, {
+    method: 'DELETE',
+    headers: {
+      'accept':'application/ld+json',
+    },
+  });
+  await fetchDrivingSchool();
+};
+
 console.log(drivingSchool);
 </script>
 
