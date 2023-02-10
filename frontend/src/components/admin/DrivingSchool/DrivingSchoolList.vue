@@ -57,19 +57,21 @@ console.log(drivingSchool);
 
 <template>
   <!--    Tableau qui liste les auto école -->
-  <div class=" relative-position">
+  <div class=" q-pt-lg window-height window-width row justify-center ">
     <q-markup-table>
       <thead>
       <tr>
-        <th colspan="12">
-          <div class="text-h4 q-ml-md">Liste des auto-écoles</div>
-          <q-btn
-            color="primary"
+        <th colspan="13">
+          <div class="text-h4 q-ml-md">Liste des auto-écoles
+            <q-btn
+            class="float-right"
+            color="positive"
             text-color="white"
-            label="Ajouter une auto-école"
             icon="add"
             @click="addDrivingSchool()"
           />
+          </div>
+
 
         </th>
       </tr>
@@ -122,28 +124,34 @@ console.log(drivingSchool);
         <td v-else>Non renseigné</td>
         <td>
           <q-btn
-            color="primary"
+            color="warning"
             text-color="white"
-            label="Editer"
             icon="edit"
             @click="editDrivingSchool(driving.id)"
           />
         </td>
         <td>
           <q-btn
-            color="primary"
+            color="negative"
             text-color="white"
-            label="Supprimer"
             icon="delete"
             @click="deleteDrivingSchool(driving.id)"
           />
         </td>
-        <td>
+        <td v-if="driving.status === true">
           <q-btn
-            color="primary"
+            color="secondary"
             text-color="white"
-            label="Changer le status"
-            icon="edit"
+            icon="sync"
+            disabled
+            @click="changeStatus(driving.id)"
+          />
+        </td>
+        <td v-else>
+          <q-btn
+            color="warning"
+            text-color="white"
+            icon="sync"
             @click="changeStatus(driving.id)"
           />
         </td>

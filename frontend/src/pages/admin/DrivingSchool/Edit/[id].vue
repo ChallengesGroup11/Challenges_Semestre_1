@@ -57,16 +57,17 @@ const onSubmit = async (id: string) => {
 
 <template>
   <q-page class="bg-light-grey  items-center">
-      <div class="q-pa-md" style="max-width: 400px">
+    <div class=" q-mt-sl  row justify-center">
+      <div class="q-pa-md">
+        <h2 class="text-h5 w-100 q-mb-xl">Editer une auto-école </h2>
         <q-form
           @submit="onSubmit(drivingSchool.id)"
           class="q-gutter-md"
         >
           <q-input
-            filled
             v-model="drivingSchool.name"
-            label="Your name *"
-            hint="Name and surname"
+            label="Nom de l'école de conduite"
+            filled
             lazy-rules
             :rules="[ val => val && val.length > 0 || 'Please type something']"
           />
@@ -115,6 +116,7 @@ const onSubmit = async (id: string) => {
           </div>
         </q-form>
       </div>
+    </div>
   </q-page>
 </template>
 

@@ -5,10 +5,8 @@
 
 <template>
   <q-page class="bg-light-grey  items-center">
-  <div class="container">
 
     <DrivingSchoolList />
-  </div>
 
   </q-page>
 </template>
