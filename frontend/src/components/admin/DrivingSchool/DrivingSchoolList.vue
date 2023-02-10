@@ -1,7 +1,9 @@
 <script setup lang="ts">
 const router = useRouter()
-import { onMounted, reactive } from 'vue';
-const drivingSchool = reactive({ value: [] });
+import {onMounted, reactive} from 'vue';
+
+
+const drivingSchool = reactive({value: []});
 
 onMounted(async () => {
   await fetchDrivingSchool();
@@ -17,11 +19,12 @@ const fetchDrivingSchool = async () => {
     });
 };
 
-const editDrivingSchool=(id: string)=>{
-  router.push('/admin/drivingSchool/Edit/'+id)
+
+const editDrivingSchool = (id: string) => {
+  router.push('/admin/drivingSchool/Edit/' + id)
 }
 
-const addDrivingSchool=()=>{
+const addDrivingSchool = () => {
   router.push('/admin/drivingSchool/Add/DrivingSchool')
 }
 
@@ -29,9 +32,23 @@ const deleteDrivingSchool = async (id: string) => {
   const response = await fetch('https://localhost/driving_schools/' + id, {
     method: 'DELETE',
     headers: {
-      'accept':'application/ld+json',
+      'accept': 'application/ld+json',
     },
   });
+  await fetchDrivingSchool();
+};
+
+const changeStatus = async (id: string) => {
+  const response = await fetch('https://localhost/driving_schools/' + id + '/edit_status', {
+    method: 'PATCH',
+    headers: {
+      'accept': 'application/ld+json',
+      'Content-type': 'application/merge-patch+json',
+    },
+    body: '{}'
+  });
+  const data = await response.json()
+  console.log('Success:', data)
   await fetchDrivingSchool();
 };
 
@@ -39,80 +56,100 @@ console.log(drivingSchool);
 </script>
 
 <template>
-<!--    Tableau qui liste les auto école -->
+  <!--    Tableau qui liste les auto école -->
   <div class=" relative-position">
-  <q-markup-table>
-    <thead>
-    <tr>
-      <th colspan="11">
-
-
+    <q-markup-table>
+      <thead>
+      <tr>
+        <th colspan="12">
           <div class="text-h4 q-ml-md">Liste des auto-écoles</div>
-        <q-btn
-          color="primary"
-          text-color="white"
-          label="Ajouter une auto-école"
-          icon="add"
-          @click="addDrivingSchool()"
-        />
+          <q-btn
+            color="primary"
+            text-color="white"
+            label="Ajouter une auto-école"
+            icon="add"
+            @click="addDrivingSchool()"
+          />
 
-      </th>
-    </tr>
-    <tr>
-      <th>Id</th>
-      <th>Nom</th>
-      <th>Adresse</th>
-      <th>Code Postal</th>
-      <th>Ville</th>
-      <th>Numéro de téléphone</th>
-      <th>Numéro de SIRET</th>
-      <th> Kbis </th>
-      <th> Directeur </th>
-      <th> Editer</th>
-      <th> Supprimer</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr v-for="(driving, index) in drivingSchool.value" :key="index">
-      <td>{{ driving.id }}</td>
-      <td>{{ driving.name }}</td>
-      <td>{{ driving.address }}</td>
-      <td>{{ driving.zipcode }}</td>
-      <td>{{ driving.city }}</td>
-      <td>{{ driving.phoneNumber }}</td>
-      <td>{{ driving.siret }}</td>
-      <td>
-        <q-img
-          :src="driving.filePath"
-          spinner-color="white"
-          style="height: 140px; max-width: 150px"
-        />
-      </td>
-      <td v-if="driving.director">
-        {{ driving.director.userId.firstname }}
-      </td>
-      <td v-else>Non renseigné</td>
-      <td>
-        <q-btn
-          color="primary"
-          text-color="white"
-          label="Editer"
-          icon="edit"
-          @click="editDrivingSchool(driving.id)"
-        />
-      </td>
-      <td>
-        <q-btn
-          color="primary"
-          text-color="white"
-          label="Supprimer"
-          icon="delete"
-          @click="deleteDrivingSchool(driving.id)"
-        />
-      </td>
-    </tr>
-    </tbody>
-  </q-markup-table>
+        </th>
+      </tr>
+      <tr>
+        <th>Id</th>
+        <th>Nom</th>
+        <th>Adresse</th>
+        <th>Code Postal</th>
+        <th>Ville</th>
+        <th>Numéro de téléphone</th>
+        <th>Numéro de SIRET</th>
+        <th> Kbis</th>
+        <th>Status</th>
+        <th> Directeur</th>
+        <th> Editer</th>
+        <th> Supprimer</th>
+        <th> Valider le status</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="(driving, index) in drivingSchool.value" :key="index">
+        <td>{{ driving.id }}</td>
+        <td>{{ driving.name }}</td>
+        <td>{{ driving.address }}</td>
+        <td>{{ driving.zipcode }}</td>
+        <td>{{ driving.city }}</td>
+        <td>{{ driving.phoneNumber }}</td>
+        <td>{{ driving.siret }}</td>
+        <td v-if="driving.contentUrl">
+          <span>  <q-icon color="positive" name="thumb_up"/> </span>
+        </td>
+        <td v-else>
+          <span> <q-icon color="negative" name="thumb_down"/> </span>
+          <!--          <q-img-->
+          <!--            :src="'../' + driving.contentUrl"-->
+          <!--            :alt="driving.contentUrl"-->
+          <!--            spinner-color="#8785A2"-->
+          <!--            style="height: 140px; max-width: 150px"-->
+          <!--          />-->
+        </td>
+        <td v-if="driving.status === true">
+          <span> Valider </span>
+        </td>
+        <td v-else>
+          <span> En attente </span>
+        </td>
+        <td v-if="driving.director">
+          {{ driving.director.userId.firstname }}
+        </td>
+        <td v-else>Non renseigné</td>
+        <td>
+          <q-btn
+            color="primary"
+            text-color="white"
+            label="Editer"
+            icon="edit"
+            @click="editDrivingSchool(driving.id)"
+          />
+        </td>
+        <td>
+          <q-btn
+            color="primary"
+            text-color="white"
+            label="Supprimer"
+            icon="delete"
+            @click="deleteDrivingSchool(driving.id)"
+          />
+        </td>
+        <td>
+          <q-btn
+            color="primary"
+            text-color="white"
+            label="Changer le status"
+            icon="edit"
+            @click="changeStatus(driving.id)"
+          />
+        </td>
+      </tr>
+      </tbody>
+    </q-markup-table>
 
   </div>
 

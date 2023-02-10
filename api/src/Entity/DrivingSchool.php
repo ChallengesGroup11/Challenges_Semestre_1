@@ -95,8 +95,8 @@ class DrivingSchool
     #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write'])]
     private ?string $phoneNumber = null;
 
-    #[ApiProperty(types: ['https://schema.org/contentUrl'])]
-    #[Groups(['driving_school_get'])]
+    #[ApiProperty(types: ['https://localhost/contentUrl'])]
+    #[Groups(['driving_school_get','driving_school_cget'])]
     public ?string $contentUrl = null;
 
     #[Vich\UploadableField(mapping: "media_object", fileNameProperty: "filePath")]
