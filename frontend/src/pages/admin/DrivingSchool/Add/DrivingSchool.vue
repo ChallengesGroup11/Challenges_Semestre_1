@@ -38,13 +38,11 @@ const onSubmit = async () => {
 }
 
 // const fetchDirector = async () => {
-//   return fetch('https://localhost/users')
+//   return fetch('https://localhost/directors')
 //     .then((response) => response.json())
 //     .then((data) => {
-//       console.log(data)
-//       director.value = data["hydra:member"].filter(
-//         (user) => user.director !== null
-//       )
+//       console.log(data['hydra:member'].id)
+//       director.value = data['hydra:member']
 //     })
 //     .catch((error) => {
 //       console.error('Error:', error)
@@ -73,31 +71,36 @@ const onSubmit = async () => {
           filled
           lazy-rules
           :rules="[val => val.length > 0 || 'Veuillez saisir une adresse']"
-         model-value=""/>
+          v-model="address"
+        />
         <q-input
           label="Code postal"
           filled
           lazy-rules
           :rules="[val => val.length > 0 || 'Veuillez saisir un code postal']"
-         model-value=""/>
+          v-model="zipcode"
+        />
         <q-input
           label="Ville"
           filled
           lazy-rules
           :rules="[val => val.length > 0 || 'Veuillez saisir une ville']"
-         model-value=""/>
+          v-model="city"
+        />
         <q-input
           label="Numéro de téléphone"
           filled
           lazy-rules
           :rules="[val => val.length > 0 || 'Veuillez saisir un numéro de téléphone']"
-         model-value=""/>
+          v-model="phoneNumber"
+        />
         <q-input
           label="Numéro de SIRET"
           filled
           lazy-rules
           :rules="[val => val.length > 0 || 'Veuillez saisir un numéro de SIRET']"
-         model-value=""/>
+          v-model="siret"
+        />
         <q-input
           @update:model-value="val => { file = val[0] }"
           filled

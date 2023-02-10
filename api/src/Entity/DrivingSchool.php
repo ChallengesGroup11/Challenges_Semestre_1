@@ -11,7 +11,6 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\DrivingSchoolAddKbisController;
 use App\Controller\DrivingSchoolEditStatusController;
-use App\DTO\DrivingSchoolDTO;
 use App\Repository\DrivingSchoolRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
