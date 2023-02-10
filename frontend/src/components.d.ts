@@ -20,6 +20,7 @@ declare module '@vue/runtime-core' {
     FileUploader: typeof import('./components/FileUploader.vue')['default']
     Footer: typeof import('./components/Footer.vue')['default']
     LayoutHeader: typeof import('./components/LayoutHeader.vue')['default']
+    LayoutHeaderAdmin: typeof import('./components/admin/LayoutHeaderAdmin.vue')['default']
     ListRoom: typeof import('./components/ListRoom.vue')['default']
     ListUser: typeof import('./components/ListUser.vue')['default']
     OneSignalStatus: typeof import('./components/OneSignalStatus.vue')['default']
