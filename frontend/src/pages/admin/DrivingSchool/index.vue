@@ -1,25 +1,15 @@
 <script setup lang="ts">
 
+
 </script>
 
-
-
 <template>
+  <q-page class="bg-light-grey  items-center">
 
-<!--  navigation vers le menu des auto école-->
+    <DrivingSchoolList />
 
-
-  <div class="q-pa-md">
-
-  </div>
+  </q-page>
 </template>
-
-<style>
-
-
-</style>
-
-
 
 <route lang="yaml">
 meta:

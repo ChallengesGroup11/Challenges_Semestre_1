@@ -24,11 +24,11 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 #[ApiResource()]
 #[GetCollection(
     normalizationContext: ['groups' => ['user_cget']],
-    security: 'is_granted("ROLE_ADMIN")'
+//    security: 'is_granted("ROLE_ADMIN")'
 )]
 #[Get(
-    normalizationContext: ['groups' => ['user_get','director_get']],
-    security: 'object.getId() == user.getId()'
+    normalizationContext: ['groups' => ['user_get', 'director_get']],
+//    security: 'object.getId() == user.getId()'
 )]
 #[Patch(
     denormalizationContext: ['groups' => ['user_patch']],
@@ -53,10 +53,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
+    #[Groups(['user_get', 'user_cget', 'director_cget'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-
     #[Groups(['user_get', 'user_cget'])]
     #[NotBlank]
     private ?string $email = null;
@@ -74,7 +74,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $token = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['user_get', 'user_cget'])]
     private ?bool $status = null;
 
@@ -91,15 +91,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?Monitor $monitor = null;
 
     #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Payment::class)]
-    #[Groups([ 'user_cget'])]
+    #[Groups(['user_cget'])]
     private Collection $payments;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['booking_get','user_get','booking_cget','user_cget','user_patch'])]
+    #[Groups(['booking_get', 'user_get', 'booking_cget', 'user_cget', 'user_patch', 'driving_school_cget', 'director_cget','director_get'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['booking_get','user_get','booking_cget','user_cget','user_patch'])]
+    #[Groups(['booking_get', 'user_get', 'booking_cget', 'user_cget', 'user_patch', 'driving_school_cget'])]
     private ?string $lastname = null;
 
     public function __construct()
@@ -131,7 +131,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**

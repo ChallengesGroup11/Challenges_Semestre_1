@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Director;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -38,7 +39,15 @@ class DirectorRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-
+    public function findAllDirector(): ?array
+    {
+        return $this->createQueryBuilder('u')
+            ->join('u.userId', 'd')
+            ->addSelect('d')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 //    /**
 //     * @return Director[] Returns an array of Director objects
 //     */
