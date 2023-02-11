@@ -6,10 +6,12 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use App\Controller\GetCurrentUserController;
 use App\Controller\ResetPasswordController;
+use App\Controller\SignUpController;
 use App\Entity\Traits\Timer;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -20,6 +22,8 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -28,6 +32,12 @@ use Symfony\Component\Validator\Constraints\NotBlank;
         uriTemplate: '/me',
         controller: GetCurrentUserController::class,
         openapiContext: ['description' => 'Get current user']
+    ),
+    new Post(
+        inputFormats: ['multipart' => ['multipart/form-data']],
+        uriTemplate:'/SignUp',
+        controller: SignUpController::class,
+        openapiContext: ['description' => 'Signup User'],
     ),
 ])]
 
