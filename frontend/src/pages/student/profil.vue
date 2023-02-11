@@ -4,7 +4,6 @@ import moment from 'moment';
 
 const currentUser = reactive({value: []});
 
-
 onMounted(async () => {
 
   await getUser()
@@ -38,7 +37,8 @@ const getUser = async () => {
 
 <template>
   <div class="q-pa-md  ">
-    <q-card class="my-card">
+    <div class=" row ">
+    <q-card class="my-card q-ma-lg col" >
       <q-card-section>
         <div class="text-h5">Mon profil</div>
         <div class="text-left">
@@ -58,9 +58,22 @@ const getUser = async () => {
         </div>
         <!--        <div class="text-h6">Réservation : {{ currentUser.value.student.bookings }}</div>-->
       </q-card-section>
+    </q-card>
+      <q-card class="my-card q-ma-lg  col " >
+        <q-card-section>
+          <div class="text-h5">Mon crédit</div>
+            <div class="vertical text-h1"> {{ currentUser.value.student.countCredit }}</div>
+
+          <!--        <div class="text-h6">Réservation : {{ currentUser.value.student.bookings }}</div>-->
+        </q-card-section>
+      </q-card>
+    </div>
+    <q-card class="my-card q-ma-lg">
       <q-card-section>
         <div class="text-h5">Mes Réservations</div>
+
         <q-markup-table class="q-ma-md  ">
+
           <thead>
           <tr>
             <th>Heure de début</th>
@@ -68,9 +81,9 @@ const getUser = async () => {
             <th>Nom de l'école</th>
             <th>Numéro de téléphone</th>
             <th>Adresse</th>
-            <th> Valider ? </th>
-            <th> Heure terminé </th>
-            <th> Action </th>
+            <th> Valider ?</th>
+            <th> Heure terminé</th>
+            <th> Action</th>
           </tr>
           </thead>
           <tbody v-if="currentUser.value.student && currentUser.value.student.bookings">
@@ -81,28 +94,27 @@ const getUser = async () => {
             <td>{{ bookings.drivingSchoolId[0].phoneNumber }}</td>
             <td>{{ bookings.drivingSchoolId[0].city }}</td>
             <td v-if="bookings.statusValidate === true">
-            <q-icon name="mood" color="positive" size="20px" />
+              <q-icon name="mood" color="positive" size="20px"/>
             </td>
             <td v-else>
-            <q-icon name="mood_bad" color="negative" size="20px" />
+              <q-icon name="mood_bad" color="negative" size="20px"/>
             </td>
             <td v-if="bookings.statusDone === true">
-              <q-icon name="mood" color="positive" size="20px" />
+              <q-icon name="mood" color="positive" size="20px"/>
             </td>
             <td v-else>
-              <q-icon name="mood_bad" color="negative" size="20px" />
+              <q-icon name="mood_bad" color="negative" size="20px"/>
             </td>
             <td v-if="bookings.statusDone === true">
-              <q-btn disabled color="secondary" label="Annuler" />
+              <q-btn disabled color="secondary" label="Annuler"/>
             </td>
             <td v-else>
-              <q-btn color="primary" label="Annuler" />
+              <q-btn color="primary" label="Annuler"/>
             </td>
           </tr>
           </tbody>
 
         </q-markup-table>
-
 
         <!--        <div class="text-h6">Réservation : {{ currentUser.value.student.bookings }}</div>-->
       </q-card-section>

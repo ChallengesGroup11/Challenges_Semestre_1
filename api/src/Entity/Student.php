@@ -40,6 +40,9 @@ class Student
     #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'studentId')]
     #[Groups(['student_get'])]
     private Collection $bookings;
+    #[ORM\Column(nullable: true)]
+    #[Groups(['student_get'])]
+    private ?int $countCredit = null;
 
     public function __construct()
     {
@@ -122,6 +125,19 @@ class Student
         if ($this->bookings->removeElement($booking)) {
             $booking->removeStudentId($this);
         }
+
+        return $this;
+    }
+
+
+    public function getCountCredit(): ?int
+    {
+        return $this->countCredit;
+    }
+
+    public function setCountCredit(?int $countCredit): self
+    {
+        $this->countCredit = $countCredit;
 
         return $this;
     }

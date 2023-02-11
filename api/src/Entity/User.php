@@ -111,6 +111,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['booking_get', 'user_get', 'booking_cget', 'user_cget', 'user_patch', 'driving_school_cget'])]
     private ?string $lastname = null;
 
+
+
     public function __construct()
     {
         $this->payments = new ArrayCollection();
@@ -314,4 +316,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
 }
