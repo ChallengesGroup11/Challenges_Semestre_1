@@ -1,4 +1,7 @@
 <script setup lang="ts">
+
+
+
 const router = useRouter()
 import {onMounted, reactive} from 'vue';
 
@@ -10,14 +13,24 @@ onMounted(async () => {
 });
 
 
+
+
 const fetchDrivingSchool = async () => {
-  return fetch('https://localhost/driving_schools')
+  return fetch('https://localhost/driving_schools',
+    {
+      headers: {
+        'accept': 'application/ld+json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token') ,
+      },
+    })
     .then((response) => response.json())
     .then((data) => {
       drivingSchool.value = data["hydra:member"];
       console.log(drivingSchool.value);
     });
 };
+
+
 
 
 const editDrivingSchool = (id: string) => {

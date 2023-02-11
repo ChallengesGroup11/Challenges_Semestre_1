@@ -1,3 +1,33 @@
+<script setup lang="ts">
+
+import {reactive} from "vue";
+const currentUser = reactive({value: []});
+
+onMounted(async () => {
+  await getUser()
+});
+
+
+
+const getUser = async () => {
+  return fetch("https://localhost/me", {
+    headers:{
+      'Authorization': 'Bearer ' + localStorage.getItem('token') ,
+    }
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      currentUser.value = data;
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+};
+
+</script>
+
+
 <template>
   <q-header elevated class="bg-primary text-white">
     <q-toolbar>

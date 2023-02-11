@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
+use App\Controller\GetCurrentUserController;
 use App\Controller\ResetPasswordController;
 use App\Entity\Traits\Timer;
 use App\Repository\UserRepository;
@@ -21,7 +23,14 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-#[ApiResource()]
+#[ApiResource(operations: [
+    new GetCollection(
+        uriTemplate: '/me',
+        controller: GetCurrentUserController::class,
+        openapiContext: ['description' => 'Get current user']
+    ),
+])]
+
 #[GetCollection(
     normalizationContext: ['groups' => ['user_cget']],
 //    security: 'is_granted("ROLE_ADMIN")'
