@@ -1,26 +1,42 @@
 <script setup lang="ts">
-const emit = defineEmits<{
-  (e: 'signup', val: FormSignupStudent): void
-}>()
 
-class FormSignupStudent {
-  name = ''
-  firstname = ''
-  email = ''
-  password = ''
-  passwordSecond = ''
-  identityCardFile = {} as File
-  codeCertificate = {} as File
-}
+import {reactive} from 'vue';
 
-const state = reactive({
-  form: new FormSignupStudent(),
-})
+const user = reactive({
+  firstname: "",
+  lastname: "",
+  email: "",
+  password: "",
+  passwordSecond: "",
+  identity: "",
+});
 
-const fn = {
-  onClickSignup() {
-    console.log('signup')
-  },
+const onClickSignup = async (e: { preventDefault: () => void; }) => {
+  e.preventDefault();
+  const requestData = {
+    firstname: user.firstname,
+    lastname: user.lastname,
+    email: user.email,
+    password: user.password,
+    roles: ["ROLE_USER"],
+    status: false
+  };
+  console.log(requestData)
+  const response = await fetch('https://localhost/signup/student', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(requestData),
+  });
+  // const data = await response.json();
+  if (response.status === 201) {
+    console.log("created")
+  }
+  if (response.status === 422) {
+    const data = await response.json();
+    console.log(data)
+  }
 }
 </script>
 
@@ -28,13 +44,13 @@ const fn = {
   <div>
     <q-card-section>
       <q-form class="q-gutter-md">
-        <q-input v-model="state.form.name" square filled clearable type="text" label="Prénom" />
-        <q-input v-model="state.form.firstname" square filled clearable type="text" label="Nom" />
+        <q-input v-model="user.firstname" square filled clearable type="text" label="Prénom" />
+        <q-input v-model="user.lastname" square filled clearable type="text" label="Nom" />
 
-        <q-input v-model="state.form.email" square filled clearable type="email" label="email" />
-        <q-input v-model="state.form.password" square filled clearable type="password" label="password" />
+        <q-input v-model="user.email" square filled clearable type="email" label="email" />
+        <q-input v-model="user.password" square filled clearable type="password" label="password" />
         <q-input
-          v-model="state.form.passwordSecond"
+          v-model="user.passwordSecond"
           square
           filled
           clearable
@@ -42,21 +58,11 @@ const fn = {
           label="Confirmer le mot de
       passe"
         />
-        <q-file v-model="state.form.identityCardFile" outlined clearable label="Carte d'identité">
-          <template #prepend>
-            <q-icon name="attach_file" />
-          </template>
-        </q-file>
-        <q-file v-model="state.form.codeCertificate" outlined clearable label="Certificat de code">
-          <template #prepend>
-            <q-icon name="attach_file" />
-          </template>
-        </q-file>
       </q-form>
     </q-card-section>
     <q-card-actions class="q-px-md">
       <q-btn
-        @click="fn.onClickSignup"
+        @click="onClickSignup"
         unelevated
         color="light-green-7"
         size="lg"

@@ -11,7 +11,8 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use App\Controller\GetCurrentUserController;
 use App\Controller\ResetPasswordController;
-use App\Controller\SignUpController;
+use App\Controller\SignUpStudentController;
+use App\Controller\SignUpDirectorController;
 use App\Entity\Traits\Timer;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -34,10 +35,16 @@ use Symfony\Component\Validator\Constraints as Assert;
         openapiContext: ['description' => 'Get current user']
     ),
     new Post(
-        inputFormats: ['multipart' => ['multipart/form-data']],
-        uriTemplate:'/SignUp',
-        controller: SignUpController::class,
+        uriTemplate: '/signup/student',
+        controller: SignUpStudentController::class,
         openapiContext: ['description' => 'Signup User'],
+        denormalizationContext: ['groups' => ['user_write']],
+    ),
+    new Post(
+        uriTemplate: '/signup/director',
+        controller: SignUpDirectorController::class,
+        openapiContext: ['description' => 'Signup Director'],
+        denormalizationContext: ['groups' => ['user_write']],
     ),
 ])]
 
@@ -76,25 +83,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['user_get', 'user_cget'])]
+    #[Groups(['user_get', 'user_cget', 'user_write'])]
     #[NotBlank]
     private ?string $email = null;
 
     #[ORM\Column]
-    #[Groups(['user_get', 'user_cget'])]
+    #[Groups(['user_get', 'user_cget', 'user_write'])]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Groups(['user_write'])]
     private ?string $password = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user_write'])]
     private ?string $token = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['user_get', 'user_cget'])]
+    #[Groups(['user_get', 'user_cget', 'user_write'])]
     private ?bool $status = null;
 
     #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'])]
@@ -114,12 +123,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $payments;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['booking_get', 'user_get', 'booking_cget', 'user_cget', 'user_patch', 'driving_school_cget', 'director_cget','director_get'])]
+    #[Groups(['booking_get', 'user_get', 'booking_cget', 'user_cget', 'user_patch', 'driving_school_cget', 'director_cget','director_get', 'user_write'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['booking_get', 'user_get', 'booking_cget', 'user_cget', 'user_patch', 'driving_school_cget'])]
+    #[Groups(['booking_get', 'user_get', 'booking_cget', 'user_cget', 'user_patch', 'driving_school_cget', 'user_write'])]
     private ?string $lastname = null;
+
 
     public function __construct()
     {

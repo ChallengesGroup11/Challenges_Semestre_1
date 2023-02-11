@@ -21,7 +21,7 @@ class Monitor
     private ?int $id = null;
 
     #[ORM\OneToOne(inversedBy: 'monitor', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     #[Groups(['booking_get','booking_cget'])]
     private ?User $userId = null;
 

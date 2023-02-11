@@ -1,52 +1,61 @@
 import { handleFileUpload } from '../utils/domUtil';
 <script setup lang="ts">
 // import { domUtil } from '~/utils/domUtil'
-import {ref} from 'vue'
+import {reactive} from 'vue'
 
-// const emit = defineEmits<{
-//   (e: 'signup', val: FormSignupDirector): void
-// }>()
+const user = reactive({
+  firstname: "",
+  lastname: "",
+  email: "",
+  password: "",
+  passwordSecond: "",
+  identity: "",
+});
 
-// class FormSignupDirector {
-//   name = 'bonjour'
-//   lastname = 'cava'
-//   email = 'florianguillot94@gmail.com'
-//   password = 'test'
-//   passwordSecond = 'test'
-//   numSiret = '123456'
-//   kbisFile = {} as File
-//   identity= 'student'
-// }
+const error = reactive({
+  type: "",
+  message: "",
+})
 
-const firstname = ref('')
-const lastname = ref('')
-const email = ref('')
-const password = ref('')
-const passwordSecond = ref('')
-const numSiret = ref('')
-const kbisFile = ref()
-const identity = ref('student')
-
-
-// const state = reactive({
-//   form: new FormSignupDirector(),
-// })
-
-const onClickSignup = async () => {
-  const formData = new FormData();
-  formData.append('firstname', firstname.value);
-  formData.append('lastname', lastname.value);
-  formData.append('email', email.value);
-  formData.append('password', password.value);
-  formData.append('identity', identity.value);
-  formData.append('siret', numSiret.value);
-  formData.append('kbis', kbisFile.value[0]);
-  const response = await fetch('https://localhost/SignUp', {
-    method: 'POST',
-    body: formData
-  });
-  const data = await response.json();
-  console.log(data)
+const onClickSignup = async (e: { preventDefault: () => void; }) => {
+  e.preventDefault();
+  if(user.password !== user.passwordSecond) {
+    error.type = "password"
+    error.message = "Les mots de passe ne correspondent pas"
+    return error
+  }else {
+    error.type = ""
+    error.message = ""
+    const requestData = {
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      password: user.password,
+      roles: ["ROLE_USER", "ROLE_DIRECTOR"],
+      status: false
+    };
+    console.log(requestData)
+    const response = await fetch('https://localhost/signup/director', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestData),
+    });
+    // const data = await response.json();
+    if (response.status === 201) {
+      console.log("created")
+    }
+    if (response.status === 422) {
+      const data = await response.json();
+      if(data.hydra.title === "An error occurred") {
+        error.type = "email"
+        error.message = "Cet email est déjà utilisé"
+        return error
+      }
+      console.log(data)
+    }
+  }
 }
 
 </script>
@@ -54,20 +63,15 @@ const onClickSignup = async () => {
 <template>
   <div>
     <q-card-section>
+      {{error.message}}
       <q-form class="q-gutter-md">
-        <q-input v-model="firstname" square filled clearable type="text" label="Prénom" />
-        <q-input v-model="lastname" square filled clearable type="text" label="Nom" />
+        <q-input v-model="user.firstname" square filled clearable type="text" label="Prénom" />
+        <q-input v-model="user.lastname" square filled clearable type="text" label="Nom" />
 
-        <q-input v-model="email" square filled clearable type="email" label="email" />
-        <q-input v-model="password" square filled clearable type="password" label="password" />
-        <q-input v-model="passwordSecond" square filled clearable type="password" label="Confirmer le mot de
+        <q-input v-model="user.email" square filled clearable type="email" label="email" />
+        <q-input v-model="user.password" square filled clearable type="password" label="password" />
+        <q-input v-model="user.passwordSecond" square filled clearable type="password" label="Confirmer le mot de
       passe" />
-        <q-input v-model="numSiret" square filled clearable type="number" label="Numéro de Siret" />
-        <q-file v-model="kbisFile"  @update:model-value="val => { file = val[0] }">
-          <template #prepend>
-            <q-icon name="attach_file" />
-          </template>
-        </q-file>
       </q-form>
     </q-card-section>
     <q-card-actions class="q-px-md">
