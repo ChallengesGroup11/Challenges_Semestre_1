@@ -20,26 +20,29 @@ class Student
     #[ORM\Column()]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['student_get'])]
     private ?int $nbHourDone;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable:true)]
     #[Groups(['student_get'])]
     private ?string $urlCodeCertification = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable:true)]
     #[Groups(['student_get'])]
     private ?string $urlCni = null;
 
     #[ORM\OneToOne(inversedBy: 'student', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     #[Groups(['booking_get','booking_cget','student_get','user_get'])]
-    private ?User $userId = null;
+
+
 
     #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'studentId')]
     #[Groups(['student_get'])]
     private Collection $bookings;
+
+
     #[ORM\Column(nullable: true)]
     #[Groups(['student_get'])]
     private ?int $countCredit = null;
