@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
 #[ApiResource]
-#[Get(normalizationContext: ['groups' => ['director_get']])]
+#[Get(normalizationContext: ['groups' => ['student_get']])]
 class Student
 {
     #[ORM\Id]
@@ -21,20 +21,24 @@ class Student
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['student_get'])]
     private ?int $nbHourDone;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['student_get'])]
     private ?string $urlCodeCertification = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['student_get'])]
     private ?string $urlCni = null;
 
     #[ORM\OneToOne(inversedBy: 'student', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['booking_get','booking_cget'])]
+    #[Groups(['booking_get','booking_cget','student_get','user_get'])]
     private ?User $userId = null;
 
     #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'studentId')]
+    #[Groups(['student_get'])]
     private Collection $bookings;
 
     public function __construct()

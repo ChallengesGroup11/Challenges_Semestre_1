@@ -42,7 +42,6 @@ class Booking
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
-    #[Groups(['booking_get'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -53,7 +52,7 @@ class Booking
     #[Groups(['booking_get', 'booking_write','get','booking_cget'])]
     private ?\DateTimeInterface $slotEnd = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,nullable: true)]
     #[Groups(['booking_get', 'booking_write','get', 'booking_cget'])]
     private ?string $comment = null;
 
@@ -66,7 +65,7 @@ class Booking
     private ?bool $statusDone = null;
 
     #[ORM\ManyToMany(targetEntity: Student::class, inversedBy: 'bookings')]
-    #[Groups(['booking_get', 'booking_cget'])]
+    #[Groups(['booking_get', 'booking_cget','student_get'])]
     private Collection $studentId;
 
     #[ORM\ManyToMany(targetEntity: Monitor::class, inversedBy: 'bookings')]

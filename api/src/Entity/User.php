@@ -27,17 +27,17 @@ use Symfony\Component\Validator\Constraints\NotBlank;
     new GetCollection(
         uriTemplate: '/me',
         controller: GetCurrentUserController::class,
-        openapiContext: ['description' => 'Get current user']
+        openapiContext: ['description' => 'Get current user'],
     ),
 ])]
 
 #[GetCollection(
     normalizationContext: ['groups' => ['user_cget']],
-//    security: 'is_granted("ROLE_ADMIN")'
+    security: 'is_granted("ROLE_ADMIN")'
 )]
 #[Get(
     normalizationContext: ['groups' => ['user_get', 'director_get']],
-//    security: 'object.getId() == user.getId()'
+    security: 'object.getId() == user.getId()'
 )]
 #[Patch(
     denormalizationContext: ['groups' => ['user_patch']],
@@ -62,7 +62,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
-    #[Groups(['user_get', 'user_cget', 'director_cget'])]
+    #[Groups([ 'user_cget', 'director_cget'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]

@@ -68,11 +68,11 @@ class DrivingSchool
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
-    #[Groups(['driving_school_cget', 'driving_school_get'])]
+    #[Groups(['driving_school_cget'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['booking_get', 'booking_cget', 'user_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write'])]
+    #[Groups(['driving_school_cget', 'driving_school_get', 'driving_school_write'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
@@ -119,6 +119,7 @@ class DrivingSchool
     private Collection $monitors;
 
     #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'drivingSchoolId')]
+    #[Groups(['driving_school_get','booking_get'])]
     private Collection $bookings;
 
     public function __construct()
