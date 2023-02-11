@@ -33,33 +33,33 @@ use Symfony\Component\HttpFoundation\File\File;
             'summary' => 'Editer le status d\'une auto-école',
         ],
         denormalizationContext: ['groups' => ['driving_school_patch']],
+        security: 'is_granted("ROLE_DIRECTOR") and object.getDirector() == user',
         name: 'driving_school_edit_status'
-//    security: 'is_granted("ROLE_DIRECTOR") and object.getDirector() == user'
     ),
 
     new Post(
         inputFormats: ['multipart' => ['multipart/form-data']],
         normalizationContext: ['groups' => ['driving_school_get']],
         denormalizationContext: ['groups' => ['driving_school_write']],
-//        security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR")',
+        security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR")',
     ),
 ],
 )]
 #[GetCollection(
     normalizationContext: ['groups' => ['driving_school_cget']],
-//    security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR")'
+    security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR")'
 )]
 #[Get(
     normalizationContext: ['groups' => ['driving_school_get']]
 )]
 #[Put(
-//    security: 'is_granted("ROLE_ADMIN")'
+    security: 'is_granted("ROLE_ADMIN")'
 )]
 #[Patch(
     security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR") and object.getDirector() == user'
 )]
 #[Delete(
-//    security: 'is_granted("ROLE_ADMIN")'
+    security: 'is_granted("ROLE_ADMIN")'
 )]
 class DrivingSchool
 {

@@ -17,6 +17,7 @@
     "@vueuse/core": "^9.1.0",
     "@vueuse/head": "^0.7.9",
     "imtool": "^1.1.5",
+    "jsonwebtoken": "^9.0.0",
     "nprogress": "^0.2.0",
     "pinia": "^2.0.17",
     "quasar": "^2.7.7",
