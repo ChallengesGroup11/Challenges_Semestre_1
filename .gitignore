@@ -4,5 +4,5 @@
 .idea/*
 /api/.env
 /api/public/media
-api/migrations
+
 .env
