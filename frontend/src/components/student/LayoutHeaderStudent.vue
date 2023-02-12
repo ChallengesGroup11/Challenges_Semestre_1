@@ -1,13 +1,22 @@
 <script setup lang="ts">
 
 import {reactive} from "vue";
+const router = useRouter()
 
 const currentUser = reactive({value: []});
 
 onMounted(async () => {
-  await getUser()
+  if(!localStorage.getItem('token')) {
+    await router.push('/auth')
+  }else {
+    await getUser()
+  }
 });
 
+const logoutUser = async () => {
+  localStorage.removeItem('token');
+  await router.push('/login');
+}
 
 const getUser = async () => {
   return fetch("https://localhost/me", {
@@ -43,7 +52,7 @@ const getUser = async () => {
       <q-btn icon="person" flat label="Mon profil" to="/student/profil"/>
       <q-btn icon="paid" flat label="Acheter des crédits" to="/student/buy_credit"/>
       <q-space/>
-      <q-btn icon="logout" flat label="Déconnexion" to="/logout"/>
+      <q-btn @click="logoutUser" icon="logout" flat label="Déconnexion" />
     </q-toolbar>
   </q-header>
 </template>

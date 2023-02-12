@@ -18,6 +18,7 @@ class Student
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
+    #[Groups(['student_get'])]
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
@@ -35,7 +36,7 @@ class Student
     #[ORM\OneToOne(inversedBy: 'student', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: true)]
     #[Groups(['booking_get','booking_cget','student_get','user_get'])]
-
+    private ?User $userId = null;
 
 
     #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'studentId')]

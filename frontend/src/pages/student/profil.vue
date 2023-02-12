@@ -2,18 +2,25 @@
 import {reactive, defineComponent} from "vue";
 import moment from 'moment';
 
+const router = useRouter()
+
 const currentUser = reactive({value: []});
 
 onMounted(async () => {
-
-  await getUser()
+  if (localStorage.getItem('token') == null) {
+    await router.push('/auth')
+  } else {
+    await getUser()
+  }
 });
 
 
-const date = (date: moment.MomentInput) => {
+const dateJour = (date: moment.MomentInput) => {
   return moment(date).format(" DD/MM/YYYY ");
 }
-
+const dateHeure = (date: moment.MomentInput) => {
+  return moment(date).format("hh:ss ");
+}
 
 const getUser = async () => {
   return fetch("https://localhost/me", {
@@ -31,6 +38,9 @@ const getUser = async () => {
     });
 };
 
+const editer = (id: string) => {
+ router.push('/student/edit/' + id)
+}
 
 </script>
 
@@ -38,44 +48,69 @@ const getUser = async () => {
 <template>
   <div class="q-pa-md  ">
     <div class=" row ">
-    <q-card class="my-card q-ma-lg col" >
-      <q-card-section>
-        <div class="text-h5">Mon profil</div>
-        <div class="text-left">
-          <div class="text-h6">Nom : {{ currentUser.value.firstname }}</div>
-          <div class="text-h6">Prénom : {{ currentUser.value.lastname }}</div>
-          <div class="text-h6">Email : {{ currentUser.value.email }}</div>
-          <div v-if="currentUser.value.student" class="text-h6">Nombre d'heure de conduite effectuée : {{
-              currentUser.value.student.nbHourDone
-            }}
-          </div>
-          <div v-if="currentUser.value.student" class="text-h6">Url du code de la route : {{
-              currentUser.value.student.urlCodeCertification
-            }}
-          </div>
-          <div v-if="currentUser.value.student" class="text-h6">Url de la CNI : {{ currentUser.value.student.urlCni }}
-          </div>
-        </div>
-        <!--        <div class="text-h6">Réservation : {{ currentUser.value.student.bookings }}</div>-->
-      </q-card-section>
-    </q-card>
-      <q-card class="my-card q-ma-lg  col " >
+      <q-card class="my-card q-ma-lg col">
         <q-card-section>
-          <div class="text-h5">Mon crédit</div>
-            <div class="vertical text-h1"> {{ currentUser.value.student.countCredit }}</div>
+          <div class="text-h4"> {{ currentUser.value.firstname }} {{ currentUser.value.lastname }}<q-icon color="warning" @click="editer(currentUser.value.id)" name="edit"></q-icon></div>
+          <div class="text-left">
+            <div class="text-h6">Mon email : {{ currentUser.value.email }}</div>
+            <div v-if="currentUser.value.student" class="text-h6">
+              Code de la route
+              <span v-if="currentUser.value.student.urlCodeCertification !== null">
+              <q-icon color="positive" name="check"/>
+            </span>
+              <span v-else>
+              <q-icon color="negative" name="close"/>
+            </span>
+            </div>
+            <div v-if="currentUser.value.student" class="text-h6">
+              CNI
+              <span v-if="currentUser.value.student.urlCni !== null">
+              <q-icon color="positive" name="check"/>
+            </span>
+              <span v-else>
+              <q-icon color="negative" name="close"/>
+            </span>
+            </div>
+          </div>
+        </q-card-section>
+      </q-card>
 
-          <!--        <div class="text-h6">Réservation : {{ currentUser.value.student.bookings }}</div>-->
+      <q-card class="my-card q-ma-lg bg-secondary col">
+        <q-card-section>
+          <div class="text-h4">Mon crédit</div>
+          <div v-if="currentUser.value.student" class="vertical text-h1">
+            <span v-if="currentUser.value.student.countCredit !== null">
+              {{ currentUser.value.student.countCredit }}
+            </span>
+            <span v-else class="vertical text-h1"> 0</span>
+          </div>
+          <div v-else class="vertical text-h1"> 0</div>
+        </q-card-section>
+      </q-card>
+
+      <q-card class="my-card q-ma-lg  col ">
+        <q-card-section class="vertical-middle">
+          <div class="text-h4">Nombre d'heure effectué(e)</div>
+          <div v-if="currentUser.value.student" class="vertical text-h1">
+            <span v-if="currentUser.value.student.nbHourDone !== null">
+              {{ currentUser.value.student.nbHourDone }}
+            </span>
+            <span v-else class="vertical text-h1"> 0</span>
+          </div>
+
         </q-card-section>
       </q-card>
     </div>
+
+    <div v-if="currentUser.value.student && currentUser.value.student.bookings">
     <q-card class="my-card q-ma-lg">
       <q-card-section>
         <div class="text-h5">Mes Réservations</div>
-
         <q-markup-table class="q-ma-md  ">
 
           <thead>
           <tr>
+            <th> Jour de la session</th>
             <th>Heure de début</th>
             <th>Heure de fin</th>
             <th>Nom de l'école</th>
@@ -88,8 +123,10 @@ const getUser = async () => {
           </thead>
           <tbody v-if="currentUser.value.student && currentUser.value.student.bookings">
           <tr v-for="(bookings, index ) in currentUser.value.student.bookings" :key="index">
-            <td>{{ date(bookings.slotBegin) }}</td>
-            <td>{{ date(bookings.slotEnd) }}</td>
+            <td v-if="!bookings" colspan="9">Pas de réservation de session effectué(e)</td>
+            <td>{{ dateJour(bookings.slotBegin) }}</td>
+            <td>{{ dateHeure(bookings.slotBegin) }}</td>
+            <td>{{ dateHeure(bookings.slotEnd) }}</td>
             <td> {{ bookings.drivingSchoolId[0].name }}</td>
             <td>{{ bookings.drivingSchoolId[0].phoneNumber }}</td>
             <td>{{ bookings.drivingSchoolId[0].city }}</td>
@@ -137,6 +174,7 @@ const getUser = async () => {
       <!--          </div>-->
       <!--        </div>-->
     </q-card>
+    </div>
   </div>
 </template>
 

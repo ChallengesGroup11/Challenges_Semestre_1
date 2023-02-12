@@ -79,7 +79,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
-    #[Groups([ 'user_cget', 'director_cget'])]
+    #[Groups([ 'user_cget', 'user_get','director_cget'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]

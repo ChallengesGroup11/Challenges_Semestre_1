@@ -29,37 +29,14 @@ const onSubmit = async () => {
   formData.append('siret', siret.value);
   const response = await fetch('https://localhost/driving_schools', {
     method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + localStorage.getItem('token'),
+    },
     body: formData
   })
   const data = await response.json()
   console.log('Success:', data)
   await router.push('/admin/drivingSchool')
-}
-
-const firstname = ref('')
-const lastname = ref('')
-const email = ref('')
-const password = ref('')
-const passwordSecond = ref('')
-const numSiret = ref('')
-const kbisFile = ref()
-const identity = ref('student')
-
-const onClickSignup = async () => {
-  const formData = new FormData();
-  formData.append('firstname', firstname.value);
-  formData.append('lastname', lastname.value);
-  formData.append('email', email.value);
-  formData.append('password', password.value);
-  formData.append('identity', identity.value);
-  formData.append('siret', numSiret.value);
-  formData.append('kbis', kbisFile.value[0]);
-  const response = await fetch('https://localhost/SignUp', {
-    method: 'POST',
-    body: formData
-  });
-  const data = await response.json();
-  console.log(data)
 }
 
 // const fetchDirector = async () => {
