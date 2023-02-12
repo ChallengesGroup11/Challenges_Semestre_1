@@ -7,6 +7,8 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Delete;
+use App\Controller\StudentEditStatusController;
 use App\Repository\StudentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,7 +16,25 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
-#[ApiResource]
+#[ApiResource(operations: [
+    new Patch(
+        uriTemplate: '/students/{id}/edit_status',
+        controller: StudentEditStatusController::class,
+        openapiContext: [
+            'summary' => 'Editer le status d\'un élève',
+        ],
+        denormalizationContext: ['groups' => ['student_patch']],
+        security: 'is_granted("ROLE_ADMIN")',
+        name: 'student_edit_status'
+    ),
+    new Post(
+        inputFormats: ['multipart' => ['multipart/form-data']],
+        normalizationContext: ['groups' => ['student_get']],
+        denormalizationContext: ['groups' => ['student_write']],
+        security: 'is_granted("ROLE_ADMIN")',
+    ),
+],
+)]
 #[GetCollection(
     normalizationContext: ['groups' => ['student_cget']],
 )]
@@ -27,6 +47,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[Patch(
     inputFormats: ['multipart' => ['multipart/form-data']]
 )]
+#[Delete(
+    security: 'is_granted("ROLE_ADMIN")'
+)]
 
 class Student
 {
@@ -36,17 +59,20 @@ class Student
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['student_get','student_cget'])]
     private ?int $nbHourDone;
 
     #[ORM\Column(length: 255, nullable:true)]
+    #[Groups(['student_get','student_cget'])]
     private ?string $urlCodeCertification = null;
 
     #[ORM\Column(length: 255, nullable:true)]
+    #[Groups(['student_get','student_cget'])]
     private ?string $urlCni = null;
 
     #[ORM\OneToOne(inversedBy: 'student', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['booking_get','booking_cget'])]
+    #[Groups(['booking_get','booking_cget', 'student_get','student_cget'])]
     private ?User $userId = null;
 
     #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'studentId')]

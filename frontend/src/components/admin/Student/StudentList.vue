@@ -110,7 +110,12 @@ const changeStatus = async (id: string) => {
         <td>{{ stud.lastname }}</td>
         <td>{{ stud.firstname }}</td>
         <td>{{ stud.email }}</td>
-        <td>{{ stud.status }}</td>
+        <td v-if="stud.status === true">
+          <span> Validé </span>
+        </td>
+        <td v-else>
+          <span> En attente </span>
+        </td>
         <td>{{ stud.nb_hour_done }}</td>
         <td v-if="stud.url_code_certification">
           <span>  <q-icon color="positive" name="thumb_up"/> </span>
@@ -135,12 +140,6 @@ const changeStatus = async (id: string) => {
                      spinner-color="#8785A2"
                      style="height: 140px; max-width: 150px"
                    />
-        </td>
-        <td v-if="stud.status === true">
-          <span> Validé </span>
-        </td>
-        <td v-else>
-          <span> En attente </span>
         </td>
         <td>
           <q-btn
