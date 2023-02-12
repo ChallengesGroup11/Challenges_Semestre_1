@@ -12,41 +12,41 @@ const state = reactive({
   form: new FormSignin(),
 })
 
-const errorMessage = ref(null);
+const errorMessage = ref(null)
 
 const user = reactive({
-  email: "",
-  password: "",
+  email: '',
+  password: '',
 })
 
-const onClickSignin = async (e: { preventDefault: () => void; }) => {
-  e.preventDefault();
-  console.log("bla")
+const onClickSignin = async (e: { preventDefault: () => void }) => {
+  e.preventDefault()
+  console.log('bla')
   const response = await fetch('https://localhost/authentication_token', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(user),
-  });
-  const data = await response.json();
+  })
+  const data = await response.json()
   if (data.token) {
-    errorMessage.value = null;
-    localStorage.setItem("token", data.token);
-    await router.push("/admin/DrivingSchool");
+    errorMessage.value = null
+    debugger
+    localStorage.setItem('token', data.token)
+    await router.push('/admin/DrivingSchool')
   } else if (data.message) {
-    errorMessage.value = data.message;
+    errorMessage.value = data.message
   } else if (data.error) {
-    errorMessage.value = data.error;
+    errorMessage.value = data.error
   }
-
 }
 </script>
 
 <template>
   <div>
     <q-card-section>
-      <span>{{errorMessage}}</span>
+      <span>{{ errorMessage }}</span>
       <q-form class="q-gutter-md">
         <q-input v-model="user.email" square filled clearable type="email" label="email" />
         <q-input v-model="user.password" square filled clearable type="password" label="password" />
