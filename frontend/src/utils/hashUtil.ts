@@ -22,10 +22,24 @@ export namespace hashUtil {
         return 'ROLE_DIRECTOR'
       case 'monitor':
         return 'ROLE_MONITOR'
-      case 'student':
-        return 'ROLE_STUDENT'
       default:
         return ''
     }
+  }
+
+  export function pathToRedirectByRole(roles: string[]) {
+    if (roles.includes('ROLE_ADMIN')) {
+      return '/admin'
+    }
+    if (roles.includes('ROLE_DIRECTOR')) {
+      return '/director'
+    }
+    if (roles.includes('ROLE_MONITOR')) {
+      return '/monitor'
+    }
+    if (roles.includes('ROLE_USER')) {
+      return '/student'
+    }
+    return '/'
   }
 }

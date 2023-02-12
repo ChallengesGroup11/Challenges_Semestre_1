@@ -1,21 +1,7 @@
 import type { UserModule } from '~/types'
 import { hashUtil } from '~/utils/hashUtil'
 
-// requiresAuth
-// requiresNotAuth
-// roles: director, monitor, student, admin
-
-// director: null
-// email: 'user@user.fr'
-// firstname: 'flauz'
-// id: 1
-// lastname: 'guillot'
-// monitor: null
-// roles: (2)[('ROLE_ADMIN', 'ROLE_USER')]
-// status: null
-// student: null
-
-type Roles = 'ROLE_ADMIN' | 'ROLE_USER' | 'ROLE_DIRECTOR' | 'ROLE_MONITOR' | 'ROLE_STUDENT'
+type Roles = 'ROLE_ADMIN' | 'ROLE_USER' | 'ROLE_DIRECTOR' | 'ROLE_MONITOR'
 
 interface TokenParsed {
   iat: string
@@ -24,12 +10,12 @@ interface TokenParsed {
   email: string
 }
 
-const tokenParsedFake: TokenParsed = {
-  iat: '',
-  exp: '',
-  roles: ['ROLE_ADMIN', 'ROLE_STUDENT'],
-  email: '',
-}
+// const tokenParsedFake: TokenParsed = {
+//   iat: '',
+//   exp: '',
+//   roles: ['ROLE_ADMIN', 'ROLE_STUDENT'],
+//   email: '',
+// }
 
 export const install: UserModule = ({ isClient, router }) => {
   const token = localStorage.getItem('token')
@@ -54,8 +40,10 @@ export const install: UserModule = ({ isClient, router }) => {
           ) {
             if (!tokenParsed.roles.includes(hashUtil.convertRoleFrontToDbRole(to.meta.roles))) {
               next({
-                path: '/',
+                path: hashUtil.pathToRedirectByRole(tokenParsed.roles),
               })
+            } else {
+              next()
             }
           }
         }
@@ -66,11 +54,12 @@ export const install: UserModule = ({ isClient, router }) => {
       ) {
         if (tokenParsed) {
           next({
-            path: '/',
+            path: hashUtil.pathToRedirectByRole(tokenParsed.roles),
           })
+        } else {
+          next()
         }
       }
-      next()
     })
   }
 }
