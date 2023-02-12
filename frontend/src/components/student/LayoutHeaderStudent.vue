@@ -15,7 +15,7 @@ onMounted(async () => {
 
 const logoutUser = async () => {
   localStorage.removeItem('token');
-  await router.push('/login');
+  await router.push('/auth');
 }
 
 const getUser = async () => {

@@ -42,6 +42,10 @@ const editer = (id: string) => {
  router.push('/student/edit/' + id)
 }
 
+const addCodeAndCni = (id: string) => {
+  router.push('/student/add/codecertification/' + id)
+}
+
 </script>
 
 
@@ -50,25 +54,22 @@ const editer = (id: string) => {
     <div class=" row ">
       <q-card class="my-card q-ma-lg col">
         <q-card-section>
-          <div class="text-h4"> {{ currentUser.value.firstname }} {{ currentUser.value.lastname }}<q-icon color="warning" @click="editer(currentUser.value.id)" name="edit"></q-icon></div>
+          <div class="text-h4"> {{ currentUser.value.firstname }} {{ currentUser.value.lastname }} <q-btn size="sm" round color="warning" @click="editer(currentUser.value.id)" icon="edit"></q-btn></div>
           <div class="text-left">
             <div class="text-h6">Mon email : {{ currentUser.value.email }}</div>
+            <div v-if="!currentUser.value.student" class="text-center q-mt-lg">
+              <q-btn label="Ajouter votre Code et CNI" push size="md" @click='addCodeAndCni(currentUser.value.id)' color="positive" icon="add"/>
+            </div>
             <div v-if="currentUser.value.student" class="text-h6">
               Code de la route
-              <span v-if="currentUser.value.student.urlCodeCertification !== null">
-              <q-icon color="positive" name="check"/>
-            </span>
-              <span v-else>
-              <q-icon color="negative" name="close"/>
+              <span v-if="currentUser.value.student.contentUrlCode">
+              <q-icon style="vertical-align: text-top" size="sm" color="positive" name="check"/>
             </span>
             </div>
             <div v-if="currentUser.value.student" class="text-h6">
               CNI
-              <span v-if="currentUser.value.student.urlCni !== null">
-              <q-icon color="positive" name="check"/>
-            </span>
-              <span v-else>
-              <q-icon color="negative" name="close"/>
+              <span v-if="currentUser.value.student.contentUrlCni">
+              <q-icon style="vertical-align: text-top" size="sm" color="positive" name="check"/>
             </span>
             </div>
           </div>

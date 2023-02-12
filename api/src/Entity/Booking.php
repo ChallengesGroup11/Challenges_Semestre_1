@@ -64,15 +64,15 @@ class Booking
     #[Groups(['booking_get', 'booking_write','get','booking_cget'])]
     private ?bool $statusDone = null;
 
-    #[ORM\ManyToMany(targetEntity: Student::class, inversedBy: 'bookings')]
-    #[Groups(['booking_get', 'booking_cget','student_get'])]
+    #[ORM\ManyToMany(targetEntity: Student::class, inversedBy: 'bookings',fetch: "EAGER")]
+    #[Groups([ 'booking_get','student_get'])]
     private Collection $studentId;
 
-    #[ORM\ManyToMany(targetEntity: Monitor::class, inversedBy: 'bookings')]
+    #[ORM\ManyToMany(targetEntity: Monitor::class, inversedBy: 'bookings',fetch: "EAGER")]
     #[Groups(['booking_get', 'booking_cget'])]
     private Collection $monitorId;
 
-    #[ORM\ManyToMany(targetEntity: DrivingSchool::class, inversedBy: 'bookings')]
+    #[ORM\ManyToMany(targetEntity: DrivingSchool::class, inversedBy: 'bookings',fetch: "EAGER")]
     #[Groups(['booking_get', 'booking_cget'])]
     private Collection $drivingSchoolId;
 

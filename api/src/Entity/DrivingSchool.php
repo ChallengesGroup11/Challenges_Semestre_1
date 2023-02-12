@@ -111,14 +111,14 @@ class DrivingSchool
     #[Groups(['driving_school_cget'])]
     private ?bool $status = false;
 
-    #[ORM\OneToOne(mappedBy: 'drivingSchoolId', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'drivingSchoolId', cascade: ['persist', 'remove'],fetch: "EAGER")]
     #[Groups(['driving_school_cget'])]
     private ?Director $director = null;
 
-    #[ORM\OneToMany(mappedBy: 'drivingSchoolId', targetEntity: Monitor::class)]
+    #[ORM\OneToMany(mappedBy: 'drivingSchoolId', targetEntity: Monitor::class,fetch: "EAGER")]
     private Collection $monitors;
 
-    #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'drivingSchoolId')]
+    #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'drivingSchoolId',fetch: "EAGER")]
     #[Groups(['driving_school_get','booking_get'])]
     private Collection $bookings;
 
