@@ -17,12 +17,12 @@ import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
 export default defineConfig(({ command, mode }) => {
   // Load env file based on `mode` in the current working directory.
   // Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
-  const env = loadEnv(mode, process.cwd(), '')
+  // const env = loadEnv(mode, process.cwd(), '')
   return {
     // vite config
-    define: {
-      __APP_ENV__: env.APP_ENV,
-    },
+    // define: {
+    //   __APP_ENV__: env.APP_ENV,
+    // },
     resolve: {
       alias: {
         '~/': `${path.resolve(__dirname, 'src')}/`,
@@ -138,10 +138,7 @@ export default defineConfig(({ command, mode }) => {
     //   onFinished() { generateSitemap() },
     // },
 
-    ssr: {
-      // TODO: workaround until they support native ESM
-      noExternal: ['workbox-window', /vue-i18n/],
-    },
+ 
     optimizeDeps: {
       exclude: ['./nhost-demo-template/*'],
     },
