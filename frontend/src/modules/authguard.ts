@@ -10,14 +10,13 @@ interface TokenParsed {
   email: string
 }
 
-//
+// // test
 // const tokenParsedFake: TokenParsed = {
 //   iat: '',
 //   exp: '',
 //   roles: ['ROLE_ADMIN', 'ROLE_STUDENT'],
 //   email: '',
 // }
-
 export const install: UserModule = ({ isClient, router }) => {
   const token = localStorage.getItem('token')
   const tokenParsed = token ? (hashUtil.parseJwt(token) as TokenParsed) : null
