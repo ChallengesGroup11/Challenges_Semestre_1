@@ -11,12 +11,14 @@ services:
     environment:
       APP_ENV: dev
 
-  pwa:
-    build:
-      context: ./pwa
-      target: api_platform_pwa_dev
+  frontend:
     volumes:
-      - ./pwa:/usr/src/pwa:rw,cached
+      - ./api:/srv/api:rw,cached
+      - ./api/docker/frontend/dev.conf:/etc/nginx/conf.d/default.conf:ro
+      # if you develop on Linux, you may use a bind-mounted host directory instead
+      # - ./api/var:/srv/api/var:rw
+    environment:
+      APP_ENV: dev
 
   caddy:
     volumes:
