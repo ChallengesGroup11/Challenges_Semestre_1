@@ -1,16 +1,6 @@
 <script setup lang="ts">
-const emit = defineEmits<{
-  (e: 'signin', val: FormSignin): void
-}>()
-const router = useRouter()
 
-class FormSignin {
-  email = ''
-  password = ''
-}
-const state = reactive({
-  form: new FormSignin(),
-})
+const router = useRouter()
 
 const errorMessage = ref(null)
 

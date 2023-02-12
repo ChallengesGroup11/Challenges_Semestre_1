@@ -136,6 +136,8 @@
       <path value="$PROJECT_DIR$/api/vendor/symfony/mime" />
       <path value="$PROJECT_DIR$/api/vendor/symfony/polyfill-intl-idn" />
       <path value="$PROJECT_DIR$/api/vendor/jms/metadata" />
+      <path value="$PROJECT_DIR$/api/vendor/egulias/email-validator" />
+      <path value="$PROJECT_DIR$/api/vendor/symfony/mailer" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1" />

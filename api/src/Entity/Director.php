@@ -24,12 +24,12 @@ class Director
     private ?int $id = null;
 
     #[ORM\OneToOne(inversedBy: 'director', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     #[Groups(['driving_school_cget','user_get','director_cget','director_get','user_cget'])]
     private ?User $userId = null;
 
     #[ORM\OneToOne(inversedBy: 'director', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     #[Groups(['director_get','director_cget','driving_school_cget'])]
     private ?DrivingSchool $drivingSchoolId = null;
 

@@ -2,5 +2,7 @@
 /helm/api-platform/charts/*
 !/helm/api-platform/charts/.gitignore
 .idea/*
-ap/.env
+/api/.env
 /api/public/media
+api/migrations
+.env

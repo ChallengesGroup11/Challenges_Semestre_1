@@ -1,4 +1,8 @@
-version: "3.4"
+version: "3.7"
+
+x-shared_environment: &shared_environment
+  LOG_LEVEL: ${LOG_LEVEL:-debug}
+
 
 services:
   php:
@@ -23,13 +27,16 @@ services:
       MERCURE_PUBLIC_URL: https://${SERVER_NAME:-localhost}/.well-known/mercure
       MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET:-!ChangeMe!}
 
-  pwa:
+
+  frontend:
     build:
-      context: ./pwa
-      target: api_platform_pwa_prod
+      context: ./frontend
+      target: api_platform_frontend
     environment:
-      API_PLATFORM_CLIENT_GENERATOR_ENTRYPOINT: http://caddy
-      NEXT_PUBLIC_ENTRYPOINT: http://caddy
+      <<: *shared_environment
+    ports:
+      - '4010:4010'
+    command: ["pnpm", "dev"]
 
   caddy:
     build:
@@ -37,9 +44,7 @@ services:
       target: api_platform_caddy
     depends_on:
       - php
-      - pwa
     environment:
-      PWA_UPSTREAM: pwa:3000
       SERVER_NAME: ${SERVER_NAME:-localhost}, caddy:80
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeMe!}
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeMe!}
@@ -50,8 +55,8 @@ services:
       - caddy_config:/config
     ports:
       # HTTP
-      - target: 80
-        published: ${HTTP_PORT:-80}
+      - target: 81
+        published: ${HTTP_PORT:-81}
         protocol: tcp
       # HTTPS
       - target: 443
@@ -83,6 +88,16 @@ services:
     depends_on:
       - database
 
+
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - 8082:8082
+    links:
+      - database
+    depends_on:
+      - database
 # Mercure is installed as a Caddy module, prevent the Flex recipe from installing another service
 ###> symfony/mercure-bundle ###
 ###< symfony/mercure-bundle ###
