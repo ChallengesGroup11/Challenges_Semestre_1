@@ -84,7 +84,7 @@ services:
     image: adminer
     restart: unless-stopped
     ports:
-      - 8082:8082
+      - 8080:8080
     links:
       - database
     depends_on:
