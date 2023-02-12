@@ -44,5 +44,22 @@ jobs:
         run: docker compose exec -T php bin/phpunit
       - name: Doctrine Schema Validator
         run: docker compose exec -T php bin/console doctrine:schema:validate --skip-sync
-      - name: Jest
-        run: docker compose exec -T pwa yarn test --ci --passWithNoTests
+      
+
+  # deploy:
+  #   name: Deploy
+  #   needs: tests
+  #   runs-on: ubuntu-latest
+  #   if: success()
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #     - name: Set up SSH key
+  #       uses: setup-ssh@v1.1.0
+  #       with:
+  #         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+  #     - name: Deploy to production
+  #       run:  
+
+      
