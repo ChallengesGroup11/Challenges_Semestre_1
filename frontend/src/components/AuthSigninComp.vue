@@ -2,11 +2,11 @@
 
 const router = useRouter()
 
-const errorMessage = ref(null);
+const errorMessage = ref(null)
 
 const user = reactive({
-  email: "",
-  password: "",
+  email: '',
+  password: '',
 })
 
 function parseJwt(token: string | null) {
@@ -28,8 +28,8 @@ const onClickSignin = async (e: { preventDefault: () => void; }) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(user),
-  });
-  const data = await response.json();
+  })
+  const data = await response.json()
   if (data.token) {
     errorMessage.value = null;
     localStorage.setItem("token", data.token);
@@ -41,18 +41,17 @@ const onClickSignin = async (e: { preventDefault: () => void; }) => {
       await router.push("/student");
     }
   } else if (data.message) {
-    errorMessage.value = data.message;
+    errorMessage.value = data.message
   } else if (data.error) {
-    errorMessage.value = data.error;
+    errorMessage.value = data.error
   }
-
 }
 </script>
 
 <template>
   <div>
     <q-card-section>
-      <span>{{errorMessage}}</span>
+      <span>{{ errorMessage }}</span>
       <q-form class="q-gutter-md">
         <q-input v-model="user.email" square filled clearable type="email" label="email" />
         <q-input v-model="user.password" square filled clearable type="password" label="password" />
