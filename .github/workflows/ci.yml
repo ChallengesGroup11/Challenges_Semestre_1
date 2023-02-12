@@ -38,11 +38,11 @@ jobs:
           docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
       - name: Doctrine Schema Validator
         run: docker compose exec -T php bin/console doctrine:schema:validate --skip-sync
-      - name: Push images to Docker Hub
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: |
-          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-          docker compose push
+      # - name: Push images to Docker Hub
+      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      #   run: |
+      #     echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+      #     docker compose push
       # - name: Run tests
       #   run: docker compose exec -T php bin/phpunit
       # - name: Run tests frontend
