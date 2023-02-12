@@ -27,9 +27,11 @@ const onSubmit = async () => {
   formData.append('city', city.value);
   formData.append('phoneNumber', phoneNumber.value);
   formData.append('siret', siret.value);
-
   const response = await fetch('https://localhost/driving_schools', {
     method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + localStorage.getItem('token'),
+    },
     body: formData
   })
   const data = await response.json()

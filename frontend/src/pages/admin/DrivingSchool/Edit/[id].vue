@@ -20,7 +20,13 @@ onMounted(async () => {
 });
 
 const fetchOneDrivingSchool = async (id: string | string[]) => {
-  return fetch('https://localhost/driving_schools/'+id)
+  return fetch('https://localhost/driving_schools/'+id,
+    {
+      headers:{
+        'Authorization': 'Bearer ' + localStorage.getItem('token'),
+      }
+    }
+  )
     .then((response) => response.json())
     .then((data) => {
       console.log(data)
@@ -44,6 +50,7 @@ const onSubmit = async (id: string) => {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token'),
     },
     body: JSON.stringify(drivingSchool),
   });

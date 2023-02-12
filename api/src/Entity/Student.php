@@ -2,40 +2,125 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use App\Controller\StudentPostController;
 use App\Repository\StudentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\OpenApi\Model;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
+#[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
-#[ApiResource]
-#[Get(normalizationContext: ['groups' => ['director_get']])]
+#[ApiResource(operations: [
+    new Post(
+        uriTemplate: '/student/patchCode',
+        inputFormats: ['multipart' => ['multipart/form-data']],
+        controller: StudentPostController::class,
+        openapiContext: [
+            'summary' => 'Ajouter le code de l\'étudiant',
+            'requestBody' => [
+                'content' => [
+                    'multipart/form-data' => [
+                        'schema' => [
+                            'type' => 'object',
+                            'properties' => [
+                                'fileCode' => [
+                                    'type' => 'string',
+                                    'format' => 'binary'
+                                ],
+                                'fileCni' => [
+                                    'type' => 'string',
+                                    'format' => 'binary'
+                                ],
+                                'userId' => [
+                                    'type' => 'integer'
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
+    normalizationContext: ['groups' => ['student_get_patch_code']],
+    denormalizationContext: ['groups' => ['student_write_patch_code']],
+    name: 'student_patch_code'
+ )]
+)]
+
+
+#[GetCollection(
+    normalizationContext: ['groups' => ['user_cget']],
+    security: 'object.getId() == student.getId()'
+)]
+//TODO CREER LE USER QUAND IL ENVOIE SES FILES
+#[Get(normalizationContext: ['groups' => ['student_get']])]
 class Student
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
+    #[Groups(['student_get'])]
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['student_get'])]
     private ?int $nbHourDone;
 
-    #[ORM\Column(length: 255, nullable:true)]
-    private ?string $urlCodeCertification = null;
+    #[ApiProperty(types: ['https://localhost/contentUrl'])]
+    #[Groups(['student_get', 'student_get_patch_code', 'student_cget'])]
+    public ?string $contentUrlCode = null;
 
-    #[ORM\Column(length: 255, nullable:true)]
-    private ?string $urlCni = null;
+    #[Vich\UploadableField(mapping: "media_object_code", fileNameProperty: "filePathCode")]
+    #[Groups(['student_write_patch_code'])]
+    public ?File $fileCode = null;
 
-    #[ORM\OneToOne(inversedBy: 'student', cascade: ['persist', 'remove'])]
+    #[ORM\Column(nullable: true)]
+    public ?string $filePathCode = null;
+
+    #[ApiProperty(types: ['https://localhost/contentUrl'])]
+    #[Groups(['student_get', 'student_get_patch'])]
+    public ?string $contentUrlCni = null;
+
+    #[Vich\UploadableField(mapping: "media_object", fileNameProperty: "filePathCni")]
+    #[Groups(['student_write_patch'])]
+    public ?File $fileCni = null;
+
+    #[ORM\Column(nullable: true)]
+    public ?string $filePathCni = null;
+
+
+//    #[ORM\Column(length: 255, nullable:true)]
+//    #[Groups(['student_get'])]
+//    private ?string $urlCodeCertification = null;
+//
+//    #[ORM\Column(length: 255, nullable:true)]
+//    #[Groups(['student_get'])]
+//    private ?string $urlCni = null;
+
+    #[ORM\OneToOne(inversedBy: 'student', cascade: ['persist', 'remove'], fetch: "EAGER")]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['booking_get','booking_cget'])]
+    #[Groups(['user_get'])]
     private ?User $userId = null;
 
-    #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'studentId')]
+
+    #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'studentId', fetch: "EAGER")]
+    #[Groups(['student_get'])]
+    #[ApiProperty(fetchEager: true)]
     private Collection $bookings;
+
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['student_get'])]
+    private ?int $countCredit = null;
 
     public function __construct()
     {
@@ -59,29 +144,62 @@ class Student
         return $this;
     }
 
-    public function getUrlCodeCertification(): ?string
+    /**
+     * @return string|null
+     */
+    public function getFilePathCode(): ?string
     {
-        return $this->urlCodeCertification;
+        return $this->filePathCode;
     }
 
-    public function setUrlCodeCertification(string $urlCodeCertification): self
+    /**
+     * @param string|null $filePathCode
+     */
+    public function setFilePathCode(?string $filePathCode): void
     {
-        $this->urlCodeCertification = $urlCodeCertification;
-
-        return $this;
+        $this->filePathCode = $filePathCode;
     }
 
-    public function getUrlCni(): ?string
+    /**
+     * @return string|null
+     */
+    public function getFilePathCni(): ?string
     {
-        return $this->urlCni;
+        return $this->filePathCni;
     }
 
-    public function setUrlCni(string $urlCni): self
+    /**
+     * @param string|null $filePathCni
+     */
+    public function setFilePathCni(?string $filePathCni): void
     {
-        $this->urlCni = $urlCni;
-
-        return $this;
+        $this->filePathCni = $filePathCni;
     }
+
+
+//    public function getUrlCodeCertification(): ?string
+//    {
+//        return $this->urlCodeCertification;
+//    }
+//
+//    public function setUrlCodeCertification(string $urlCodeCertification): self
+//    {
+//        $this->urlCodeCertification = $urlCodeCertification;
+//
+//        return $this;
+//    }
+//
+//    public function getUrlCni(): ?string
+//    {
+//        return $this->urlCni;
+//    }
+//
+//    public function setUrlCni(string $urlCni): self
+//    {
+//        $this->urlCni = $urlCni;
+//
+//        return $this;
+//    }
 
     public function getUserId(): ?User
     {
@@ -118,6 +236,19 @@ class Student
         if ($this->bookings->removeElement($booking)) {
             $booking->removeStudentId($this);
         }
+
+        return $this;
+    }
+
+
+    public function getCountCredit(): ?int
+    {
+        return $this->countCredit;
+    }
+
+    public function setCountCredit(?int $countCredit): self
+    {
+        $this->countCredit = $countCredit;
 
         return $this;
     }

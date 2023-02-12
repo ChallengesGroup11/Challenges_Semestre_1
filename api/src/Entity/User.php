@@ -32,7 +32,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     new GetCollection(
         uriTemplate: '/me',
         controller: GetCurrentUserController::class,
-        openapiContext: ['description' => 'Get current user']
+        openapiContext: ['description' => 'Get current user'],
     ),
     new Post(
         uriTemplate: '/signup/student',
@@ -50,11 +50,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[GetCollection(
     normalizationContext: ['groups' => ['user_cget']],
-//    security: 'is_granted("ROLE_ADMIN")'
+    security: 'is_granted("ROLE_ADMIN")'
 )]
 #[Get(
     normalizationContext: ['groups' => ['user_get', 'director_get']],
-//    security: 'object.getId() == user.getId()'
+    security: 'object.getId() == user.getId()'
 )]
 #[Patch(
     denormalizationContext: ['groups' => ['user_patch']],
@@ -79,7 +79,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
-    #[Groups(['user_get', 'user_cget', 'director_cget'])]
+    #[Groups([ 'user_cget', 'user_get'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -106,28 +106,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user_get', 'user_cget', 'user_write'])]
     private ?bool $status = null;
 
-    #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'],fetch: "EAGER")]
     #[Groups(['user_get', 'user_cget'])]
     private ?Student $student = null;
 
-    #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'],fetch: "EAGER")]
     #[Groups(['user_get', 'user_cget'])]
     private ?Director $director = null;
 
-    #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'],fetch: "EAGER")]
     #[Groups(['user_get', 'user_cget'])]
     private ?Monitor $monitor = null;
 
-    #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Payment::class)]
+    #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Payment::class,fetch: "EAGER")]
     #[Groups(['user_cget'])]
     private Collection $payments;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['booking_get', 'user_get', 'booking_cget', 'user_cget', 'user_patch', 'driving_school_cget', 'director_cget','director_get', 'user_write'])]
+    #[Groups([ 'user_get', 'user_cget', 'user_patch', 'user_write'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['booking_get', 'user_get', 'booking_cget', 'user_cget', 'user_patch', 'driving_school_cget', 'user_write'])]
+    #[Groups([ 'user_get',  'user_cget', 'user_patch',  'user_write'])]
     private ?string $lastname = null;
 
 
@@ -334,4 +334,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
 }
