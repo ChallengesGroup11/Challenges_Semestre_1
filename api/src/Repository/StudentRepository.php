@@ -39,6 +39,16 @@ class StudentRepository extends ServiceEntityRepository
         }
     }
 
+    public function findAllStudent(): ?array
+    {
+        return $this->createQueryBuilder('u')
+            ->join('u.userId', 's')
+            ->addSelect('s')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 //    /**
 //     * @return Student[] Returns an array of Student objects
 //     */

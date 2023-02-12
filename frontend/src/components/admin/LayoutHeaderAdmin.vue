@@ -33,6 +33,7 @@ const getUser = async () => {
     <q-toolbar>
       <q-btn flat label="Home" to="/admin" />
       <q-btn flat label="Auto-école" to="/admin/DrivingSchool" />
+      <q-btn flat label="Étudiants" to="/admin/Student" />
       <q-btn flat label="Users" to="/about" />
       <q-space />
       <q-toolbar-title>

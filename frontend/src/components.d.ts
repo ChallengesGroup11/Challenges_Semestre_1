@@ -38,6 +38,7 @@ declare module '@vue/runtime-core' {
     README: typeof import('./components/README.md')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    StudentList: typeof import('./components/admin/Student/StudentList.vue')['default']
     UserList: typeof import('./components/admin/UserList.vue')['default']
   }
 }

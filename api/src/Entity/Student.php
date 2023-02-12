@@ -3,7 +3,10 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Patch;
 use App\Repository\StudentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,7 +15,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
 #[ApiResource]
-#[Get(normalizationContext: ['groups' => ['director_get']])]
+#[GetCollection(
+    normalizationContext: ['groups' => ['student_cget']],
+)]
+#[Get(
+    normalizationContext: ['groups' => ['student_get']]
+)]
+#[Post(
+    inputFormats: ['multipart' => ['multipart/form-data']]
+)]
+#[Patch(
+    inputFormats: ['multipart' => ['multipart/form-data']]
+)]
+
 class Student
 {
     #[ORM\Id]
@@ -35,6 +50,7 @@ class Student
     private ?User $userId = null;
 
     #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'studentId')]
+    #[Groups(['student_get','student_cget'])]
     private Collection $bookings;
 
     public function __construct()
