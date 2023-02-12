@@ -153,27 +153,7 @@ const addCodeAndCni = (id: string) => {
           </tbody>
 
         </q-markup-table>
-
-        <!--        <div class="text-h6">Réservation : {{ currentUser.value.student.bookings }}</div>-->
       </q-card-section>
-
-
-      <!--        DATA     -->
-      <!--        <div class=" text-h6">{{ currentUser.value.firstname }} - {{currentUser.value.lastname}}</div>-->
-      <!--        <div class="text-h6">{{ currentUser.value.email }}</div>-->
-      <!--        <div v-if="currentUser.value.student">-->
-      <!--        <div class="text-h6">{{ currentUser.value.student.nbHourDone}}</div>-->
-      <!--        <div class="text-h6">{{ currentUser.value.student.urlCodeCertification }}</div>-->
-      <!--        <div class="text-h6">{{ currentUser.value.student.urlCni }}</div>-->
-      <!--          <div v-if="currentUser.value.student.bookings">-->
-      <!--            <div v-for="(bookings, index ) in currentUser.value.student.bookings" :key="index">-->
-      <!--              <div class="text-h6">{{ bookings.slotBegin }}</div>-->
-      <!--              <div class="text-h6">{{ bookings.slotEnd }}</div>-->
-      <!--              <div v-if="bookings.drivingSchoolId" class="text-h6">{{ bookings.drivingSchoolId[0].name }}</div>-->
-      <!--              <div v-if="bookings.drivingSchoolId" class="text-h6">{{ bookings.drivingSchoolId[0].phoneNumber }}</div>-->
-      <!--            </div>-->
-      <!--          </div>-->
-      <!--        </div>-->
     </q-card>
     </div>
   </div>
