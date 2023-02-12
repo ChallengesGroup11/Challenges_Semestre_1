@@ -9,9 +9,19 @@ const user = reactive({
   password: '',
 })
 
-const onClickSignin = async (e: { preventDefault: () => void }) => {
-  e.preventDefault()
-  console.log('bla')
+function parseJwt(token: string | null) {
+  if (!token) {
+    return;
+  }
+  const base64Url = token.split(".")[1];
+  const base64 = base64Url.replace("-", "+").replace("_", "/");
+  return JSON.parse(window.atob(base64));
+}
+
+
+const onClickSignin = async (e: { preventDefault: () => void; }) => {
+  e.preventDefault();
+  console.log("bla")
   const response = await fetch('https://localhost/authentication_token', {
     method: 'POST',
     headers: {
@@ -21,10 +31,15 @@ const onClickSignin = async (e: { preventDefault: () => void }) => {
   })
   const data = await response.json()
   if (data.token) {
-    errorMessage.value = null
-    debugger
-    localStorage.setItem('token', data.token)
-    await router.push('/admin/DrivingSchool')
+    errorMessage.value = null;
+    localStorage.setItem("token", data.token);
+    const token = localStorage.getItem("token");
+    const user = parseJwt(token);
+    if(user.roles.includes("ROLE_ADMIN")){
+      await router.push("/admin");
+    } else{
+      await router.push("/student");
+    }
   } else if (data.message) {
     errorMessage.value = data.message
   } else if (data.error) {

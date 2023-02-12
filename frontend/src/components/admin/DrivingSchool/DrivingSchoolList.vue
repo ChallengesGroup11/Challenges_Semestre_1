@@ -46,6 +46,7 @@ const deleteDrivingSchool = async (id: string) => {
     method: 'DELETE',
     headers: {
       'accept': 'application/ld+json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token') ,
     },
   });
   await fetchDrivingSchool();
@@ -57,6 +58,7 @@ const changeStatus = async (id: string) => {
     headers: {
       'accept': 'application/ld+json',
       'Content-type': 'application/merge-patch+json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token') ,
     },
     body: '{}'
   });
