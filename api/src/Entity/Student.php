@@ -22,7 +22,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
 #[ApiResource(operations: [
     new Post(
-        uriTemplate: '/student/patchCode',
+        uriTemplate: '/student/pathCode',
         inputFormats: ['multipart' => ['multipart/form-data']],
         controller: StudentPostController::class,
         openapiContext: [
@@ -50,9 +50,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
                 ]
             ]
         ],
-    normalizationContext: ['groups' => ['student_get_patch_code']],
-    denormalizationContext: ['groups' => ['student_write_patch_code']],
-    name: 'student_patch_code'
+    normalizationContext: ['groups' => ['student_get_path_code']],
+    denormalizationContext: ['groups' => ['student_write_path_code']],
+    name: 'student_path_code'
  )]
 )]
 
@@ -80,18 +80,18 @@ class Student
     public ?string $contentUrlCode = null;
 
     #[Vich\UploadableField(mapping: "media_object_code", fileNameProperty: "filePathCode")]
-    #[Groups(['student_write_patch_code'])]
+    #[Groups(['student_write_path_code'])]
     public ?File $fileCode = null;
 
     #[ORM\Column(nullable: true)]
     public ?string $filePathCode = null;
 
     #[ApiProperty(types: ['https://localhost/contentUrl'])]
-    #[Groups(['student_get', 'student_get_patch'])]
+    #[Groups(['student_get', 'student_get_path'])]
     public ?string $contentUrlCni = null;
 
     #[Vich\UploadableField(mapping: "media_object", fileNameProperty: "filePathCni")]
-    #[Groups(['student_write_patch'])]
+    #[Groups(['student_write_path'])]
     public ?File $fileCni = null;
 
     #[ORM\Column(nullable: true)]

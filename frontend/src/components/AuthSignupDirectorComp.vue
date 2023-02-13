@@ -3,6 +3,8 @@ import { handleFileUpload } from '../utils/domUtil';
 // import { domUtil } from '~/utils/domUtil'
 import {reactive} from 'vue'
 
+const router = useRouter();
+
 const user = reactive({
   firstname: "",
   lastname: "",
@@ -45,6 +47,7 @@ const onClickSignup = async (e: { preventDefault: () => void; }) => {
     // const data = await response.json();
     if (response.status === 201) {
       console.log("created")
+      await router.push("/auth")
     }
     if (response.status === 422) {
       const data = await response.json();

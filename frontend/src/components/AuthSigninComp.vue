@@ -53,7 +53,10 @@ const onClickSignin = async (e: { preventDefault: () => void; }) => {
       const user = parseJwt(token);
       if (user.roles.includes("ROLE_ADMIN")) {
         await router.push("/admin");
-      } else {
+      } if(user.roles.includes("ROLE_DIRECTOR")){
+        await router.push("/director");
+      }
+       else {
         await router.push("/student");
       }
     } else if (data.message) {
