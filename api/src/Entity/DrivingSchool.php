@@ -33,7 +33,7 @@ use Symfony\Component\HttpFoundation\File\File;
             'summary' => 'Editer le status d\'une auto-école',
         ],
         denormalizationContext: ['groups' => ['driving_school_patch']],
-        security: 'is_granted("ROLE_DIRECTOR") and object.getDirector() == user',
+        security: '(is_granted("ROLE_DIRECTOR") and object.getDirector() == user) or (is_granted("ROLE_ADMIN"))',
         name: 'driving_school_edit_status'
     ),
 
@@ -42,12 +42,12 @@ use Symfony\Component\HttpFoundation\File\File;
         normalizationContext: ['groups' => ['driving_school_get']],
         denormalizationContext: ['groups' => ['driving_school_write']],
         security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR")',
-    ),
+    )
 ],
 )]
 #[GetCollection(
     normalizationContext: ['groups' => ['driving_school_cget']],
-    security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR")'
+    security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR") or is_granted("ROLE_USER")'
 )]
 #[Get(
     normalizationContext: ['groups' => ['driving_school_get']]
