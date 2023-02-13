@@ -18,5 +18,13 @@ class LoginSubscriber implements EventSubscriberInterface
     {
         $user = $event->getUser();
 
+        if(!$user->isStatus() ) {
+            $event->setData([
+                'status' => 0,
+                'message' => 'Votre compte est n\'est pas actif, veuillez vérifier votre boite mail'
+            ]);
+            $event->getResponse()->setStatusCode(401);
+        }
+
     }
 }

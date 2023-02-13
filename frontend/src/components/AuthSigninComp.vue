@@ -3,7 +3,7 @@
 import {useQuasar} from "quasar";
 
 const $q = useQuasar()
-const viewNotif = (icon:any ,color: string, message: string, textColor: string, position:any) => {
+const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
   $q.notify({
     icon,
     color,
@@ -42,25 +42,25 @@ const onClickSignin = async (e: { preventDefault: () => void; }) => {
     },
     body: JSON.stringify(user),
   })
-  const data = await response.json()
-  if (data.token) {
-    errorMessage.value = null;
-    localStorage.setItem("token", data.token);
-    const token = localStorage.getItem("token");
-    const user = parseJwt(token);
-    if(user.status === false){
-      viewNotif('thumb_up','red', "Votre compte n'est pas activé", 'white', 'top-right')
-    }else{
-    if(user.roles.includes("ROLE_ADMIN")){
-      await router.push("/admin");
-    } else{
-      await router.push("/student");
+  if (response.status === 401) {
+    viewNotif('thumb_up', 'red', "Votre compte n'est pas activé", 'white', 'top-right')
+  } else {
+    const data = await response.json()
+    if (data.token) {
+      errorMessage.value = null;
+      localStorage.setItem("token", data.token);
+      const token = localStorage.getItem("token");
+      const user = parseJwt(token);
+      if (user.roles.includes("ROLE_ADMIN")) {
+        await router.push("/admin");
+      } else {
+        await router.push("/student");
+      }
+    } else if (data.message) {
+      errorMessage.value = data.message
+    } else if (data.error) {
+      errorMessage.value = data.error
     }
-    }
-  } else if (data.message) {
-    errorMessage.value = data.message
-  } else if (data.error) {
-    errorMessage.value = data.error
   }
 }
 </script>
@@ -70,12 +70,12 @@ const onClickSignin = async (e: { preventDefault: () => void; }) => {
     <q-card-section>
       <span>{{ errorMessage }}</span>
       <q-form class="q-gutter-md">
-        <q-input v-model="user.email" square filled clearable type="email" label="email" />
-        <q-input v-model="user.password" square filled clearable type="password" label="password" />
+        <q-input v-model="user.email" square filled clearable type="email" label="email"/>
+        <q-input v-model="user.password" square filled clearable type="password" label="password"/>
       </q-form>
     </q-card-section>
     <q-card-actions class="q-px-md">
-      <q-btn @click="onClickSignin" color="light-green-7" size="lg" class="full-width" label="Se connecter" />
+      <q-btn @click="onClickSignin" color="light-green-7" size="lg" class="full-width" label="Se connecter"/>
     </q-card-actions>
   </div>
 </template>
