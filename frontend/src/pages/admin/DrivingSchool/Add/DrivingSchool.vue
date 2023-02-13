@@ -27,7 +27,7 @@ const onSubmit = async () => {
   formData.append('city', city.value);
   formData.append('phoneNumber', phoneNumber.value);
   formData.append('siret', siret.value);
-  const response = await fetch('https://localhost/driving_schools', {
+  const response = await fetch('https://localhost:81/driving_schools', {
     method: 'POST',
     headers: {
       'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -40,7 +40,7 @@ const onSubmit = async () => {
 }
 
 // const fetchDirector = async () => {
-//   return fetch('https://localhost/directors')
+//   return fetch('https://localhost:81/directors')
 //     .then((response) => response.json())
 //     .then((data) => {
 //       console.log(data['hydra:member'].id)

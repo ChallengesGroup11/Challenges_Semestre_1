@@ -20,7 +20,7 @@ onMounted(async () => {
 });
 
 const fetchOneDrivingSchool = async (id: string | string[]) => {
-  return fetch('https://localhost/driving_schools/'+id,
+  return fetch('https://localhost:81/driving_schools/'+id,
     {
       headers:{
         'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -46,7 +46,7 @@ const fetchOneDrivingSchool = async (id: string | string[]) => {
 
 const onSubmit = async (id: string) => {
   console.log(id)
-  const response = await fetch('https://localhost/driving_schools/'+id, {
+  const response = await fetch('https://localhost:81/driving_schools/'+id, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

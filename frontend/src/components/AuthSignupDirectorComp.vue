@@ -35,7 +35,7 @@ const onClickSignup = async (e: { preventDefault: () => void; }) => {
       status: false
     };
     console.log(requestData)
-    const response = await fetch('https://localhost/signup/director', {
+    const response = await fetch('https://localhost:81/signup/director', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

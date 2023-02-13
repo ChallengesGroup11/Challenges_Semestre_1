@@ -8,8 +8,10 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Delete;
 use App\Controller\StudentPostController;
 use App\Repository\StudentRepository;
+use App\Controller\StudentEditStatusController;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -53,7 +55,17 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     normalizationContext: ['groups' => ['student_get_patch_code']],
     denormalizationContext: ['groups' => ['student_write_patch_code']],
     name: 'student_patch_code'
- )]
+    ),
+    new Patch(
+        uriTemplate: '/students/{id}/edit_status',
+        controller: StudentEditStatusController::class,
+        openapiContext: [
+            'summary' => 'Editer le status d\'un élève',
+        ],
+        denormalizationContext: ['groups' => ['student_patch']],
+        security: 'is_granted("ROLE_ADMIN")',
+        name: 'student_edit_status'
+    ),]
 )]
 
 
@@ -63,6 +75,13 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 )]
 //TODO CREER LE USER QUAND IL ENVOIE SES FILES
 #[Get(normalizationContext: ['groups' => ['student_get']])]
+#[Delete(
+    security: 'is_granted("ROLE_ADMIN")'
+)]
+#[Patch(
+    inputFormats: ['multipart' => ['multipart/form-data']]
+)]
+
 class Student
 {
     #[ORM\Id]
