@@ -22,8 +22,8 @@ class SignUpStudentController extends AbstractController
     public function __construct(
         private RequestStack $requestStack,
     ) {}
-    // MailerInterface $mailer
-    public function __invoke(UserRepository $userRepository,EntityManagerInterface $entityManager,UserPasswordHasherInterface $passwordHasher) :JsonResponse
+    //
+    public function __invoke(UserRepository $userRepository,EntityManagerInterface $entityManager,UserPasswordHasherInterface $passwordHasher,MailerInterface $mailer) :JsonResponse
     {
 
         // TODO : Secure if not email in body
@@ -61,13 +61,13 @@ class SignUpStudentController extends AbstractController
             $routeCheckAccount = "https://localhost/checkAccount/". $user->getId()."?token=". $user->getToken();
             $emailBody = $this->EmailBody($routeCheckAccount);
 
-            // $email = (new Email())
-            //     ->from('support@drivequeen.com')
-            //     ->to($user->getEmail())
-            //     ->subject('Confirmation de votre compte')
-            //     ->html($emailBody);
+             $email = (new Email())
+                 ->from('support@drivequeen.com')
+                 ->to($user->getEmail())
+                 ->subject('Confirmation de votre compte')
+                 ->html($emailBody);
 
-            // $mailer->send($email);
+             $mailer->send($email);
 
 
 
@@ -79,8 +79,8 @@ class SignUpStudentController extends AbstractController
     private function EmailBody($routeCheckAccount)
     {
         //tempalte email
-        return `
-        <!doctype html>
+        return "
+        <!DOCTYPE html>
             <html lang='fr'>
             <head>
                 <meta charset='UTF-8'>
@@ -98,16 +98,16 @@ class SignUpStudentController extends AbstractController
                 }
 
             </style>
-            <img src='https://drivequeen.com/wp-content/uploads/2021/05/logo-drivequeen.png' alt='logo drivequeen'>
+            <img src='https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg' alt='logo drivequeen'>
 
 
-            <h1>Confirmation de votre compte étudiant</h1>
-            !<p>Vous avez créé un compte sur DriveQueen</p>
+            <h1>Confirmation de votre compte étudiant!</h1>
+            <p>Vous avez créé un compte sur DriveQueen</p>
             <p>Vous devez confirmer votre compte en cliquant sur le lien ci-dessous</p>
-            <a href='$routeCheckAccount'>Confirmer mon compte</a>
+            <a href='{$routeCheckAccount}'>Confirmer mon compte</a>
 
             </body>
             </html>
-        `;
+        ";
     }
 }
