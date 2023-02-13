@@ -5,7 +5,7 @@ import { log } from "console";
 
 const router = useRouter()
 
-const currentUser = reactive({ value: [] });
+const currentUser = reactive({ value: [] })
 
 onMounted(async () => {
   if (localStorage.getItem('token') == null) {
@@ -13,23 +13,22 @@ onMounted(async () => {
   } else {
     await getUser()
   }
-});
+})
 
 const getUser = async () => {
   return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/me`, {
     headers: {
-      'Authorization': 'Bearer ' + localStorage.getItem('token'),
-    }
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    },
   })
     .then((response) => response.json())
     .then((data) => {
       currentUser.value = data;
     })
     .catch((error) => {
-      console.error("Error:", error);
-    });
-};
-
+      console.error('Error:', error)
+    })
+}
 
 const editer = (id: string) => {
   router.push('/director/edit/' + id)
@@ -38,9 +37,7 @@ const editer = (id: string) => {
 const addKbisAndSiret = (id: string) => {
   router.push('/director/add/createdrivingschool/' + id)
 }
-
 </script>
-
 
 <template>
   <div>
@@ -118,7 +115,6 @@ const addKbisAndSiret = (id: string) => {
     </div>
   </div>
 </template>
-
 
 <route lang="yaml">
 meta:

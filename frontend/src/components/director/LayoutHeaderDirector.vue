@@ -1,47 +1,44 @@
 <script setup lang="ts">
-
-import {reactive} from "vue";
+import { reactive } from 'vue'
 const router = useRouter()
 
-const currentUser = reactive({value: []});
+const currentUser = reactive({ value: [] })
 
 onMounted(async () => {
-  if(!localStorage.getItem('token')) {
+  if (!localStorage.getItem('token')) {
     await router.push('/auth')
-  }else {
+  } else {
     await getUser()
   }
-});
+})
 
 const logoutUser = async () => {
-  localStorage.removeItem('token');
-  await router.push('/auth');
+  localStorage.removeItem('token')
+  await router.push('/auth')
 }
 
 const getUser = async () => {
   return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/me`, {
     headers: {
-      'Authorization': 'Bearer ' + localStorage.getItem('token'),
-    }
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    },
   })
     .then((response) => response.json())
     .then((data) => {
-      currentUser.value = data;
+      currentUser.value = data
     })
     .catch((error) => {
-      console.error("Error:", error);
-    });
-};
-
+      console.error('Error:', error)
+    })
+}
 </script>
-
 
 <template>
   <q-header elevated class="bg-primary text-white">
     <q-toolbar>
       <q-toolbar-title>
         <q-avatar>
-          <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg"/>
+          <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
         </q-avatar>
         DRIVE QUEEN
       </q-toolbar-title>
@@ -51,8 +48,9 @@ const getUser = async () => {
       <q-btn  icon="home_filled" flat label="Home" to="/director"/>
       <q-btn icon="person" flat label="Mon profil" to="/director/profil"/>
       <q-btn icon="person" flat label="Liste des moniteurs" to="/director/monitor"/>
+      <q-btn icon="school" flat label="Créneaux" to="/director/slots" />
       <!-- <q-btn icon="paid" flat label="Acheter des crédits" to="/student/package"/> -->
-      <q-space/>
+      <q-space />
       <q-btn @click="logoutUser" icon="logout" flat label="Déconnexion" />
     </q-toolbar>
   </q-header>
