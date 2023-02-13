@@ -24,6 +24,7 @@ declare module '@vue/runtime-core' {
     LayoutHeaderDirector: typeof import('./components/director/LayoutHeaderDirector.vue')['default']
     LayoutHeaderStudent: typeof import('./components/student/LayoutHeaderStudent.vue')['default']
     ListRoom: typeof import('./components/ListRoom.vue')['default']
+    ListSlotComp: typeof import('./components/director/ListSlotComp.vue')['default']
     ListUser: typeof import('./components/ListUser.vue')['default']
     OneSignalStatus: typeof import('./components/OneSignalStatus.vue')['default']
     ProfileEdit: typeof import('./components/ProfileEdit.vue')['default']
