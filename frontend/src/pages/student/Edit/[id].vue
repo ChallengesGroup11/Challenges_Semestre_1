@@ -24,7 +24,7 @@ onMounted(async () => {
 });
 
 const getUser=(id: string | string[])=>{
-  return fetch("https://localhost/users/"+id,{
+  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/users/`+id,{
     headers:{
       'Authorization': 'Bearer ' + localStorage.getItem('token'),
     }
@@ -42,7 +42,7 @@ const getUser=(id: string | string[])=>{
 }
 
 const onSubmit = async (id: string | string[]) =>{
-  const response =  await fetch('https://localhost/users/'+id ,{
+  const response =  await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/users/`+id ,{
     method: 'PATCH',
       headers: {
       'Content-Type': 'application/merge-patch+json',

@@ -23,3 +23,9 @@
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
+
+###> doctrine/doctrine-bundle ###
+/config/migrations/
+###< doctrine/doctrine-bundle ###
+
+/.env

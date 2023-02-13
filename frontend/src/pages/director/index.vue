@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, defineComponent } from "vue";
+import moment from 'moment';
+import { log } from "console";
 
 const router = useRouter()
 
@@ -14,7 +16,7 @@ onMounted(async () => {
 })
 
 const getUser = async () => {
-  return fetch('https://localhost/me', {
+  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/me`, {
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     },

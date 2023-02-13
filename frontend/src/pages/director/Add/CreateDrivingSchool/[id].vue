@@ -22,7 +22,7 @@ const { params } = useRoute();
 const { id } = params;
 
 const getUser = async () => {
-  return fetch("https://localhost/me", {
+  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/me`, {
     headers: {
       'Authorization': 'Bearer ' + localStorage.getItem('token'),
     }
@@ -58,10 +58,9 @@ const onSubmit = async () => {
   formData.append('city', user.city);
   formData.append('zipCode', user.zipCode);
   formData.append('phone_number', user.phone_number);
-
   try {
     isLoading.value = true;
-    const checked = await fetch('http://localhost:3200/api/director', {
+    const checked = await fetch(`${import.meta.env.VITE_KYC_URL}/api/director`, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token'),
         'Content-Type': 'multipart/form-data'
@@ -71,7 +70,7 @@ const onSubmit = async () => {
     })
     const validDocs = await checked;
     if (validDocs.status == 200) {
-      const response = await fetch('https://localhost/driving_school/create', {
+      const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_school/create`, {
         method: 'POST',
         headers: {
           'Authorization': 'Bearer ' + localStorage.getItem('token'),

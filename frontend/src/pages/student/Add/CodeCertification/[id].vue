@@ -33,7 +33,7 @@ const onSubmit = async () => {
   formData.append('userId', id);
   try {
     isLoading.value = true;
-    const checked = await fetch('http://localhost:3200/api/student', {
+    const checked = await fetch(`${import.meta.env.VITE_KYC_URL}:3200/api/student`, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token'),
         'Content-Type': 'multipart/form-data'
@@ -43,7 +43,7 @@ const onSubmit = async () => {
     })
     const validDocs = await checked;
     if (validDocs.status == 200) {
-      const response = await fetch('https://localhost/student/pathCode', {
+      const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/student/pathCode`, {
         method: 'POST',
         headers: {
           'Authorization': 'Bearer ' + localStorage.getItem('token'),

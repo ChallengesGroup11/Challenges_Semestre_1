@@ -8,4 +8,5 @@ node_modules
 .idea/
 *.log
 frontend/.env.development
+.env    
 
