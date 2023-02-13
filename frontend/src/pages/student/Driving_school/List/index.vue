@@ -28,7 +28,6 @@ const getDrivingSchool = async () => {
     .then((response) => response.json())
     .then((data) => {
       drivingSchool.value = data["hydra:member"];
-      console.log(drivingSchool.value);
 
       if (filterVille.value != "") {
         filteredDrivingSchool.value = drivingSchool.value.filter((item: any) => {
@@ -44,7 +43,6 @@ const getDrivingSchool = async () => {
 };
 
 const showAvailability = (id: any) => {
-  console.log(id)
   router.push('/student/driving_school/bookings/' + id)
 }
 

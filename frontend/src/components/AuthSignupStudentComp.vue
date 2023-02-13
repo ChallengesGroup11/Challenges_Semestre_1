@@ -21,7 +21,6 @@ const onClickSignup = async (e: { preventDefault: () => void; }) => {
     roles: ["ROLE_USER"],
     status: false
   };
-  console.log(requestData)
   const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/signup/student`, {
     method: 'POST',
     headers: {
@@ -31,11 +30,9 @@ const onClickSignup = async (e: { preventDefault: () => void; }) => {
   });
   // const data = await response.json();
   if (response.status === 201) {
-    console.log("created")
   }
   if (response.status === 422) {
     const data = await response.json();
-    console.log(data)
   }
 }
 </script>

@@ -25,7 +25,6 @@ const getDrivingSchool = async (id: string | string[]) => {
   })
     .then((response) => response.json())
     .then((data) => {
-        console.log(data)
         driving_school.value = data["hydra:member"];
     })
     .catch((error) => {

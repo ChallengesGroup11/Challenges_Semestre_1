@@ -26,7 +26,6 @@ const fetchDrivingSchool = async () => {
     .then((response) => response.json())
     .then((data) => {
       drivingSchool.value = data["hydra:member"];
-      console.log(drivingSchool.value);
     });
 };
 
@@ -63,11 +62,9 @@ const changeStatus = async (id: string) => {
     body: '{}'
   });
   const data = await response.json()
-  console.log('Success:', data)
   await fetchDrivingSchool();
 };
 
-console.log(drivingSchool);
 </script>
 
 <template>

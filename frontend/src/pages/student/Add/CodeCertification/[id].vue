@@ -51,7 +51,6 @@ const onSubmit = async () => {
         body: formData,
       });
       if (response.ok) {
-        console.log('Success:', response.status);
         await router.push('/student/profil')
       } else {
         alert("Vos documents n'ont pas été enregistrés, veuillez réessayer")
