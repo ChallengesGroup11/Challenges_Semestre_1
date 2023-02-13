@@ -27,28 +27,17 @@ const onSubmit = async () => {
   formData.append('city', city.value);
   formData.append('phoneNumber', phoneNumber.value);
   formData.append('siret', siret.value);
-
-  const response = await fetch('https://localhost/driving_schools', {
+  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_schools`, {
     method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + localStorage.getItem('token'),
+    },
     body: formData
   })
   const data = await response.json()
   console.log('Success:', data)
   await router.push('/admin/drivingSchool')
 }
-
-// const fetchDirector = async () => {
-//   return fetch('https://localhost/directors')
-//     .then((response) => response.json())
-//     .then((data) => {
-//       console.log(data['hydra:member'].id)
-//       director.value = data['hydra:member']
-//     })
-//     .catch((error) => {
-//       console.error('Error:', error)
-//     })
-// }
-// console.log(director.value)
 
 </script>
 

@@ -43,6 +43,7 @@ class Package
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
+    #[Groups(['package_get', 'package_cget'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]

@@ -23,7 +23,7 @@ class SignUpDirectorController extends AbstractController
         private RequestStack $requestStack,
     ) {}
 //MailerInterface $mailer
-    public function __invoke(UserRepository $userRepository,EntityManagerInterface $entityManager,UserPasswordHasherInterface $passwordHasher ) :JsonResponse
+    public function __invoke(MailerInterface $mailer,UserRepository $userRepository,EntityManagerInterface $entityManager,UserPasswordHasherInterface $passwordHasher ) :JsonResponse
     {
 
         // TODO : Secure if not email in body
@@ -56,21 +56,20 @@ class SignUpDirectorController extends AbstractController
             $director = new Director();
             $director->setUserId($userUnique);
 
-
             $entityManager->persist($director);
             $entityManager->flush();
 
 
-            $routeCheckAccount = "https//localhost/checkAccount/". $user->getId()."?token=". $user->getToken();
+            $routeCheckAccount = "http://localhost:4010/auth/CheckAccount/". $user->getId()."?token=". $user->getToken();
             $emailBody = $this->EmailBody($routeCheckAccount);
 
-//            $email = (new Email())
-//                ->from('support@drivequeen.com')
-//                ->to($user->getEmail())
-//                ->subject('Confirmation de votre compte')
-//                ->html($emailBody);
-//
-//            $mailer->send($email);
+            $email = (new Email())
+                ->from('support@drivequeen.com')
+                ->to($user->getEmail())
+                ->subject('Confirmation de votre compte')
+                ->html($emailBody);
+
+            $mailer->send($email);
 
 
 
@@ -82,7 +81,7 @@ class SignUpDirectorController extends AbstractController
     private function EmailBody($routeCheckAccount)
     {
         //tempalte email
-        return `
+        return "
         <!doctype html>
             <html lang='fr'>
             <head>
@@ -101,16 +100,16 @@ class SignUpDirectorController extends AbstractController
                 }
 
             </style>
-            <img src='https://drivequeen.com/wp-content/uploads/2021/05/logo-drivequeen.png' alt='logo drivequeen'>
+           <img src='https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg' alt='logo drivequeen'>
 
 
             <h1>Confirmation de votre compte directeur</h1>
             !<p>Vous avez créé un compte sur DriveQueen</p>
             <p>Vous devez confirmer votre compte en cliquant sur le lien ci-dessous</p>
-            <a href='$routeCheckAccount'>Confirmer mon compte</a>
+            <a href='{$routeCheckAccount}'>Confirmer mon compte</a>
 
             </body>
             </html>
-        `;
+        ";
     }
 }

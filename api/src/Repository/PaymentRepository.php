@@ -40,7 +40,7 @@ class PaymentRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return Payment[] Returns an array of Payment objects
+//     * @return Package[] Returns an array of Package objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class PaymentRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Payment
+//    public function findOneBySomeField($value): ?Package
 //    {
 //        return $this->createQueryBuilder('p')
 //            ->andWhere('p.exampleField = :val')

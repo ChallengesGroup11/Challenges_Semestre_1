@@ -22,7 +22,7 @@ const onClickSignup = async (e: { preventDefault: () => void; }) => {
     status: false
   };
   console.log(requestData)
-  const response = await fetch('https://localhost/signup/student', {
+  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/signup/student`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

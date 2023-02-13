@@ -3,6 +3,8 @@ import { handleFileUpload } from '../utils/domUtil';
 // import { domUtil } from '~/utils/domUtil'
 import {reactive} from 'vue'
 
+const router = useRouter();
+
 const user = reactive({
   firstname: "",
   lastname: "",
@@ -35,7 +37,7 @@ const onClickSignup = async (e: { preventDefault: () => void; }) => {
       status: false
     };
     console.log(requestData)
-    const response = await fetch('https://localhost/signup/director', {
+    const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/signup/director`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -45,6 +47,7 @@ const onClickSignup = async (e: { preventDefault: () => void; }) => {
     // const data = await response.json();
     if (response.status === 201) {
       console.log("created")
+      await router.push("/auth")
     }
     if (response.status === 422) {
       const data = await response.json();

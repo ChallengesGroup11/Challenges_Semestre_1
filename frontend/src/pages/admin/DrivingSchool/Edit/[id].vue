@@ -20,7 +20,13 @@ onMounted(async () => {
 });
 
 const fetchOneDrivingSchool = async (id: string | string[]) => {
-  return fetch('https://localhost/driving_schools/'+id)
+  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_schools/`+id,
+    {
+      headers:{
+        'Authorization': 'Bearer ' + localStorage.getItem('token'),
+      }
+    }
+  )
     .then((response) => response.json())
     .then((data) => {
       console.log(data)
@@ -40,10 +46,11 @@ const fetchOneDrivingSchool = async (id: string | string[]) => {
 
 const onSubmit = async (id: string) => {
   console.log(id)
-  const response = await fetch('https://localhost/driving_schools/'+id, {
+  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_schools/`+id, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token'),
     },
     body: JSON.stringify(drivingSchool),
   });

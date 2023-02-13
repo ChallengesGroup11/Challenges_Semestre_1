@@ -21,6 +21,7 @@ use ApiPlatform\OpenApi\Model;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\File;
+use App\Controller\DrivingSchoolPostController;
 
 
 #[Vich\Uploadable]
@@ -33,7 +34,7 @@ use Symfony\Component\HttpFoundation\File\File;
             'summary' => 'Editer le status d\'une auto-école',
         ],
         denormalizationContext: ['groups' => ['driving_school_patch']],
-        security: 'is_granted("ROLE_DIRECTOR") and object.getDirector() == user',
+        security: '(is_granted("ROLE_DIRECTOR") and object.getDirector() == user) or (is_granted("ROLE_ADMIN"))',
         name: 'driving_school_edit_status'
     ),
 
@@ -43,11 +44,59 @@ use Symfony\Component\HttpFoundation\File\File;
         denormalizationContext: ['groups' => ['driving_school_write']],
         security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR")',
     ),
+    new Post(
+        uriTemplate: '/driving_school/create',
+        inputFormats: ['multipart' => ['multipart/form-data']],
+        controller: DrivingSchoolPostController::class,
+        openapiContext: [
+            'summary' => 'Création de l\'auto-école',
+            'requestBody' => [
+                'content' => [
+                    'multipart/form-data' => [
+                        'schema' => [
+                            'type' => 'object',
+                            'properties' => [
+                                'file' => [
+                                    'type' => 'string',
+                                    'format' => 'binary'
+                                ],
+                                'siret' => [
+                                    'type' => 'string',
+                                ],
+                                'name' => [
+                                    'type' => 'string'
+                                ],
+                                'address' => [
+                                    'type' => 'string'
+                                ],
+                                'city' => [
+                                    'type' => 'string'
+                                ],
+
+                                'zipCode' => [
+                                    'type' => 'string'
+                                ],
+                                'phone_number' => [
+                                    'type' => 'string'
+                                ],
+                                'director' => [
+                                    'type' => 'integer'
+                                ],
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
+    normalizationContext: ['groups' => ['driving_school_get']],
+    denormalizationContext: ['groups' => ['driving_school_write']],
+    name: 'driving_school_create'
+ )
 ],
 )]
 #[GetCollection(
     normalizationContext: ['groups' => ['driving_school_cget']],
-    security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR")'
+    security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR") or is_granted("ROLE_USER")'
 )]
 #[Get(
     normalizationContext: ['groups' => ['driving_school_get']]
@@ -70,9 +119,10 @@ class DrivingSchool
     #[ORM\Column()]
     #[Groups(['driving_school_cget', 'driving_school_get'])]
     private ?int $id = null;
+    
 
     #[ORM\Column(length: 255)]
-    #[Groups(['booking_get', 'booking_cget', 'user_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write'])]
+    #[Groups(['driving_school_cget', 'driving_school_get', 'driving_school_write'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
@@ -111,14 +161,15 @@ class DrivingSchool
     #[Groups(['driving_school_cget'])]
     private ?bool $status = false;
 
-    #[ORM\OneToOne(mappedBy: 'drivingSchoolId', cascade: ['persist', 'remove'])]
-    #[Groups(['driving_school_cget'])]
+    #[ORM\OneToOne(mappedBy: 'drivingSchoolId', cascade: ['persist', 'remove'],fetch: "EAGER")]
+    #[Groups(['driving_school_cget', 'driving_school_get'])]
     private ?Director $director = null;
 
-    #[ORM\OneToMany(mappedBy: 'drivingSchoolId', targetEntity: Monitor::class)]
+    #[ORM\OneToMany(mappedBy: 'drivingSchoolId', targetEntity: Monitor::class,fetch: "EAGER")]
     private Collection $monitors;
 
-    #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'drivingSchoolId')]
+    #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'drivingSchoolId',fetch: "EAGER")]
+    #[Groups(['driving_school_get','booking_get'])]
     private Collection $bookings;
 
     public function __construct()
