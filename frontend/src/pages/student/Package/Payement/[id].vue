@@ -45,7 +45,7 @@ onMounted(async () => {
 const getOnePackage = async (id: string | string[]) => {
 
 
-  return fetch('https://localhost/packages/' + id, {
+  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/packages/` + id, {
     headers: {
       'accept': 'application/ld+json',
       'Authorization': 'Bearer ' + localStorage.getItem('token'),

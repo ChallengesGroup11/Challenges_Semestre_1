@@ -22,7 +22,7 @@ const { params } = useRoute();
 const { id } = params;
 
 const getUser = async () => {
-  return fetch("https://localhost/me", {
+  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/me`, {
     headers: {
       'Authorization': 'Bearer ' + localStorage.getItem('token'),
     }
