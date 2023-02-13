@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
+use App\Controller\CheckAccountController;
 use App\Controller\GetCurrentUserController;
 use App\Controller\ResetPasswordController;
 use App\Controller\SignUpStudentController;
@@ -18,6 +19,7 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use http\Env\Request;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -46,6 +48,31 @@ use Symfony\Component\Validator\Constraints as Assert;
         openapiContext: ['description' => 'Signup Director'],
         denormalizationContext: ['groups' => ['user_write']],
     ),
+    new Post(
+        uriTemplate: '/CheckAccount',
+        controller: CheckAccountController::class,
+        openapiContext: [
+            'requestBody' => [
+                'content' => [
+                    'application/json' => [
+                        'schema' => [
+                            'type' => 'object',
+                            'properties' => [
+                                'token' => [
+                                    'type' => 'string',
+                                ],
+                                'userId' => [
+                                    'type' => 'integer'
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+
+        ],
+        description: 'Check account'
+    )
 ])]
 
 #[GetCollection(
@@ -99,7 +126,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['user_write'])]
+    #[Groups(['user_write','user_get', 'user_cget'])]
     private ?string $token = null;
 
     #[ORM\Column(nullable: true)]
