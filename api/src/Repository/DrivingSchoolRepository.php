@@ -39,6 +39,16 @@ class DrivingSchoolRepository extends ServiceEntityRepository
         }
     }
 
+    //get bookings for a driving school
+    public function getBookings($id)
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return DrivingSchool[] Returns an array of DrivingSchool objects
 //     */

@@ -51,6 +51,7 @@ const getUser = async () => {
       <q-btn  icon="home_filled" flat label="Home" to="/student"/>
       <q-btn icon="person" flat label="Mon profil" to="/student/profil"/>
       <q-btn icon="paid" flat label="Acheter des crédits" to="/student/package"/>
+      <q-btn icon="list" flat label="Liste des auto-écoles" to="/student/driving_school/list"/>
       <q-space/>
       <q-btn @click="logoutUser" icon="logout" flat label="Déconnexion" />
     </q-toolbar>
