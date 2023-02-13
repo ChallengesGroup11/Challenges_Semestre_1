@@ -25,7 +25,6 @@ const getPackage = async () => {
     .then((response) => response.json())
     .then((data) => {
       packageItem.value = data["hydra:member"];
-      console.log(packageItem.value);
     })
     .catch((error) => {
       console.error("Error:", error);

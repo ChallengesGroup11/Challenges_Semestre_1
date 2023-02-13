@@ -17,7 +17,6 @@ const getUser = async () => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       currentUser.value = data;
     })
     .catch((error) => {

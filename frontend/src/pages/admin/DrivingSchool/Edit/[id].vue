@@ -29,7 +29,6 @@ const fetchOneDrivingSchool = async (id: string | string[]) => {
   )
     .then((response) => response.json())
     .then((data) => {
-      console.log(data)
       drivingSchool.id = data.id;
       drivingSchool.name = data.name;
       drivingSchool.address = data.address;
@@ -45,7 +44,6 @@ const fetchOneDrivingSchool = async (id: string | string[]) => {
 };
 
 const onSubmit = async (id: string) => {
-  console.log(id)
   const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_schools/`+id, {
     method: 'PUT',
     headers: {
@@ -56,9 +54,7 @@ const onSubmit = async (id: string) => {
   });
   const data = await response.json();
   await router.push('/admin/drivingSchool')
-  console.log('Success:', data);
 };
-// console.log(drivingSchool);
 </script>
 
 

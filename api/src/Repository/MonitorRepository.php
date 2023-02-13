@@ -39,6 +39,16 @@ class MonitorRepository extends ServiceEntityRepository
         }
     }
 
+    public function findAllMonitor(): ?array
+    {
+        return $this->createQueryBuilder('u')
+            ->join('u.userId', 'd')
+            ->addSelect('d')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 //    /**
 //     * @return Monitor[] Returns an array of Monitor objects
 //     */

@@ -33,10 +33,9 @@ const onClickSignup = async (e: { preventDefault: () => void; }) => {
       lastname: user.lastname,
       email: user.email,
       password: user.password,
-      roles: ["ROLE_USER", "ROLE_DIRECTOR"],
+      roles: ["ROLE_DIRECTOR"],
       status: false
     };
-    console.log(requestData)
     const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/signup/director`, {
       method: 'POST',
       headers: {
@@ -46,7 +45,6 @@ const onClickSignup = async (e: { preventDefault: () => void; }) => {
     });
     // const data = await response.json();
     if (response.status === 201) {
-      console.log("created")
       await router.push("/auth")
     }
     if (response.status === 422) {
@@ -56,7 +54,6 @@ const onClickSignup = async (e: { preventDefault: () => void; }) => {
         error.message = "Cet email est déjà utilisé"
         return error
       }
-      console.log(data)
     }
   }
 }
