@@ -20,7 +20,7 @@ onMounted(
 )
 
 const getDrivingSchool = async () => {
-  return fetch("https://localhost/driving_schools", {
+  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_schools`, {
     headers: {
       'Authorization': 'Bearer ' + localStorage.getItem('token'),
     }

@@ -46,7 +46,7 @@ const fetchOneDrivingSchool = async (id: string | string[]) => {
 
 const onSubmit = async (id: string) => {
   console.log(id)
-  const response = await fetch('https://localhost/driving_schools/'+id, {
+  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_schools/`+id, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

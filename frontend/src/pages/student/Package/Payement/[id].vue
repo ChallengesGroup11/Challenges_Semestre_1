@@ -72,7 +72,7 @@ const OnSubmit = async (id: string | string[]) => {
   const cardMonth = cardDate.value.split('/')[0]
   const cardYear = cardDate.value.split('/')[1]
 
-  const response = await fetch('https://localhost/payments', {
+  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/payments`, {
     method: 'POST',
     headers:{
       'Content-Type': 'application/json',
