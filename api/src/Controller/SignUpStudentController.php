@@ -58,7 +58,7 @@ class SignUpStudentController extends AbstractController
 //            $entityManager->flush();
 
 
-            $routeCheckAccount = "https//localhost/checkAccount/". $user->getId()."?token=". $user->getToken();
+            $routeCheckAccount = "https://localhost/checkAccount/". $user->getId()."?token=". $user->getToken();
             $emailBody = $this->EmailBody($routeCheckAccount);
 
             // $email = (new Email())

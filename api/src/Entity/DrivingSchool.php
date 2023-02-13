@@ -33,7 +33,7 @@ use Symfony\Component\HttpFoundation\File\File;
             'summary' => 'Editer le status d\'une auto-école',
         ],
         denormalizationContext: ['groups' => ['driving_school_patch']],
-        security: 'is_granted("ROLE_DIRECTOR") and object.getDirector() == user',
+        security: '(is_granted("ROLE_DIRECTOR") and object.getDirector() == user) or (is_granted("ROLE_ADMIN"))',
         name: 'driving_school_edit_status'
     ),
 
@@ -42,17 +42,7 @@ use Symfony\Component\HttpFoundation\File\File;
         normalizationContext: ['groups' => ['driving_school_get']],
         denormalizationContext: ['groups' => ['driving_school_write']],
         security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR")',
-    ),
-    // new Get(
-    //     uriTemplate: '/driving_schools/{id}/bookings',
-    //     controller: DrivingSchoolGetBookingsController::class,
-    //     openapiContext: [
-    //         'summary' => 'Récupérer les réservations d\'une auto-école',
-    //     ],
-    //     normalizationContext: ['groups' => ['driving_school_get_bookings']],
-    //     security: 'is_granted("ROLE_USER") and object.getStudent() == user',
-    //     // name: 'driving_school_get_bookings'
-    // )
+    )
 ],
 )]
 #[GetCollection(
