@@ -16,7 +16,7 @@ onMounted(async () => {
 
 
 const fetchDrivingSchool = async () => {
-  return fetch('https://localhost/driving_schools',
+  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_schools`,
     {
       headers: {
         'accept': 'application/ld+json',
@@ -42,7 +42,7 @@ const addDrivingSchool = () => {
 }
 
 const deleteDrivingSchool = async (id: string) => {
-  const response = await fetch('https://localhost/driving_schools/' + id, {
+  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_schools/` + id, {
     method: 'DELETE',
     headers: {
       'accept': 'application/ld+json',
@@ -53,7 +53,7 @@ const deleteDrivingSchool = async (id: string) => {
 };
 
 const changeStatus = async (id: string) => {
-  const response = await fetch('https://localhost/driving_schools/' + id + '/edit_status', {
+  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_schools/` + id + '/edit_status', {
     method: 'PATCH',
     headers: {
       'accept': 'application/ld+json',

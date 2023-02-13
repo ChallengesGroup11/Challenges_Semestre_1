@@ -35,7 +35,7 @@ function parseJwt(token: string | null) {
 const onClickSignin = async (e: { preventDefault: () => void; }) => {
   e.preventDefault();
   console.log("bla")
-  const response = await fetch('https://localhost/authentication_token', {
+  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/authentication_token`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
