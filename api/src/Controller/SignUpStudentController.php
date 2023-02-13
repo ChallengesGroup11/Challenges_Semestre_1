@@ -49,16 +49,7 @@ class SignUpStudentController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-//            $userUnique = $userRepository->findOneBy(['email' => $email]);
-//            $student = new Student();
-//            $student->setUserId($userUnique);
-//
-//
-//            $entityManager->persist($student);
-//            $entityManager->flush();
-
-
-            $routeCheckAccount = "https://localhost/checkAccount/". $user->getId()."?token=". $user->getToken();
+            $routeCheckAccount = "http://localhost:4010/auth/CheckAccount/". $user->getId()."?token=". $user->getToken();
             $emailBody = $this->EmailBody($routeCheckAccount);
 
              $email = (new Email())
