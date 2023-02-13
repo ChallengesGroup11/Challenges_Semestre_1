@@ -183,5 +183,5 @@ const OnSubmit = async (id: string | string[]) => {
 meta:
   layout: student
   requiresAuth: true
-  roles: student
+  roles: user
 </route>

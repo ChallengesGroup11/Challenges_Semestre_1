@@ -66,5 +66,5 @@ const payement = (item: any) => {
 meta:
   layout: student
   requiresAuth: true
-  roles: student
+  roles: user
 </route>
