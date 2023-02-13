@@ -52,8 +52,15 @@ class SignUpDirectorController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
+            $userUnique = $userRepository->findOneBy(['email' => $email]);
+            $director = new Director();
+            $director->setUserId($userUnique);
 
-            $routeCheckAccount = "http:/localhost:4010/auth/CheckAccount/". $user->getId()."?token=". $user->getToken();
+            $entityManager->persist($director);
+            $entityManager->flush();
+
+
+            $routeCheckAccount = "http://localhost:4010/auth/CheckAccount/". $user->getId()."?token=". $user->getToken();
             $emailBody = $this->EmailBody($routeCheckAccount);
 
             $email = (new Email())
