@@ -18,11 +18,10 @@ interface TokenParsed {
 //   email: '',
 // }
 export const install: UserModule = ({ isClient, router }) => {
-  const token = localStorage.getItem('token')
-  const tokenParsed = token ? (hashUtil.parseJwt(token) as TokenParsed) : null
-
   if (isClient) {
     router.beforeEach((to, from, next) => {
+      const token = localStorage.getItem('token')
+      const tokenParsed = token ? (hashUtil.parseJwt(token) as TokenParsed) : null
       if (
         to.matched.some((record) => {
           return record.meta.requiresAuth
