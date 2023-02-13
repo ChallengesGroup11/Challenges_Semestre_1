@@ -80,7 +80,6 @@ const onSubmit = async () => {
 
       isLoading.value = false;
       if (response.ok) {
-        console.log('Success:', response.status);
         await router.push('/director')
       } else {
         alert("Vos documents n'ont pas été enregistrés, veuillez réessayer")
