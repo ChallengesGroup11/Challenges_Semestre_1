@@ -36,7 +36,6 @@ const validateAccount = (id: any, token: any) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       if (data.type=="success") {
         viewNotif('thumb_up','green-4', data.message, 'white', 'top-right')
         router.push('/auth')

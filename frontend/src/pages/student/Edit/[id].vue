@@ -31,7 +31,6 @@ const getUser=(id: string | string[])=>{
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data)
       user.id = data.id;
       user.firstname = data.firstname;
       user.lastname = data.lastname;
@@ -52,7 +51,6 @@ const onSubmit = async (id: string | string[]) =>{
   });
   const data = await response.json();
   await router.push('/student/profil')
-  console.log('Success:', data);
 }
 
 </script>

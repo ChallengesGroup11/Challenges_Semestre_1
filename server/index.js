@@ -27,14 +27,12 @@ app.get('/', (req, res) => {
 
 app.post('/api/student', (req, res) => {
     setTimeout(() => {
-        console.log(req.body);
         res.send('Document are valid');
     }, 5000);
 });
 
 app.post('/api/director', (req, res) => {
     setTimeout(() => {
-        // console.log(req);
         res.send('Document are valid');
     }, 1000);
 });

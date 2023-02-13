@@ -26,6 +26,7 @@ declare module '@vue/runtime-core' {
     ListRoom: typeof import('./components/ListRoom.vue')['default']
     ListSlotComp: typeof import('./components/director/ListSlotComp.vue')['default']
     ListUser: typeof import('./components/ListUser.vue')['default']
+    MonitorList: typeof import('./components/director/Monitor/MonitorList.vue')['default']
     OneSignalStatus: typeof import('./components/OneSignalStatus.vue')['default']
     ProfileEdit: typeof import('./components/ProfileEdit.vue')['default']
     QAvatar: typeof import('quasar')['QAvatar']

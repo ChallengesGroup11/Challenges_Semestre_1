@@ -35,7 +35,6 @@ const onSubmit = async () => {
     body: formData
   })
   const data = await response.json()
-  console.log('Success:', data)
   await router.push('/admin/drivingSchool')
 }
 

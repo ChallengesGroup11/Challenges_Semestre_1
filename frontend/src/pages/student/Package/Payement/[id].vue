@@ -59,7 +59,6 @@ const getOnePackage = async (id: string | string[]) => {
       packageItem.description = data.description
       packageItem.nbCredit = data.nbCredit
 
-      console.log(packageItem)
     })
     .catch((error) => {
       console.error('Error:', error)
@@ -96,7 +95,6 @@ const OnSubmit = async (id: string | string[]) => {
     loading.value = false
     await router.push('/student/profil')
     viewNotif('thumb_up', 'green-4', data.message, 'white', 'top-right')
-    console.log('Success:', data);
   }
 }
 

@@ -45,8 +45,9 @@ const getUser = async () => {
       <span>Bienvenue {{ currentUser.value.firstname }} sur notre site !</span>
     </q-toolbar>
     <q-toolbar inset>
-      <q-btn icon="home_filled" flat label="Home" to="/director" />
-      <q-btn icon="person" flat label="Mon profil" to="/director/profil" />
+      <q-btn  icon="home_filled" flat label="Home" to="/director"/>
+      <q-btn icon="person" flat label="Mon profil" to="/director/profil"/>
+      <q-btn icon="person" flat label="Liste des moniteurs" to="/director/monitor"/>
       <q-btn icon="school" flat label="Créneaux" to="/director/slots" />
       <!-- <q-btn icon="paid" flat label="Acheter des crédits" to="/student/package"/> -->
       <q-space />
