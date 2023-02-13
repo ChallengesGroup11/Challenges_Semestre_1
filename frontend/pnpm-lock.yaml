@@ -11,6 +11,7 @@ specifiers:
   '@types/nprogress': ^0.2.0
   '@types/ramda': ^0.28.20
   '@vitejs/plugin-vue': ^3.0.1
+  '@vue-stripe/vue-stripe': ^4.5.0
   '@vue/test-utils': ^2.0.2
   '@vueuse/core': ^9.1.0
   '@vueuse/head': ^0.7.9
@@ -21,6 +22,7 @@ specifiers:
   https-localhost: ^4.7.1
   imtool: ^1.1.5
   jsonwebtoken: ^9.0.0
+  moment: ^2.29.4
   nprogress: ^0.2.0
   pinia: ^2.0.17
   pnpm: ^7.27.0
@@ -47,10 +49,12 @@ specifiers:
 
 dependencies:
   '@quasar/extras': 1.15.10
+  '@vue-stripe/vue-stripe': 4.5.0
   '@vueuse/core': 9.12.0_vue@3.2.47
   '@vueuse/head': 0.7.13_vue@3.2.47
   imtool: 1.2.0
   jsonwebtoken: 9.0.0
+  moment: 2.29.4
   nprogress: 0.2.0
   pinia: 2.0.30_hmuptsblhheur2tugfgucj7gc4
   quasar: 2.11.5
@@ -1707,6 +1711,10 @@ packages:
       picomatch: 2.3.1
     dev: true
 
+  /@stripe/stripe-js/1.46.0:
+    resolution: {integrity: sha512-dkm0zCEoRLu5rTnsIgwDf/QG2DKcalOT2dk1IVgMySOHWTChLyOvQwMYhEduGgLvyYWTwNhAUV4WOLPQvjwLwA==}
+    dev: false
+
   /@surma/rollup-plugin-off-main-thread/2.2.3:
     resolution: {integrity: sha512-lR8q/9W7hZpMWweNiAKU7NQerBnzQQLvi8qnTDU/fxItPhtZVMbPV3lbCwjhIlNBe9Bbr5V+KHshvWmVSG9cxQ==}
     dependencies:
@@ -2144,6 +2152,13 @@ packages:
       '@volar/typescript-faster': 0.39.5
       '@volar/vue-language-core': 0.39.5
     dev: true
+
+  /@vue-stripe/vue-stripe/4.5.0:
+    resolution: {integrity: sha512-BU449XT5zegjNQirl+SSztbzGIvPjhxlHv8ybomSZcI1jB6qEpLgpk2eHMFDKnOGZZRhqtg4C5FiErwSJ/yuRw==}
+    dependencies:
+      '@stripe/stripe-js': 1.46.0
+      vue-coerce-props: 1.0.0
+    dev: false
 
   /@vue/compiler-core/3.2.47:
     resolution: {integrity: sha512-p4D7FDnQb7+YJmO2iPEv0SQNeNzcbHdGByJDsT4lynf63AFkOTFN07HsiRSvjGo0QrxR/o3d0hUyNCUnBU2Tig==}
@@ -4892,6 +4907,10 @@ packages:
       ufo: 1.0.1
     dev: true
 
+  /moment/2.29.4:
+    resolution: {integrity: sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==}
+    dev: false
+
   /mrmime/1.0.1:
     resolution: {integrity: sha512-hzzEagAgDyoU1Q6yg5uI+AorQgdvMCur3FcKf7NhMKWsaYg+RnbTyHRa/9IlLF9rf455MOCtcqqrQQ83pPP7Uw==}
     engines: {node: '>=10'}
@@ -6416,6 +6435,10 @@ packages:
       - supports-color
       - terser
     dev: true
+
+  /vue-coerce-props/1.0.0:
+    resolution: {integrity: sha512-4fdRMXO6FHzmE7H4soAph6QmPg3sL/RiGdd+axuxuU07f02LNMns0jMM88fmt1bvSbN+2Wyd8raho6p6nXUzag==}
+    dev: false
 
   /vue-demi/0.13.11_vue@3.2.47:
     resolution: {integrity: sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A==}
