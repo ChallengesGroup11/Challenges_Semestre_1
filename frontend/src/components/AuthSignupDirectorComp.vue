@@ -33,7 +33,7 @@ const onClickSignup = async (e: { preventDefault: () => void; }) => {
       lastname: user.lastname,
       email: user.email,
       password: user.password,
-      roles: ["ROLE_USER", "ROLE_DIRECTOR"],
+      roles: ["ROLE_DIRECTOR"],
       status: false
     };
     console.log(requestData)

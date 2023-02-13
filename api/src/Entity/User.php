@@ -14,6 +14,7 @@ use App\Controller\GetCurrentUserController;
 use App\Controller\ResetPasswordController;
 use App\Controller\SignUpStudentController;
 use App\Controller\SignUpDirectorController;
+use App\Controller\CreateMonitorController;
 use App\Entity\Traits\Timer;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -72,12 +73,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 
         ],
         description: 'Check account'
-    )
+    ),
+    new Post(
+        uriTemplate: 'director/create_monitor',
+        controller: CreateMonitorController::class,
+        openapiContext: ['description' => 'Create Monitor'],
+        denormalizationContext: ['groups' => ['user_write']],
+    ),
 ])]
 
 #[GetCollection(
     normalizationContext: ['groups' => ['user_cget']],
-    security: 'is_granted("ROLE_ADMIN")'
+    security: 'is_granted("ROLE_ADMIN")',
 )]
 #[Get(
     normalizationContext: ['groups' => ['user_get', 'director_get']],
@@ -110,7 +117,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['user_get', 'user_cget', 'user_write'])]
+    #[Groups(['user_get', 'user_cget', 'user_write', 'monitor_get', 'monitor_cget'])]
     #[NotBlank]
     private ?string $email = null;
 
@@ -130,7 +137,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $token = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['user_get', 'user_cget', 'user_write'])]
+    #[Groups(['user_get', 'user_cget', 'user_write', 'monitor_get', 'monitor_cget'])]
     private ?bool $status = null;
 
     #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'],fetch: "EAGER")]
@@ -138,11 +145,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?Student $student = null;
 
     #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'],fetch: "EAGER")]
-    #[Groups(['user_get', 'user_cget'])]
+    #[Groups(['user_get', 'user_cget', 'director_get', 'director_cget'])]
     private ?Director $director = null;
 
     #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'],fetch: "EAGER")]
-    #[Groups(['user_get', 'user_cget'])]
+    #[Groups(['user_get', 'user_cget', 'monitor_get', 'monitor_cget'])]
     private ?Monitor $monitor = null;
 
     #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Payment::class,fetch: "EAGER")]
@@ -150,11 +157,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $payments;
 
     #[ORM\Column(length: 255)]
-    #[Groups([ 'user_get', 'user_cget', 'user_patch', 'user_write'])]
+    #[Groups([ 'user_get', 'user_cget', 'user_patch', 'user_write', 'monitor_get', 'monitor_cget'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups([ 'user_get',  'user_cget', 'user_patch',  'user_write'])]
+    #[Groups([ 'user_get',  'user_cget', 'user_patch',  'user_write', 'monitor_get', 'monitor_cget'])]
     private ?string $lastname = null;
 
 
