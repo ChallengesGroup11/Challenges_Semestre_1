@@ -1,5 +1,18 @@
 <script setup lang="ts">
 
+import {useQuasar} from "quasar";
+
+const $q = useQuasar()
+const viewNotif = (icon:any ,color: string, message: string, textColor: string, position:any) => {
+  $q.notify({
+    icon,
+    color,
+    message,
+    textColor,
+    position,
+  })
+}
+
 const router = useRouter()
 
 const errorMessage = ref(null)
@@ -35,10 +48,14 @@ const onClickSignin = async (e: { preventDefault: () => void; }) => {
     localStorage.setItem("token", data.token);
     const token = localStorage.getItem("token");
     const user = parseJwt(token);
+    if(user.status === false){
+      viewNotif('thumb_up','red', "Votre compte n'est pas activé", 'white', 'top-right')
+    }else{
     if(user.roles.includes("ROLE_ADMIN")){
       await router.push("/admin");
     } else{
       await router.push("/student");
+    }
     }
   } else if (data.message) {
     errorMessage.value = data.message
