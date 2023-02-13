@@ -21,6 +21,7 @@ use ApiPlatform\OpenApi\Model;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\File;
+use App\Controller\DrivingSchoolPostController;
 
 
 #[Vich\Uploadable]
@@ -43,6 +44,54 @@ use Symfony\Component\HttpFoundation\File\File;
         denormalizationContext: ['groups' => ['driving_school_write']],
         security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR")',
     ),
+    new Post(
+        uriTemplate: '/driving_school/create',
+        inputFormats: ['multipart' => ['multipart/form-data']],
+        controller: DrivingSchoolPostController::class,
+        openapiContext: [
+            'summary' => 'Création de l\'auto-école',
+            'requestBody' => [
+                'content' => [
+                    'multipart/form-data' => [
+                        'schema' => [
+                            'type' => 'object',
+                            'properties' => [
+                                'file' => [
+                                    'type' => 'string',
+                                    'format' => 'binary'
+                                ],
+                                'siret' => [
+                                    'type' => 'string',
+                                ],
+                                'name' => [
+                                    'type' => 'string'
+                                ],
+                                'address' => [
+                                    'type' => 'string'
+                                ],
+                                'city' => [
+                                    'type' => 'string'
+                                ],
+
+                                'zipCode' => [
+                                    'type' => 'string'
+                                ],
+                                'phone_number' => [
+                                    'type' => 'string'
+                                ],
+                                'director' => [
+                                    'type' => 'integer'
+                                ],
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
+    normalizationContext: ['groups' => ['driving_school_get']],
+    denormalizationContext: ['groups' => ['driving_school_write']],
+    name: 'driving_school_create'
+ )
 ],
 )]
 #[GetCollection(
@@ -68,8 +117,9 @@ class DrivingSchool
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
-    #[Groups(['driving_school_cget'])]
+    #[Groups(['driving_school_cget', 'driving_school_get'])]
     private ?int $id = null;
+    
 
     #[ORM\Column(length: 255)]
     #[Groups(['driving_school_cget', 'driving_school_get', 'driving_school_write'])]
@@ -112,7 +162,7 @@ class DrivingSchool
     private ?bool $status = false;
 
     #[ORM\OneToOne(mappedBy: 'drivingSchoolId', cascade: ['persist', 'remove'],fetch: "EAGER")]
-    #[Groups(['driving_school_cget'])]
+    #[Groups(['driving_school_cget', 'driving_school_get'])]
     private ?Director $director = null;
 
     #[ORM\OneToMany(mappedBy: 'drivingSchoolId', targetEntity: Monitor::class,fetch: "EAGER")]
