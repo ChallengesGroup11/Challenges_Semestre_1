@@ -73,16 +73,16 @@ const fn = {
     //   studentId: 1,
     //   monitorId: 1,
     // })
-
+    console.log(useStoreUser().drivingSchool)
     const newRowDb = {
       slotBegin: state.newSlot.slotBegin,
       slotEnd: state.newSlot.slotEnd,
       comment: '',
       statusValidate: false,
       statusDone: false,
-      drivingSchoolId: [useStoreUser().drivingSchool],
+      drivingSchoolId: useStoreUser().drivingSchool,
     }
-    debugger
+
     const res = await ApiService.insert(API_URL.BOOKINGS, newRowDb)
     console.log(res)
     state.rows.push(res.data)

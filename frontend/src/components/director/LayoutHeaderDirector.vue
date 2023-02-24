@@ -29,7 +29,9 @@ const getUser = async () => {
       currentUser.value = data
       useStoreUser().user = data
       // debugger
-      useStoreUser().drivingSchool = data.director.drivingSchoolId
+      if(data.director.drivingSchoolId != null) {
+        useStoreUser().drivingSchool = data.director.drivingSchoolId
+      }
     })
     .catch((error) => {
       console.error('Error:', error)

@@ -119,7 +119,7 @@ class DrivingSchool
     #[ORM\Column()]
     #[Groups(['driving_school_cget', 'driving_school_get'])]
     private ?int $id = null;
-    
+
 
     #[ORM\Column(length: 255)]
     #[Groups(['driving_school_cget', 'driving_school_get', 'driving_school_write'])]
@@ -169,7 +169,7 @@ class DrivingSchool
     private Collection $monitors;
 
     #[ORM\OneToMany(mappedBy: 'drivingSchoolId', targetEntity: Booking::class)]
-    #[Groups(['driving_school_get'])]
+    #[Groups(['driving_school_get','booking_write'])]
     private Collection $bookings;
 
     // #[ORM\ManyToMany(targetEntity: Booking::class, inversedBy: 'drivingSchoolId',fetch: "EAGER")]

@@ -18,17 +18,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: BookingRepository::class)]
 // @ApiResource(attributes={"normalization_context": {"groups"={"todolist"}, "enable_max_depth"=true}})
 #[ApiResource(
-    operations : [
-        new Post(
-            uriTemplate: '/bookings',
-            controller: BookingController::class,
-            normalizationContext: ['groups' => ['booking_get']],
-            denormalizationContext: ['groups' => ['booking_write']],
-            security: 'is_granted("ROLE_DIRECTOR")'
-        ),
-    ],
-    normalizationContext: ['groups' => ['get']],
-
+    operations:[
+    new Post(
+        denormalizationContext: ['groups' => ['booking_write']],
+        security: 'is_granted("ROLE_DIRECTOR")',
+    ),
+]
 )]
 #[Get(
     normalizationContext: ['groups' => ['booking_get']]
@@ -36,6 +31,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[GetCollection(
     normalizationContext: ['groups' => ['booking_cget']]
 )]
+
 #[Patch(
     denormalizationContext: ['groups' => ['booking_write']],
     security: 'is_granted("ROLE_MODERATOR","ROLE_DIRECTOR")'
@@ -53,23 +49,23 @@ class Booking
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['booking_get', 'booking_write','get','booking_cget'])]
+    #[Groups(['booking_get','get','booking_cget','booking_write'])]
     private ?\DateTimeInterface $slotBegin = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['booking_get', 'booking_write','get','booking_cget'])]
+    #[Groups(['booking_get','get','booking_cget','booking_write'])]
     private ?\DateTimeInterface $slotEnd = null;
 
     #[ORM\Column(length: 255,nullable: true)]
-    #[Groups(['booking_get', 'booking_write','get', 'booking_cget'])]
+    #[Groups(['booking_get','get', 'booking_cget'])]
     private ?string $comment = null;
 
     #[ORM\Column]
-    #[Groups(['booking_get', 'booking_write','get','booking_cget'])]
+    #[Groups(['booking_get','get','booking_cget','booking_write'])]
     private ?bool $statusValidate = null;
 
     #[ORM\Column]
-    #[Groups(['booking_get', 'booking_write','get','booking_cget'])]
+    #[Groups(['booking_get','get','booking_cget','booking_write'])]
     private ?bool $statusDone = null;
 
     #[ORM\ManyToMany(targetEntity: Student::class, inversedBy: 'bookings',fetch: "EAGER")]
@@ -81,7 +77,7 @@ class Booking
     private Collection $monitorId;
 
     #[ORM\ManyToOne(inversedBy: 'bookings')]
-    #[Groups(['booking_write','driving_school_get'])]
+    #[Groups(['driving_school_get','booking_get','booking_cget','booking_write'])]
     private ?DrivingSchool $drivingSchoolId = null;
 
     // #[ORM\ManyToMany(targetEntity: DrivingSchool::class, mappedBy: 'bookings',fetch: "EAGER")]
