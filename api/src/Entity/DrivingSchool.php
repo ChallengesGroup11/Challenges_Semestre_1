@@ -168,14 +168,23 @@ class DrivingSchool
     #[ORM\OneToMany(mappedBy: 'drivingSchoolId', targetEntity: Monitor::class,fetch: "EAGER")]
     private Collection $monitors;
 
-    #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'drivingSchoolId',fetch: "EAGER")]
-    #[Groups(['driving_school_get','booking_get'])]
+    #[ORM\OneToMany(mappedBy: 'drivingSchoolId', targetEntity: Booking::class)]
+    #[Groups(['driving_school_get'])]
     private Collection $bookings;
+
+    // #[ORM\ManyToMany(targetEntity: Booking::class, inversedBy: 'drivingSchoolId',fetch: "EAGER")]
+    // #[Groups(['driving_school_get','driving_school_cget','booking_write'])]
+    // private Collection $bookings;
+
+    // #[ORM\OneToMany(mappedBy: 'drivingSchoolId', targetEntity: Booking::class)]
+    // #[Groups(['driving_school_get','driving_school_cget'])]
+    // private Collection $bookings;
 
     public function __construct()
     {
         $this->monitors = new ArrayCollection();
-        $this->bookings = new ArrayCollection();
+        // $this->bookings = new ArrayCollection();
+        // $this->bookings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -314,32 +323,32 @@ class DrivingSchool
         return $this;
     }
 
-    /**
-     * @return Collection<int, Booking>
-     */
-    public function getBookings(): Collection
-    {
-        return $this->bookings;
-    }
+    // /**
+    //  * @return Collection<int, Booking>
+    //  */
+    // public function getBookings(): Collection
+    // {
+    //     return $this->bookings;
+    // }
 
-    public function addBooking(Booking $booking): self
-    {
-        if (!$this->bookings->contains($booking)) {
-            $this->bookings[] = $booking;
-            $booking->addDrivingSchoolId($this);
-        }
+    // public function addBooking(Booking $booking): self
+    // {
+    //     if (!$this->bookings->contains($booking)) {
+    //         $this->bookings[] = $booking;
+    //         $booking->addDrivingSchoolId($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeBooking(Booking $booking): self
-    {
-        if ($this->bookings->removeElement($booking)) {
-            $booking->removeDrivingSchoolId($this);
-        }
+    // public function removeBooking(Booking $booking): self
+    // {
+    //     if ($this->bookings->removeElement($booking)) {
+    //         $booking->removeDrivingSchoolId($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     /**
      * @return string|null
@@ -355,5 +364,65 @@ class DrivingSchool
     public function setFilePath(?string $filePath): void
     {
         $this->filePath = $filePath;
+    }
+
+    // /**
+    //  * @return Collection<int, Booking>
+    //  */
+    // public function getBookings(): Collection
+    // {
+    //     return $this->bookings;
+    // }
+
+    // public function addBookings(Booking $bookings): self
+    // {
+    //     if (!$this->bookings->contains($bookings)) {
+    //         $this->bookings[] = $bookings;
+    //         $bookings->setDrivingSchoolId($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeBookings(Booking $bookings): self
+    // {
+    //     if ($this->bookings->removeElement($bookings)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($bookings->getDrivingSchoolId() === $this) {
+    //             $bookings->setDrivingSchoolId(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
+
+    /**
+     * @return Collection<int, Booking>
+     */
+    public function getBookings(): Collection
+    {
+        return $this->bookings;
+    }
+
+    public function addBooking(Booking $booking): self
+    {
+        if (!$this->bookings->contains($booking)) {
+            $this->bookings[] = $booking;
+            $booking->setDrivingSchoolId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBooking(Booking $booking): self
+    {
+        if ($this->bookings->removeElement($booking)) {
+            // set the owning side to null (unless already changed)
+            if ($booking->getDrivingSchoolId() === $this) {
+                $booking->setDrivingSchoolId(null);
+            }
+        }
+
+        return $this;
     }
 }

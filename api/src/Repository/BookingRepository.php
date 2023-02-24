@@ -39,6 +39,17 @@ class BookingRepository extends ServiceEntityRepository
         }
     }
 
+    public function searchLastBooking()
+    {
+        return $this->createQueryBuilder('b')
+            ->orderBy('b.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+
 //    /**
 //     * @return Booking[] Returns an array of Booking objects
 //     */

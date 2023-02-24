@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { ApiService } from '~/services/api'
+import { API_URL } from '../../services/api'
+import { useStoreUser } from '../../../stores/user'
+
 interface Booking {
   slotBegin: string
   slotEnd: string
@@ -54,7 +58,6 @@ const state = reactive({
   newSlot: {
     slotBegin: '',
     slotEnd: '',
-    comment: '',
   },
 })
 
@@ -74,29 +77,15 @@ const fn = {
     const newRowDb = {
       slotBegin: state.newSlot.slotBegin,
       slotEnd: state.newSlot.slotEnd,
-      comment: state.newSlot.comment,
+      comment: '',
       statusValidate: false,
       statusDone: false,
+      drivingSchoolId: [useStoreUser().drivingSchool],
     }
-
-    // post in db
-    const res = await fetch('https://localhost/bookings', {
-      method: 'POST',
-      headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('token'),
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newRowDb),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Success:', data)
-      })
-      .catch((error) => {
-        console.error('Error:', error)
-      })
-
-    await fetchAll()
+    debugger
+    const res = await ApiService.insert(API_URL.BOOKINGS, newRowDb)
+    console.log(res)
+    state.rows.push(res.data)
 
     state.isShownModal = false
   },
@@ -208,13 +197,11 @@ loadData()
                 </template>
               </q-input>
             </div>
-
-            <q-input outlined v-model="state.newSlot.comment" type="text" label="comment" />
           </q-form>
         </q-card-section>
 
         <q-card-actions align="right">
-          <q-btn flat label="Enregistrerrrr" color="primary" @click="fn.onClickSaveBooking" />
+          <q-btn flat label="Enregistrer" color="primary" @click="fn.onClickSaveBooking" />
         </q-card-actions>
       </q-card>
     </q-dialog>

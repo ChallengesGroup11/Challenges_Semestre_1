@@ -3,7 +3,6 @@ version: "3.7"
 x-shared_environment: &shared_environment
   LOG_LEVEL: ${LOG_LEVEL:-debug}
 
-
 services:
   php:
     build:
@@ -27,16 +26,15 @@ services:
       MERCURE_PUBLIC_URL: https://${SERVER_NAME:-localhost}/.well-known/mercure
       MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET:-!ChangeMe!}
 
-
-  frontend:
-    build:
-      context: ./frontend
-      target: api_platform_frontend
-    environment:
-      <<: *shared_environment
-    ports:
-      - '4010:4010'
-    command: ["pnpm", "dev"]
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     target: api_platform_frontend
+  #   environment:
+  #     <<: *shared_environment
+  #   ports:
+  #     - '4010:4010'
+  #   command: ["pnpm", "dev"]
 
   # kyc:
   #   build:

@@ -11,14 +11,14 @@ services:
     environment:
       APP_ENV: dev
 
-  frontend:
-    volumes:
-      - ./api:/srv/api:rw,cached
-      - ./api/docker/frontend/dev.conf:/etc/nginx/conf.d/default.conf:ro
-      # if you develop on Linux, you may use a bind-mounted host directory instead
-      # - ./api/var:/srv/api/var:rw
-    environment:
-      APP_ENV: dev
+  # frontend:
+  #   volumes:
+  #     - ./api:/srv/api:rw,cached
+  #     - ./api/docker/frontend/dev.conf:/etc/nginx/conf.d/default.conf:ro
+  #     # if you develop on Linux, you may use a bind-mounted host directory instead
+  #     # - ./api/var:/srv/api/var:rw
+  #   environment:
+  #     APP_ENV: dev
 
   caddy:
     volumes:
@@ -27,7 +27,7 @@ services:
     environment:
       MERCURE_EXTRA_DIRECTIVES: demo
 
-###> doctrine/doctrine-bundle ###
+  ###> doctrine/doctrine-bundle ###
   database:
     ports:
       - target: 5432
