@@ -11,6 +11,8 @@ interface Booking {
   statusDone: boolean
   drivingSchoolId: []
   monitorId: []
+  studentId: []
+  id: number
 }
 
 const ListColumn = [
@@ -59,6 +61,7 @@ const state = reactive({
     slotBegin: '',
     slotEnd: '',
   },
+  currentItemSelected: [] as Booking[],
 })
 
 const fn = {
@@ -73,7 +76,6 @@ const fn = {
     //   studentId: 1,
     //   monitorId: 1,
     // })
-    console.log(useStoreUser().drivingSchool)
     const newRowDb = {
       slotBegin: state.newSlot.slotBegin,
       slotEnd: state.newSlot.slotEnd,
@@ -84,30 +86,15 @@ const fn = {
     }
 
     const res = await ApiService.insert(API_URL.BOOKINGS, newRowDb)
-    console.log(res)
+    debugger
     state.rows.push(res.data)
 
     state.isShownModal = false
   },
-  removeRow() {
-    const slot = state.rows.pop()
-    // const id = slot['@id']
-    // // get only the last string after the last slash
-    // const idNumber = id.substring(id.lastIndexOf('/') + 1)
-
-    // fetch('https://localhost/bookings/' + idNumber, {
-    //   method: 'DELETE',
-    //   headers: {
-    //     Authorization: 'Bearer ' + localStorage.getItem('token'),
-    //   },
-    // })
-    //   .then((response) => 1)
-    //   .then((data) => {
-    //     console.log('Success:', data)
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error:', error)
-    //   })
+  async onClickDeleteRow() {
+    const itemToDelete = state.currentItemSelected[0]
+    await ApiService.deleteById(API_URL.BOOKINGS, itemToDelete.id)
+    state.rows = state.rows.filter((item) => item.id !== itemToDelete.id)
   },
 }
 
@@ -205,7 +192,16 @@ loadData()
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <q-table title="Treats" :rows="state.rows" :columns="state.columns" row-key="id" :loading="state.isLoading">
+    {{ state.currentItemSelected }}
+    <q-table
+      v-model:selected="state.currentItemSelected"
+      title="Treats"
+      selection="single"
+      :rows="state.rows"
+      :columns="state.columns"
+      row-key="id"
+      :loading="state.isLoading"
+    >
       <template v-slot:top>
         <q-btn
           color="primary"
@@ -213,13 +209,7 @@ loadData()
           label="Ajouter un créneau"
           @click="state.isShownModal = true"
         />
-        <q-btn
-          class="q-ml-sm"
-          color="primary"
-          :disable="state.isLoading"
-          label="Retirer un créneau"
-          @click="fn.removeRow"
-        />
+        <q-btn v-if="state.currentItemSelected" color="primary" label="Supprimer" @click="fn.onClickDeleteRow" />
         <q-space />
         <q-input borderless dense debounce="300" color="primary">
           <template v-slot:append>

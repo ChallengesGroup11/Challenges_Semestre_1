@@ -29,7 +29,7 @@ export namespace ApiService {
     return response.data
   }
 
-  export const deleteById = async (url: string, id: string) => {
+  export const deleteById = async (url: string, id: number) => {
     const response = await api.delete(`${url}/${id}`)
     return response.data
   }
