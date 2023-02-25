@@ -51,6 +51,20 @@ const ListColumn = [
     sortable: true,
     field: (row) => row.statusDone,
   },
+  {
+    name: 'studentId',
+    label: 'élève',
+    align: 'left',
+    sortable: true,
+    field: (row) => row.studentId?.user?.firstname + ' ' + row.studentId?.user?.lastname,
+  },
+  {
+    name: 'monitorId',
+    label: 'moniteur',
+    align: 'left',
+    sortable: true,
+    field: (row) => row.monitorId?.user?.firstname + ' ' + row.monitorId?.user?.lastname,
+  },
 ]
 const state = reactive({
   columns: ListColumn,
@@ -62,9 +76,19 @@ const state = reactive({
     slotEnd: '',
   },
   currentItemSelected: [] as Booking[],
+  isShownModalEditing: false,
 })
 
 const fn = {
+  onBookingEdited(booking: Booking) {
+    state.rows = state.rows.map((row) => {
+      if (row.id === booking.id) {
+        return booking
+      }
+      return row
+    })
+    state.isShownModalEditing = false
+  },
   async onClickSaveBooking() {
     // state.rows.push({
     //   slotBegin: '2021-06-01',
@@ -86,7 +110,6 @@ const fn = {
     }
 
     const res = await ApiService.insert(API_URL.BOOKINGS, newRowDb)
-    debugger
     state.rows.push(res.data)
 
     state.isShownModal = false
@@ -95,6 +118,10 @@ const fn = {
     const itemToDelete = state.currentItemSelected[0]
     await ApiService.deleteById(API_URL.BOOKINGS, itemToDelete.id)
     state.rows = state.rows.filter((item) => item.id !== itemToDelete.id)
+  },
+
+  onClickModifyRow() {
+    state.isShownModalEditing = true
   },
 }
 
@@ -121,6 +148,12 @@ loadData()
 
 <template>
   <div class="q-pa-md">
+    <ModalEditBookingComp
+      v-if="state.isShownModalEditing"
+      :booking="state.currentItemSelected[0]"
+      @booking-edited="fn.onBookingEdited"
+    />
+
     <q-dialog v-model="state.isShownModal">
       <q-card style="width: 600px">
         <q-card-section>
@@ -192,7 +225,6 @@ loadData()
         </q-card-actions>
       </q-card>
     </q-dialog>
-    {{ state.currentItemSelected }}
     <q-table
       v-model:selected="state.currentItemSelected"
       title="Treats"
@@ -209,7 +241,10 @@ loadData()
           label="Ajouter un créneau"
           @click="state.isShownModal = true"
         />
-        <q-btn v-if="state.currentItemSelected" color="primary" label="Supprimer" @click="fn.onClickDeleteRow" />
+        <template v-if="state.currentItemSelected[0]">
+          <q-btn v-if="state.currentItemSelected" color="primary" label="Modifier" @click="fn.onClickModifyRow" />
+          <q-btn v-if="state.currentItemSelected" color="primary" label="Supprimer" @click="fn.onClickDeleteRow" />
+        </template>
         <q-space />
         <q-input borderless dense debounce="300" color="primary">
           <template v-slot:append>

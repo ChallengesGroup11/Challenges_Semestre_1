@@ -166,6 +166,7 @@ class DrivingSchool
     private ?Director $director = null;
 
     #[ORM\OneToMany(mappedBy: 'drivingSchoolId', targetEntity: Monitor::class,fetch: "EAGER")]
+    #[Groups(['driving_school_get','driving_school_cget'])]
     private Collection $monitors;
 
     #[ORM\OneToMany(mappedBy: 'drivingSchoolId', targetEntity: Booking::class)]

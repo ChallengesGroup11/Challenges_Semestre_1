@@ -58,8 +58,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 
 #[GetCollection(
-    normalizationContext: ['groups' => ['user_cget']],
-    security: 'object.getId() == student.getId()'
+    normalizationContext: ['groups' => ['student_cget']],
+    security: 'is_granted("ROLE_DIRECTOR", "ROLE_ADMIN")'
 )]
 //TODO CREER LE USER QUAND IL ENVOIE SES FILES
 #[Get(normalizationContext: ['groups' => ['student_get']])]
@@ -108,7 +108,7 @@ class Student
 
     #[ORM\OneToOne(inversedBy: 'student', cascade: ['persist', 'remove'], fetch: "EAGER")]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['user_get'])]
+    #[Groups(['user_get', 'student_cget'])]
     private ?User $userId = null;
 
 

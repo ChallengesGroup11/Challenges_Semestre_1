@@ -28,8 +28,8 @@ const getUser = async () => {
     .then((data) => {
       currentUser.value = data
       useStoreUser().user = data
-      // debugger
-      if(data.director.drivingSchoolId != null) {
+      useStoreUser().ListMonitor = data.director.drivingSchoolId.monitors
+      if (data.director.drivingSchoolId != null) {
         useStoreUser().drivingSchool = data.director.drivingSchoolId
       }
     })

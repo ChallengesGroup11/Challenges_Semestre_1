@@ -1,11 +1,19 @@
 /* eslint-disable quote-props */
 import axios from 'axios'
 export namespace ApiService {
-  export const api = axios.create({
+  const api = axios.create({
     baseURL: import.meta.env.VITE_CHALLENGE_URL,
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
       'Content-Type': 'application/json',
+    },
+  })
+
+  const apiPatch = axios.create({
+    baseURL: import.meta.env.VITE_CHALLENGE_URL,
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+      'Content-Type': 'application/merge-patch+json',
     },
   })
 
@@ -16,7 +24,7 @@ export namespace ApiService {
 
   export const fetchAll = async (url: string) => {
     const response = await api.get(url)
-    return response.data
+    return response.data['hydra:member']
   }
 
   export const insert = async (url: string, data: any) => {
@@ -24,8 +32,8 @@ export namespace ApiService {
     return response.data
   }
 
-  export const update = async (url: string, id: string, data: any) => {
-    const response = await api.patch(`${url}/${id}`, data)
+  export const patch = async (url: string, data: any) => {
+    const response = await apiPatch.patch(`${url}/${data.id}`, data)
     return response.data
   }
 

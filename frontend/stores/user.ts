@@ -4,6 +4,7 @@ export const useStoreUser = defineStore('counter', {
   state: () => ({
     user: {},
     drivingSchool: [],
+    ListMonitor: [],
   }),
   getters: {},
 })

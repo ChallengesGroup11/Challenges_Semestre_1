@@ -113,7 +113,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
-    #[Groups([ 'user_cget', 'user_get'])]
+    #[Groups([ 'user_cget', 'user_get', 'student_get', 'student_cget'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -141,7 +141,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?bool $status = null;
 
     #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'],fetch: "EAGER")]
-    #[Groups(['user_get', 'user_cget'])]
+    #[Groups(['user_get', 'user_cget', 'student_get', 'student_cget'])]
     private ?Student $student = null;
 
     #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'],fetch: "EAGER")]
@@ -157,11 +157,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $payments;
 
     #[ORM\Column(length: 255)]
-    #[Groups([ 'user_get', 'user_cget', 'user_patch', 'user_write', 'monitor_get', 'monitor_cget'])]
+    #[Groups([ 'user_get', 'user_cget', 'user_patch', 'user_write', 'monitor_get', 'monitor_cget', 'student_get', 'student_cget'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups([ 'user_get',  'user_cget', 'user_patch',  'user_write', 'monitor_get', 'monitor_cget'])]
+    #[Groups([ 'user_get',  'user_cget', 'user_patch',  'user_write', 'monitor_get', 'monitor_cget', 'student_get', 'student_cget'])]
     private ?string $lastname = null;
 
 

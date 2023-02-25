@@ -18,6 +18,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: BookingRepository::class)]
 // @ApiResource(attributes={"normalization_context": {"groups"={"todolist"}, "enable_max_depth"=true}})
+
+//TODO: ADD GUard needing already created a driving school
 #[ApiResource(
     operations:[
     new Post(
@@ -74,7 +76,7 @@ class Booking
     private ?bool $statusDone = null;
 
     #[ORM\ManyToMany(targetEntity: Student::class, inversedBy: 'bookings',fetch: "EAGER")]
-    #[Groups([ 'booking_get','student_get'])]
+    #[Groups([ 'booking_get','student_get', 'booking_cget'])]
     private Collection $studentId;
 
     #[ORM\ManyToMany(targetEntity: Monitor::class, inversedBy: 'bookings',fetch: "EAGER")]
