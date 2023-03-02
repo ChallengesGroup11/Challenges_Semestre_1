@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import moment from 'moment'
 import { ApiService } from '~/services/api'
 import { API_URL } from '../../services/api'
 import { useStoreUser } from '../../../stores/user'
@@ -100,6 +101,13 @@ const fn = {
     //   studentId: 1,
     //   monitorId: 1,
     // })
+
+    const resVerification = fn.verifySlot(state.newSlot.slotBegin, state.newSlot.slotEnd)
+
+    if (resVerification !== true) {
+      return alert(resVerification)
+    }
+
     const newRowDb = {
       slotBegin: state.newSlot.slotBegin,
       slotEnd: state.newSlot.slotEnd,
@@ -122,6 +130,21 @@ const fn = {
 
   onClickModifyRow() {
     state.isShownModalEditing = true
+  },
+
+  verifySlot(slotBegin: string, slotEnd: string) {
+    if (slotBegin > slotEnd) return 'La date de début doit être inférieure à la date de fin'
+
+    if (slotBegin === slotEnd) return 'La date de début doit être inférieure à la date de fin'
+
+    if (slotBegin < moment().add(1, 'days').format('YYYY-MM-DD'))
+      return 'La date de début doit être supérieure à la date du jour'
+
+    const resDif = moment(slotEnd).diff(moment(slotBegin), 'minutes')
+
+    if (resDif !== 60 && resDif !== 120) return 'La durée du créneau doit être de 1h ou 2h'
+
+    return true
   },
 }
 

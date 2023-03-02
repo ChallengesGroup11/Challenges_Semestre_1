@@ -3,6 +3,7 @@ import * as R from 'ramda'
 import { fetchAll } from '../../services/api'
 import { ApiService } from '~/services/api'
 import { useStoreUser } from '../../../stores/user'
+import moment from 'moment'
 
 const emit = defineEmits<{
   (e: 'bookingEdited', payload: object): void
@@ -36,8 +37,27 @@ const state = reactive({
 
 const fn = {
   onClickSaveBooking: async () => {
+    const resVerification = fn.verifySlot(state.booking.slotBegin, state.booking.slotEnd)
+
+    if (resVerification !== true) {
+      return alert(resVerification)
+    }
     await ApiService.patch('bookings', state.booking)
     emit('bookingEdited', state.booking)
+  },
+  verifySlot(slotBegin: string, slotEnd: string) {
+    if (slotBegin > slotEnd) return 'La date de début doit être inférieure à la date de fin'
+
+    if (slotBegin === slotEnd) return 'La date de début doit être inférieure à la date de fin'
+
+    if (slotBegin < moment().add(1, 'days').format('YYYY-MM-DD'))
+      return 'La date de début doit être supérieure à la date du jour'
+
+    const resDif = moment(slotEnd).diff(moment(slotBegin), 'minutes')
+
+    if (resDif !== 60 && resDif !== 120) return 'La durée du créneau doit être de 1h ou 2h'
+
+    return true
   },
 }
 
@@ -55,7 +75,6 @@ const loadData = async () => {
       name: monitor.userId.firstname + ' ' + monitor.userId.lastname,
     }
   })
-  debugger
 }
 
 loadData()
