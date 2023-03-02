@@ -56,11 +56,11 @@ class Booking
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['booking_get','get','booking_cget','booking_write'])]
+    #[Groups(['booking_get','get','booking_cget','booking_write','driving_school_get'])]
     private ?\DateTimeInterface $slotBegin = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['booking_get','get','booking_cget','booking_write'])]
+    #[Groups(['booking_get','get','booking_cget','booking_write','driving_school_get'])]
     private ?\DateTimeInterface $slotEnd = null;
 
     #[ORM\Column(length: 255,nullable: true)]
@@ -68,7 +68,7 @@ class Booking
     private ?string $comment = null;
 
     #[ORM\Column]
-    #[Groups(['booking_get','get','booking_cget','booking_write'])]
+    #[Groups(['booking_get','get','booking_cget','booking_write','driving_school_get'])]
     private ?bool $statusValidate = null;
 
     #[ORM\Column]
