@@ -2,7 +2,7 @@
 security:
     # https://symfony.com/doc/current/security.html#c-hashing-passwords
     password_hashers:
-        App\Entity\User: 'auto'
+        App\Entity\User: "auto"
 
     # https://symfony.com/doc/current/security/authenticator_manager.html
     enable_authenticator_manager: true
@@ -34,12 +34,12 @@ security:
         - { path: ^/authentication_token, roles: PUBLIC_ACCESS }
         - { path: ^/users, methods: Post, roles: PUBLIC_ACCESS }
         #- { path: ^/, roles: IS_AUTHENTICATED_FULLY }
-            
+
     role_hierarchy:
         ROLE_USER: ROLE_USER
-        ROLE_MODERATOR: ROLE_USER
-        ROLE_DIRECTOR: ROLE_MODERATOR
-        ROLE_ADMIN: ROLE_DIRECTOR 
+        ROLE_MONITOR: ROLE_USER
+        ROLE_ADMIN: ROLE_DIRECTOR
+        ROLE_DIRECTOR: ROLE_MONITOR
 
 when@test:
     security:

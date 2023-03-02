@@ -37,7 +37,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[Patch(
     denormalizationContext: ['groups' => ['booking_write']],
-    security: 'is_granted("ROLE_MODERATOR","ROLE_DIRECTOR")'
+    security: 'is_granted("ROLE_MONITOR","ROLE_DIRECTOR")'
 )]
 
 #[Delete(
@@ -80,7 +80,7 @@ class Booking
     private Collection $studentId;
 
     #[ORM\ManyToMany(targetEntity: Monitor::class, inversedBy: 'bookings',fetch: "EAGER")]
-    #[Groups(['booking_get', 'booking_cget'])]
+    #[Groups(['booking_get', 'booking_cget','booking_write'])]
     private Collection $monitorId;
 
     #[ORM\ManyToOne(inversedBy: 'bookings')]

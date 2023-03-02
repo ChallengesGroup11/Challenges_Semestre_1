@@ -51,17 +51,17 @@ class Monitor
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
-    #[Groups(['monitor_get','monitor_cget'])]
+    #[Groups(['monitor_get','monitor_cget','user_get'])]
     private ?int $id = null;
 
     #[ORM\OneToOne(inversedBy: 'monitor', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['booking_get','booking_cget', 'monitor_get', 'monitor_cget'])]
+    #[Groups(['booking_get','booking_cget', 'monitor_get', 'monitor_cget','user_cget','user_get'])]
     private ?User $userId = null;
 
     #[ORM\ManyToOne(inversedBy: 'monitors')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['monitor_cget'])]
+    #[Groups(['monitor_cget','driving_school_get','driving_school_cget'])]
     private ?DrivingSchool $drivingSchoolId = null;
 
     #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'monitor_cget')]
@@ -72,7 +72,7 @@ class Monitor
     {
         $this->bookings = new ArrayCollection();
     }
-
+    
     public function getId(): ?int
     {
         return $this->id;

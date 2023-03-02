@@ -22,14 +22,14 @@ const ListColumn = [
     label: 'slot begin',
     align: 'left',
     sortable: true,
-    field: (row) => row.slotBegin,
+    field: (row: Booking) => fn.formatDisplayDate(row.slotBegin),
   },
   {
     name: 'slotEnd',
     label: 'slot end',
     align: 'left',
     sortable: true,
-    field: (row) => row.slotEnd,
+    field: (row: Booking) => fn.formatDisplayDate(row.slotEnd),
   },
   {
     name: 'comment',
@@ -90,6 +90,10 @@ const fn = {
     })
     state.isShownModalEditing = false
   },
+  formatDisplayDate(date: moment.MomentInput) {
+    return moment(date).format('DD/MM/YYYY - hh:ss')
+  },
+
   async onClickSaveBooking() {
     // state.rows.push({
     //   slotBegin: '2021-06-01',

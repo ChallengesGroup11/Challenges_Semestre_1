@@ -16,7 +16,7 @@ interface Booking {
   statusValidate: boolean
   statusDone: boolean
   drivingSchoolId: object[]
-  // monitorId: object[]
+  monitorId: []
   // studentId: object[]
   id: number
 }
@@ -31,8 +31,8 @@ const props = defineProps({
 const state = reactive({
   booking: R.clone(props?.booking),
   isShownModal: true,
-  ListStudent: [],
-  ListMonitor: [],
+  ListStudent: [] as any[],
+  ListMonitor: [] as any[],
 })
 
 const fn = {
@@ -42,6 +42,10 @@ const fn = {
     if (resVerification !== true) {
       return alert(resVerification)
     }
+    // const editedBooking = R.clone(state.booking)
+    // editedBooking.monitorId = editedBooking.monitorId.id
+    // debugger
+
     await ApiService.patch('bookings', state.booking)
     emit('bookingEdited', state.booking)
   },
@@ -71,7 +75,8 @@ const loadData = async () => {
   })
   state.ListMonitor = useStoreUser().ListMonitor.map((monitor) => {
     return {
-      id: monitor.userId.id,
+      id: monitor.id,
+      idFull: monitor,
       name: monitor.userId.firstname + ' ' + monitor.userId.lastname,
     }
   })
@@ -152,15 +157,16 @@ loadData()
               label="Élève"
               option-value="id"
               option-label="name"
-            />
-            <q-select
+            /> -->
+            <!-- <q-select
               filled
-              v-model="state.booking.monitorId.id"
+              v-model="state.booking.monitorId"
               :options="state.ListMonitor"
               label="Moniteur"
               option-value="id"
               option-label="name"
-            /> -->
+            />
+            monitor: {{ state.booking.monitorId }} ListMonitor : {{ state.ListMonitor }} -->
 
             <q-checkbox v-model="state.booking.statusValidate" label="Validé" />
             <q-checkbox v-model="state.booking.statusDone" label="Terminé" />
