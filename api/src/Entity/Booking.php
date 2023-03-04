@@ -37,7 +37,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[Patch(
     denormalizationContext: ['groups' => ['booking_write']],
-    security: 'is_granted("ROLE_MONITOR","ROLE_DIRECTOR")'
 )]
 
 #[Delete(
@@ -52,7 +51,7 @@ class Booking
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
-    #[Groups(['booking_get','booking_cget'])]
+    #[Groups(['booking_get','booking_cget','driving_school_get'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -76,7 +75,7 @@ class Booking
     private ?bool $statusDone = null;
 
     #[ORM\ManyToMany(targetEntity: Student::class, inversedBy: 'bookings',fetch: "EAGER")]
-    #[Groups([ 'booking_get','student_get', 'booking_cget'])]
+    #[Groups([ 'booking_get','student_get', 'booking_cget','booking_write','driving_school_get'])]
     private Collection $studentId;
 
     #[ORM\ManyToMany(targetEntity: Monitor::class, inversedBy: 'bookings',fetch: "EAGER")]
