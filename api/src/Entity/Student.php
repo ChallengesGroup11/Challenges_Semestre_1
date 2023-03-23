@@ -108,12 +108,12 @@ class Student
 
     #[ORM\OneToOne(inversedBy: 'student', cascade: ['persist', 'remove'], fetch: "EAGER")]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['user_get',"user_cget", 'student_cget','student_get','booking_cget'])]
+    #[Groups(['user_get','student_cget','student_get'])]
     private ?User $userId = null;
 
 
     #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'studentId', fetch: "EAGER")]
-    #[Groups(['student_cget','student_cget','booking_cget','booking_get'])]
+    #[Groups(['student_cget','student_get'])]
     #[ApiProperty(fetchEager: true)]
     private Collection $bookings;
 

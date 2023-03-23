@@ -18,13 +18,13 @@ const ListColumn = [
     sortable: true,
     field: (row: any) => fn.formatDisplayDate(row.slotEnd),
   },
-  {
-    name: "studentName",
-    label: "nom de l'élève",
-    align: "left",
-    sortable: true,
-    field: (row: any) => row.studentName,
-  },
+  // {
+  //   name: "studentName",
+  //   label: "nom de l'élève",
+  //   align: "left",
+  //   sortable: true,
+  //   field: (row: any) => row.studentName,
+  // },
 ]
 
 const state = reactive({
@@ -71,6 +71,7 @@ const loadData = async () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data)
         if (data.monitor.drivingSchoolId != null) {
           state.drivingSchoolName = data.monitor.drivingSchoolId.name
           if (data.monitor.drivingSchoolId.bookings != null) {
@@ -92,7 +93,7 @@ const loadData = async () => {
       id: item.id,
       slotBegin: item.slotBegin,
       slotEnd: item.slotEnd,
-      studentName: item.studentId[0].userId.firstname + " " + item.studentId[0].userId.lastname,
+      // studentName: item.studentId[0].userId.firstname + " " + item.studentId[0].userId.lastname,
     }
   })
   state.isLoading = false

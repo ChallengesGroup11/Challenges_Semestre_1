@@ -24,7 +24,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations:[
     new Post(
         denormalizationContext: ['groups' => ['booking_write']],
-        security: 'is_granted("ROLE_DIRECTOR")',
+        // security: 'is_granted("ROLE_DIRECTOR")',
     ),
 ]
 )]
@@ -75,7 +75,7 @@ class Booking
     private ?bool $statusDone = null;
 
     #[ORM\ManyToMany(targetEntity: Student::class, inversedBy: 'bookings',fetch: "EAGER")]
-    #[Groups([ 'booking_get','student_get', 'booking_cget','booking_write','driving_school_get'])]
+    #[Groups([ 'booking_get','booking_cget','booking_write','driving_school_get','student_cget','student_get'])]
     private Collection $studentId;
 
     #[ORM\ManyToMany(targetEntity: Monitor::class, inversedBy: 'bookings',fetch: "EAGER")]
