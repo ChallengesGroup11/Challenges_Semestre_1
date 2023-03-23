@@ -37,16 +37,16 @@ const fn = {
         </div>
         <div class="row">
           <q-card square bordered class="q-pa-lg shadow-1">
-            <h2>Vous êtes ?</h2>
-            <q-tabs v-model="state.currentTab" inline-label class="bg-purple text-white shadow-2">
-              <q-tab :name="EnumTab.STUDENT" label="Eleve" />
-              <q-tab :name="EnumTab.SCHOOL_DRIVING" label="Gérant d'auto-école" />
-            </q-tabs>
             <template v-if="state.signupOrLogin === EnumSignupOrLogin.LOGIN">
-              <h2>Se connecter en tant que {{ state.currentTab === EnumTab.SCHOOL_DRIVING ? "Gérant" : "Eleve" }}</h2>
+              <h2>Se connecter</h2>
               <AuthSigninComp />
             </template>
             <template v-if="state.signupOrLogin === EnumSignupOrLogin.SIGNUP">
+              <h2>Vous êtes ?</h2>
+              <q-tabs v-model="state.currentTab" inline-label class="bg-purple text-white shadow-2">
+                <q-tab :name="EnumTab.STUDENT" label="Eleve" />
+                <q-tab :name="EnumTab.SCHOOL_DRIVING" label="Gérant d'auto-école" />
+              </q-tabs>
               <h2>
                 Créer un compte en tant que
                 {{ state.currentTab === EnumTab.SCHOOL_DRIVING ? "Gérant" : "Eleve" }}

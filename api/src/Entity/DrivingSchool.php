@@ -122,19 +122,19 @@ class DrivingSchool
 
 
     #[ORM\Column(length: 255)]
-    #[Groups(['driving_school_cget', 'driving_school_get', 'driving_school_write'])]
+    #[Groups(['driving_school_cget', 'driving_school_get', 'driving_school_write','monitor_get'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write'])]
+    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write','monitor_get'])]
     private ?string $address;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write'])]
+    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write','monitor_get'])]
     private ?string $city;
 
     #[ORM\Column(length: 5)]
-    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write'])]
+    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write','monitor_get'])]
     private ?string $zipcode;
 
     #[ORM\Column(length: 14)]
@@ -142,7 +142,7 @@ class DrivingSchool
     private ?string $siret = null;
 
     #[ORM\Column(length: 10)]
-    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write'])]
+    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write','monitor_get'])]
     private ?string $phoneNumber = null;
 
     #[ApiProperty(types: ['https://localhost/contentUrl'])]
