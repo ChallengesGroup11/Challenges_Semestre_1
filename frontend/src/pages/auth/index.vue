@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import AuthSigninComp from '~/components/AuthSigninComp.vue'
-import AuthSignupStudentComp from '~/components/AuthSignupStudentComp.vue'
+import AuthSigninComp from "~/components/AuthSigninComp.vue"
+import AuthSignupStudentComp from "~/components/AuthSignupStudentComp.vue"
 
 const router = useRouter()
 
+const ee = "d"
 enum EnumTab {
-  SCHOOL_DRIVING = 'school-driving',
-  STUDENT = 'student',
+  SCHOOL_DRIVING = "school-driving",
+  STUDENT = "student",
 }
 
 const enum EnumSignupOrLogin {
-  SIGNUP = 'signup',
-  LOGIN = 'login',
+  SIGNUP = "signup",
+  LOGIN = "login",
 }
 
 const state = reactive({
@@ -42,13 +43,13 @@ const fn = {
               <q-tab :name="EnumTab.SCHOOL_DRIVING" label="Gérant d'auto-école" />
             </q-tabs>
             <template v-if="state.signupOrLogin === EnumSignupOrLogin.LOGIN">
-              <h2>Se connecter en tant que {{ state.currentTab === EnumTab.SCHOOL_DRIVING ? 'Gérant' : 'Eleve' }}</h2>
+              <h2>Se connecter en tant que {{ state.currentTab === EnumTab.SCHOOL_DRIVING ? "Gérant" : "Eleve" }}</h2>
               <AuthSigninComp />
             </template>
             <template v-if="state.signupOrLogin === EnumSignupOrLogin.SIGNUP">
               <h2>
                 Créer un compte en tant que
-                {{ state.currentTab === EnumTab.SCHOOL_DRIVING ? 'Gérant' : 'Eleve' }}
+                {{ state.currentTab === EnumTab.SCHOOL_DRIVING ? "Gérant" : "Eleve" }}
               </h2>
               <AuthSignupDirectorComp v-if="state.currentTab === EnumTab.SCHOOL_DRIVING" />
               <AuthSignupStudentComp v-if="state.currentTab === EnumTab.STUDENT" />
