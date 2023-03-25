@@ -82,6 +82,37 @@ const state = reactive({
 })
 
 const fn = {
+
+  async onClickResetRow() {
+
+      const data = {
+        id: state.currentItemSelected[0].id,
+        slotBegin: state.currentItemSelected[0].slotBegin,
+        slotEnd: state.currentItemSelected[0].slotEnd,
+        comment: state.currentItemSelected[0].comment,
+        statusValidate: state.currentItemSelected[0].statusValidate,
+        statusDone: state.currentItemSelected[0].statusDone,
+        drivingSchoolId: state.currentItemSelected[0].drivingSchoolId,
+        monitorId: [],
+        studentId: [],
+      }
+      await ApiService.patch('bookings', data)
+      //todo mettre à jour la liste
+      state.rows = state.rows.map((row) => {
+        if (row.id === data.id) {
+         // mettre studentID et monitorID à vide et non undefined
+
+         data.firstname = ""
+         data.lastname = ""
+         data.Monitorfirstname = ""
+         data.Monitorlastname = ""
+
+         return data
+        }
+        return row
+      })
+  },
+
   onBookingEdited(booking: Booking) {
     state.rows = state.rows.map((row) => {
       if (row.id === booking.id) {
@@ -279,6 +310,7 @@ loadData()
         <template v-if="state.currentItemSelected[0]">
           <q-btn v-if="state.currentItemSelected" color="primary" label="Modifier" @click="fn.onClickModifyRow" />
           <q-btn v-if="state.currentItemSelected" color="primary" label="Supprimer" @click="fn.onClickDeleteRow" />
+          <q-btn v-if="state.currentItemSelected" color="primary" label="Liberer le créneau" @click="fn.onClickResetRow" />
         </template>
         <q-space />
         <q-input borderless dense debounce="300" color="primary">
