@@ -3,15 +3,12 @@ import { reactive } from 'vue'
 import { useStoreUser } from '../../../stores/user'
 const router = useRouter()
 
+const emit = defineEmits<{
+  (e: "on-loaded", payload: boolean): void
+}>()
+
 const currentUser = reactive({ value: [] })
 
-onMounted(async () => {
-  if (!localStorage.getItem('token')) {
-    await router.push('/auth')
-  } else {
-    await getUser()
-  }
-})
 
 const logoutUser = async () => {
   localStorage.removeItem('token')
@@ -28,9 +25,8 @@ const getUser = async () => {
     .then((data) => {
       currentUser.value = data
       console.log('Success:', data);
-      
-      useStoreUser().user = data
 
+      useStoreUser().user = data
       useStoreUser().ListMonitor = data.director.drivingSchoolId.monitors
       if (data.director.drivingSchoolId != null) {
         useStoreUser().drivingSchool = data.director.drivingSchoolId
@@ -40,6 +36,17 @@ const getUser = async () => {
       console.error('Error:', error)
     })
 }
+
+const loadData = async () => {
+  if (!localStorage.getItem('token')) {
+    await router.push('/auth')
+  } else {
+    await getUser()
+  }
+  emit("on-loaded", true)
+}
+
+loadData()
 </script>
 
 <template>

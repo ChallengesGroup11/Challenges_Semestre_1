@@ -68,7 +68,7 @@ class Student
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
-    #[Groups(['student_get'])]
+    #[Groups(['student_get','user_cget','driving_school_get'])]
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
@@ -97,24 +97,14 @@ class Student
     #[ORM\Column(nullable: true)]
     public ?string $filePathCni = null;
 
-
-//    #[ORM\Column(length: 255, nullable:true)]
-//    #[Groups(['student_get'])]
-//    private ?string $urlCodeCertification = null;
-//
-//    #[ORM\Column(length: 255, nullable:true)]
-//    #[Groups(['student_get'])]
-//    private ?string $urlCni = null;
-
     #[ORM\OneToOne(inversedBy: 'student', cascade: ['persist', 'remove'], fetch: "EAGER")]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['user_get','student_cget','student_get'])]
+    #[Groups(['user_get','student_cget','student_get','monitor_get'])]
     private ?User $userId = null;
 
 
     #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'studentId', fetch: "EAGER")]
-    #[Groups(['student_cget','student_get'])]
-    #[ApiProperty(fetchEager: true)]
+    #[Groups(['student_cget','student_get','booking_cget'])]
     private Collection $bookings;
 
 

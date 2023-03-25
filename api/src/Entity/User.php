@@ -87,7 +87,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     security: 'is_granted("ROLE_ADMIN")',
 )]
 #[Get(
-    normalizationContext: ['groups' => ['user_get', 'director_get']],
+    normalizationContext: ['groups' => ['user_get']],
     security: 'object.getId() == user.getId()'
 )]
 #[Patch(
@@ -157,11 +157,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $payments;
 
     #[ORM\Column(length: 255)]
-    #[Groups([ 'user_get', 'user_cget', 'user_patch', 'user_write', 'monitor_get', 'monitor_cget', 'student_get', 'student_cget'])]
+    #[Groups([ 'user_get', 'user_cget', 'user_patch', 'user_write', 'monitor_get', 'monitor_cget','student_get','driving_school_get'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups([ 'user_get',  'user_cget', 'user_patch',  'user_write', 'monitor_get', 'monitor_cget', 'student_get', 'student_cget'])]
+    #[Groups([ 'user_get',  'user_cget', 'user_patch',  'user_write', 'monitor_get', 'monitor_cget', 'student_get', 'student_cget','driving_school_get'])]
     private ?string $lastname = null;
 
 
