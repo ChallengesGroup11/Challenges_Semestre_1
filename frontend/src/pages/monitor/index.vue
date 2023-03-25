@@ -44,6 +44,7 @@ const fn = {
     for (let i = 0; i < state.ListCurrentItemSelected.length; i++) {
       console.log({
         id: state.ListCurrentItemSelected[i].id,
+        statusValidate: true,
         monitorId: [`/monitors/${useStoreUser().user.monitor.id}`],
       })
       await ApiService.patch("bookings", {

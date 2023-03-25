@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Controller\StudentPostController;
+use App\Controller\DecrementCreditController;
 use App\Repository\StudentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -53,8 +54,20 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     normalizationContext: ['groups' => ['student_get_path_code']],
     denormalizationContext: ['groups' => ['student_write_path_code']],
     name: 'student_path_code'
- )]
+    ),
+    new Patch(
+        uriTemplate: '/students/{id}/decrementCountCredit',
+        normalizationContext: ['groups' => ['student_get_decrement_count_credit']],
+        denormalizationContext: ['groups' => ['student_write_decrement_count_credit']],
+        security: '(is_granted("ROLE_MONITOR")) or (is_granted("ROLE_ADMIN"))',
+        name: 'student_decrement_count_credit',
+        controller: DecrementCreditController::class,
+    ),
+],
 )]
+
+
+
 
 
 #[GetCollection(
@@ -231,6 +244,7 @@ class Student
         return $this;
     }
 
+
     public function removeBooking(Booking $booking): self
     {
         if ($this->bookings->removeElement($booking)) {
@@ -244,6 +258,7 @@ class Student
     public function getCountCredit(): ?int
     {
         return $this->countCredit;
+        
     }
 
     public function setCountCredit(?int $countCredit): self
