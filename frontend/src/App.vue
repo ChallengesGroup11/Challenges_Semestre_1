@@ -1,12 +1,14 @@
 <script setup lang="ts">
+console.log(3)
+
 useHead({
-  title: 'Default Title',
-  meta: [{ name: 'description', content: 'Default Content' }],
+  title: "Default Title",
+  meta: [{ name: "description", content: "Default Content" }],
   link: [
     {
-      rel: 'icon',
-      type: 'image/svg+xml',
-      href: computed(() => (preferredDark.value ? '/icons/favicon-dark.svg' : '/icons/favicon.svg')),
+      rel: "icon",
+      type: "image/svg+xml",
+      href: computed(() => (preferredDark.value ? "/icons/favicon-dark.svg" : "/icons/favicon.svg")),
     },
   ],
 })

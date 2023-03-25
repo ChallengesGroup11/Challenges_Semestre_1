@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import AuthSigninComp from '~/components/AuthSigninComp.vue'
-import AuthSignupStudentComp from '~/components/AuthSignupStudentComp.vue'
+import AuthSigninComp from "~/components/AuthSigninComp.vue"
+import AuthSignupStudentComp from "~/components/AuthSignupStudentComp.vue"
 
 const router = useRouter()
 
+const ee = "d"
 enum EnumTab {
-  SCHOOL_DRIVING = 'school-driving',
-  STUDENT = 'student',
+  SCHOOL_DRIVING = "school-driving",
+  STUDENT = "student",
 }
 
 const enum EnumSignupOrLogin {
-  SIGNUP = 'signup',
-  LOGIN = 'login',
+  SIGNUP = "signup",
+  LOGIN = "login",
 }
 
 const state = reactive({
@@ -36,20 +37,17 @@ const fn = {
         </div>
         <div class="row">
           <q-card square bordered class="q-pa-lg shadow-1">
-            <h2>Vous êtes ?</h2>
-            <q-tabs v-model="state.currentTab" inline-label class="bg-purple text-white shadow-2">
-              <q-tab :name="EnumTab.STUDENT" label="Eleve" />
-              <q-tab :name="EnumTab.SCHOOL_DRIVING" label="Gérant d'auto-école" />
-            </q-tabs>
             <template v-if="state.signupOrLogin === EnumSignupOrLogin.LOGIN">
-              <h2>Se connecter en tant que {{ state.currentTab === EnumTab.SCHOOL_DRIVING ? 'Gérant' : 'Eleve' }}</h2>
+              <h2>Se connecter</h2>
               <AuthSigninComp />
             </template>
             <template v-if="state.signupOrLogin === EnumSignupOrLogin.SIGNUP">
-              <h2>
-                Créer un compte en tant que
-                {{ state.currentTab === EnumTab.SCHOOL_DRIVING ? 'Gérant' : 'Eleve' }}
-              </h2>
+              <h2>Vous êtes ?</h2>
+              <q-tabs v-model="state.currentTab" inline-label class="bg-blue text-white shadow-2">
+                <q-tab :name="EnumTab.STUDENT" label="Eleve" />
+                <q-tab :name="EnumTab.SCHOOL_DRIVING" label="Gérant d'auto-école" />
+              </q-tabs>
+
               <AuthSignupDirectorComp v-if="state.currentTab === EnumTab.SCHOOL_DRIVING" />
               <AuthSignupStudentComp v-if="state.currentTab === EnumTab.STUDENT" />
             </template>
@@ -57,14 +55,14 @@ const fn = {
               <p
                 v-if="state.signupOrLogin === EnumSignupOrLogin.LOGIN"
                 @click="fn.changeToSignupOrLogin"
-                class="text-grey-6"
+                class="text-grey-6 cursor-pointer"
               >
                 Pas encore de compte ? En créer un.
               </p>
               <p
                 v-else-if="state.signupOrLogin === EnumSignupOrLogin.SIGNUP"
                 @click="fn.changeToSignupOrLogin"
-                class="text-grey-6"
+                class="text-grey-6 cursor-pointer"
               >
                 Se connecter à son compte.
               </p>

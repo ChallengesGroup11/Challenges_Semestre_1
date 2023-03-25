@@ -22,6 +22,7 @@ declare module '@vue/runtime-core' {
     LayoutHeader: typeof import('./components/LayoutHeader.vue')['default']
     LayoutHeaderAdmin: typeof import('./components/admin/LayoutHeaderAdmin.vue')['default']
     LayoutHeaderDirector: typeof import('./components/director/LayoutHeaderDirector.vue')['default']
+    LayoutHeaderMonitor: typeof import('./components/monitor/LayoutHeaderMonitor.vue')['default']
     LayoutHeaderStudent: typeof import('./components/student/LayoutHeaderStudent.vue')['default']
     ListRoom: typeof import('./components/ListRoom.vue')['default']
     ListSlotComp: typeof import('./components/director/ListSlotComp.vue')['default']

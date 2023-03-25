@@ -27,7 +27,10 @@ const getUser = async () => {
     .then((response) => response.json())
     .then((data) => {
       currentUser.value = data
+      console.log('Success:', data);
+      
       useStoreUser().user = data
+
       useStoreUser().ListMonitor = data.director.drivingSchoolId.monitors
       if (data.director.drivingSchoolId != null) {
         useStoreUser().drivingSchool = data.director.drivingSchoolId

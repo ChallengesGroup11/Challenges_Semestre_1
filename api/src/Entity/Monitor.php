@@ -61,7 +61,7 @@ class Monitor
 
     #[ORM\ManyToOne(inversedBy: 'monitors')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['monitor_cget','driving_school_get','driving_school_cget'])]
+    #[Groups(['monitor_cget','driving_school_get','driving_school_cget',"monitor_get"])]
     private ?DrivingSchool $drivingSchoolId = null;
 
     #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'monitor_cget')]

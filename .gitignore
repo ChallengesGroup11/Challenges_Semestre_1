@@ -6,3 +6,4 @@
 /api/public/media
 
 .env
+api/.DS_Store

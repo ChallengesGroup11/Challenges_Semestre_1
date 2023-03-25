@@ -5,6 +5,7 @@ export const useStoreUser = defineStore('counter', {
     user: {},
     drivingSchool: [],
     ListMonitor: [],
+    ListBooking: [],
   }),
   getters: {},
 })
