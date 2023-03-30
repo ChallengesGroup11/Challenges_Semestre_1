@@ -36,7 +36,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     new GetCollection(
         uriTemplate: '/monitors/getAll',
         openapiContext: ['description' => 'Get all monitors'],
-        normalizationContext: ['groups' => ['monitor_get']],
+        normalizationContext: ['groups' => ['monitor_cget']],
     ),
 
     ])
@@ -51,7 +51,7 @@ class Monitor
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
-    #[Groups(['monitor_get','monitor_cget','user_get'])]
+    #[Groups(['monitor_get','monitor_cget','user_get','driving_school_get'])]
     private ?int $id = null;
 
     #[ORM\OneToOne(inversedBy: 'monitor', cascade: ['persist', 'remove'])]
@@ -61,18 +61,18 @@ class Monitor
 
     #[ORM\ManyToOne(inversedBy: 'monitors')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['monitor_cget','driving_school_get','driving_school_cget',"monitor_get"])]
+    #[Groups(['monitor_cget',"monitor_get",'user_get'])]
     private ?DrivingSchool $drivingSchoolId = null;
 
-    #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'monitor_cget')]
-    #[Groups(['monitor_cget'])]
+    #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'monitorId')]
+    #[Groups(['booking_cget', 'monitor_get', 'monitor_cget'])]
     private Collection $bookings;
 
     public function __construct()
     {
         $this->bookings = new ArrayCollection();
     }
-    
+
     public function getId(): ?int
     {
         return $this->id;

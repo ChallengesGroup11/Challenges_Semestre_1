@@ -44,7 +44,12 @@ const fn = {
     }
     // const editedBooking = R.clone(state.booking)
     // editedBooking.monitorId = editedBooking.monitorId.id
-    // debugger
+    if(state.booking.monitorId.length > 0) {
+      state.booking.monitorId = ['/monitors/' + state.booking.monitorId[0].id]
+    }
+    if(state.booking.studentId.length > 0) {
+      state.booking.studentId = ['/students/'+state.booking.studentId[0].id]
+    }
 
     await ApiService.patch('bookings', state.booking)
     emit('bookingEdited', state.booking)
@@ -67,19 +72,19 @@ const fn = {
 
 const loadData = async () => {
   // charger moniteurs et users
-  state.ListStudent = (await ApiService.fetchAll('students')).map((student) => {
-    return {
-      id: student.userId.id,
-      name: student.userId.firstname + ' ' + student.userId.lastname,
-    }
-  })
-  state.ListMonitor = useStoreUser().ListMonitor.map((monitor) => {
-    return {
-      id: monitor.id,
-      idFull: monitor,
-      name: monitor.userId.firstname + ' ' + monitor.userId.lastname,
-    }
-  })
+  // state.ListStudent = (await ApiService.fetchAll('students')).map((student) => {
+  //   return {
+  //     id: student.userId.id,
+  //     name: student.userId.firstname + ' ' + student.userId.lastname,
+  //   }
+  // })
+  // state.ListMonitor = useStoreUser().ListMonitor.map((monitor) => {
+  //   return {
+  //     id: monitor.id,
+  //     idFull: monitor,
+  //     name: monitor.userId.firstname + ' ' + monitor.userId.lastname,
+  //   }
+  // })
 }
 
 loadData()

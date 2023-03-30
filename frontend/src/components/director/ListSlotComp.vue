@@ -3,6 +3,7 @@ import moment from 'moment'
 import { ApiService } from '~/services/api'
 import { API_URL } from '../../services/api'
 import { useStoreUser } from '../../../stores/user'
+import { STATEMENT_TYPES } from '@babel/types';
 
 interface Booking {
   slotBegin: string
@@ -36,35 +37,35 @@ const ListColumn = [
     label: 'comment',
     align: 'left',
     sortable: true,
-    field: (row) => row.comment,
+    field: (row: { comment: any; }) => row.comment,
   },
   {
     name: 'statusValidate',
     label: 'status validate',
     align: 'left',
     sortable: true,
-    field: (row) => row.statusValidate,
+    field: (row: { statusValidate: any; }) => row.statusValidate,
   },
   {
     name: 'statusDone',
     label: 'status done',
     align: 'left',
     sortable: true,
-    field: (row) => row.statusDone,
+    field: (row: { statusDone: any; }) => row.statusDone,
   },
   {
     name: 'studentId',
     label: 'élève',
     align: 'left',
     sortable: true,
-    field: (row) => row.studentId?.user?.firstname + ' ' + row.studentId?.user?.lastname,
+    field: (row: { studentId: string; }) => row.firstname + ' ' + row.lastname,
   },
   {
     name: 'monitorId',
     label: 'moniteur',
     align: 'left',
     sortable: true,
-    field: (row) => row.monitorId?.user?.firstname + ' ' + row.monitorId?.user?.lastname,
+    field: (row: { monitorId: string; }) => row.Monitorfirstname + ' ' + row.Monitorlastname,
   },
 ]
 const state = reactive({
@@ -81,6 +82,37 @@ const state = reactive({
 })
 
 const fn = {
+
+  async onClickResetRow() {
+
+      const data = {
+        id: state.currentItemSelected[0].id,
+        slotBegin: state.currentItemSelected[0].slotBegin,
+        slotEnd: state.currentItemSelected[0].slotEnd,
+        comment: state.currentItemSelected[0].comment,
+        statusValidate: state.currentItemSelected[0].statusValidate,
+        statusDone: state.currentItemSelected[0].statusDone,
+        drivingSchoolId: state.currentItemSelected[0].drivingSchoolId,
+        monitorId: [],
+        studentId: [],
+      }
+      await ApiService.patch('bookings', data)
+      //todo mettre à jour la liste
+      state.rows = state.rows.map((row) => {
+        if (row.id === data.id) {
+         // mettre studentID et monitorID à vide et non undefined
+
+         data.firstname = ""
+         data.lastname = ""
+         data.Monitorfirstname = ""
+         data.Monitorlastname = ""
+
+         return data
+        }
+        return row
+      })
+  },
+
   onBookingEdited(booking: Booking) {
     state.rows = state.rows.map((row) => {
       if (row.id === booking.id) {
@@ -118,10 +150,11 @@ const fn = {
       comment: '',
       statusValidate: false,
       statusDone: false,
-      drivingSchoolId: useStoreUser().drivingSchool,
+      drivingSchoolId: "/driving_schools/"+useStoreUser().drivingSchool.id,
     }
 
     const res = await ApiService.insert(API_URL.BOOKINGS, newRowDb)
+    console.log(res)
     state.rows.push(res.data)
 
     state.isShownModal = false
@@ -153,16 +186,37 @@ const fn = {
 }
 
 const fetchAll = async () => {
-  const response = await fetch('https://localhost/bookings', {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-      'Content-Type': 'application/json',
-    },
-  })
-  const data = await response.json()
-  const allData = data['hydra:member']
+  const response = await ApiService.fetchbById(API_URL.DRIVING_SHCOOLS, useStoreUser().drivingSchool.id)
 
-  state.rows = allData
+  const ListBooking = response.bookings
+  console.log(ListBooking)
+  for await (const booking of ListBooking ) {
+    if (booking.studentId.length !== 0) {
+      const responeStudent = await ApiService.fetchbById(API_URL.STUDENTS, booking.studentId[0].id)
+      const firstname = responeStudent.userId.firstname
+      const lastname = responeStudent.userId.lastname
+
+      booking.firstname = firstname
+      booking.lastname = lastname
+    }
+    else {
+      booking.firstname = ""
+      booking.lastname = ""
+    }
+    if(booking.monitorId.length !== 0) {
+      const responseMonitor  = await ApiService.fetchbById(API_URL.MONITORS, booking.monitorId[0].id)
+      const firstnameMonitor = responseMonitor.userId.firstname
+      const lastnameMonitor = responseMonitor.userId.lastname
+
+      booking.Monitorfirstname = firstnameMonitor
+      booking.Monitorlastname = lastnameMonitor
+    }
+    else {
+      booking.Monitorfirstname = ""
+      booking.Monitorlastname = ""
+    }
+  }
+  state.rows = ListBooking
 }
 
 const loadData = async () => {
@@ -175,11 +229,8 @@ loadData()
 
 <template>
   <div class="q-pa-md">
-    <ModalEditBookingComp
-      v-if="state.isShownModalEditing"
-      :booking="state.currentItemSelected[0]"
-      @booking-edited="fn.onBookingEdited"
-    />
+    <ModalEditBookingComp v-if="state.isShownModalEditing" :booking="state.currentItemSelected[0]"
+      @booking-edited="fn.onBookingEdited" />
 
     <q-dialog v-model="state.isShownModal">
       <q-card style="width: 600px">
@@ -252,30 +303,18 @@ loadData()
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <q-table
-      v-model:selected="state.currentItemSelected"
-      title="Treats"
-      selection="single"
-      :rows="state.rows"
-      :columns="state.columns"
-      row-key="id"
-      :loading="state.isLoading"
-    >
+    <q-table v-model:selected="state.currentItemSelected" title="Treats" selection="single" :rows="state.rows"
+      :columns="state.columns" row-key="id" :loading="state.isLoading">
       <template v-slot:top>
-        <q-btn
-          color="primary"
-          :disable="state.isLoading"
-          label="Ajouter un créneau"
-          @click="state.isShownModal = true"
-        />
+        <q-btn color="primary" :disable="state.isLoading" label="Ajouter un créneau" @click="state.isShownModal = true" />
         <template v-if="state.currentItemSelected[0]">
           <q-btn v-if="state.currentItemSelected" color="primary" label="Modifier" @click="fn.onClickModifyRow" />
           <q-btn v-if="state.currentItemSelected" color="primary" label="Supprimer" @click="fn.onClickDeleteRow" />
+          <q-btn v-if="state.currentItemSelected" color="primary" label="Liberer le créneau" @click="fn.onClickResetRow" />
         </template>
         <q-space />
         <q-input borderless dense debounce="300" color="primary">
           <template v-slot:append>
-            <q-icon name="search" />
           </template>
         </q-input>
       </template>

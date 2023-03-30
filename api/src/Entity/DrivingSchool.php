@@ -96,7 +96,6 @@ use App\Controller\DrivingSchoolPostController;
 )]
 #[GetCollection(
     normalizationContext: ['groups' => ['driving_school_cget']],
-    security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR") or is_granted("ROLE_USER")'
 )]
 #[Get(
     normalizationContext: ['groups' => ['driving_school_get']]
@@ -170,16 +169,8 @@ class DrivingSchool
     private Collection $monitors;
 
     #[ORM\OneToMany(mappedBy: 'drivingSchoolId', targetEntity: Booking::class)]
-    #[Groups(['driving_school_get','booking_write'])]
+    #[Groups(['driving_school_get','booking_cget',"user_get"])]
     private Collection $bookings;
-
-    // #[ORM\ManyToMany(targetEntity: Booking::class, inversedBy: 'drivingSchoolId',fetch: "EAGER")]
-    // #[Groups(['driving_school_get','driving_school_cget','booking_write'])]
-    // private Collection $bookings;
-
-    // #[ORM\OneToMany(mappedBy: 'drivingSchoolId', targetEntity: Booking::class)]
-    // #[Groups(['driving_school_get','driving_school_cget'])]
-    // private Collection $bookings;
 
     public function __construct()
     {

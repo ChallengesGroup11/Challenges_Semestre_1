@@ -54,7 +54,7 @@ export namespace ApiService {
 export enum API_URL {
   BOOKINGS = '/bookings',
   DIRECTORS = '/directors',
-  DRIVING_SHCOOLS = '/driving-schools',
+  DRIVING_SHCOOLS = '/driving_schools',
   MONITORS = '/monitors',
   PACKAGES = '/packages',
   PAYMENTS = '/payments',

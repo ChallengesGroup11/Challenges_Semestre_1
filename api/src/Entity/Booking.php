@@ -15,6 +15,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Controller\BookingByDrivingSchoolController;
 
 #[ORM\Entity(repositoryClass: BookingRepository::class)]
 // @ApiResource(attributes={"normalization_context": {"groups"={"todolist"}, "enable_max_depth"=true}})
@@ -75,15 +76,15 @@ class Booking
     private ?bool $statusDone = null;
 
     #[ORM\ManyToMany(targetEntity: Student::class, inversedBy: 'bookings',fetch: "EAGER")]
-    #[Groups([ 'booking_get','booking_cget','booking_write','driving_school_get','student_cget','student_get'])]
+    #[Groups(['booking_get','booking_cget','booking_write','driving_school_get','user_get'])]
     private Collection $studentId;
 
     #[ORM\ManyToMany(targetEntity: Monitor::class, inversedBy: 'bookings',fetch: "EAGER")]
-    #[Groups(['booking_get', 'booking_cget','booking_write'])]
+    #[Groups(['booking_get', 'booking_cget','booking_write','driving_school_get'])]
     private Collection $monitorId;
 
     #[ORM\ManyToOne(inversedBy: 'bookings')]
-    #[Groups(['driving_school_get','booking_get','booking_cget','booking_write'])]
+    #[Groups(['booking_get','booking_cget','booking_write','driving_school_get','student_get'])]
     private ?DrivingSchool $drivingSchoolId = null;
 
     // #[ORM\ManyToMany(targetEntity: DrivingSchool::class, mappedBy: 'bookings',fetch: "EAGER")]
