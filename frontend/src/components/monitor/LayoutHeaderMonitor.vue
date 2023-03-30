@@ -5,18 +5,14 @@ const router = useRouter()
 
 const currentUser = reactive({ value: [] })
 
-onMounted(async () => {
-  if (!localStorage.getItem("token")) {
-    await router.push("/auth")
-  } else {
-    await getUser()
-  }
-})
-
 const logoutUser = async () => {
   localStorage.removeItem("token")
   await router.push("/auth")
 }
+
+const emit = defineEmits<{
+  (e: "on-loaded", payload: boolean): void
+}>()
 
 // const getUser = async () => {
 //   return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/me`, {
@@ -55,6 +51,16 @@ const getUser = async () => {
       console.error("Error:", error)
     })
 }
+
+const loadData = async () => {
+  if (!localStorage.getItem("token")) {
+    await router.push("/auth")
+  } else {
+    await getUser()
+  }
+  emit("on-loaded", true)
+}
+loadData()
 </script>
 
 <template>

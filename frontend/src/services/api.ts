@@ -37,6 +37,13 @@ export namespace ApiService {
     return response.data
   }
 
+  export const patchDecrementCountCredit = async (idStudent: number, data: any) => {
+    const response = await apiPatch.patch(`/students/${idStudent}/decrementCountCredit`, data)
+    return response.data
+  }
+
+
+
   export const deleteById = async (url: string, id: number) => {
     const response = await api.delete(`${url}/${id}`)
     return response.data
