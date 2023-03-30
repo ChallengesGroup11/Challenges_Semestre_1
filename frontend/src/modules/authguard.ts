@@ -1,7 +1,7 @@
-import type { UserModule } from '~/types'
-import { hashUtil } from '~/utils/hashUtil'
+import type { UserModule } from "~/types"
+import { hashUtil } from "~/utils/hashUtil"
 
-type Roles = 'ROLE_ADMIN' | 'ROLE_USER' | 'ROLE_DIRECTOR' | 'ROLE_MONITOR'
+type Roles = "ROLE_ADMIN" | "ROLE_USER" | "ROLE_DIRECTOR" | "ROLE_MONITOR"
 
 interface TokenParsed {
   iat: string
@@ -20,7 +20,12 @@ interface TokenParsed {
 export const install: UserModule = ({ isClient, router }) => {
   if (isClient) {
     router.beforeEach((to, from, next) => {
-      const token = localStorage.getItem('token')
+      if (to.path === "/") {
+        next({
+          path: "/auth",
+        })
+      }
+      const token = localStorage.getItem("token")
       const tokenParsed = token ? (hashUtil.parseJwt(token) as TokenParsed) : null
       if (
         to.matched.some((record) => {
@@ -29,7 +34,7 @@ export const install: UserModule = ({ isClient, router }) => {
       ) {
         if (!tokenParsed) {
           next({
-            path: '/auth',
+            path: "/auth",
           })
         } else {
           if (
@@ -59,6 +64,7 @@ export const install: UserModule = ({ isClient, router }) => {
           next()
         }
       }
+      next()
     })
   }
 }
