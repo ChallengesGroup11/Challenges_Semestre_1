@@ -25,6 +25,9 @@ const fn = {
     state.signupOrLogin =
       state.signupOrLogin === EnumSignupOrLogin.LOGIN ? EnumSignupOrLogin.SIGNUP : EnumSignupOrLogin.LOGIN
   },
+  redirectToSignin() {
+    state.signupOrLogin = EnumSignupOrLogin.LOGIN
+  },
 }
 </script>
 
@@ -48,8 +51,14 @@ const fn = {
                 <q-tab :name="EnumTab.SCHOOL_DRIVING" label="Gérant d'auto-école" />
               </q-tabs>
 
-              <AuthSignupDirectorComp v-if="state.currentTab === EnumTab.SCHOOL_DRIVING" />
-              <AuthSignupStudentComp v-if="state.currentTab === EnumTab.STUDENT" />
+              <AuthSignupDirectorComp
+                v-if="state.currentTab === EnumTab.SCHOOL_DRIVING"
+                @redirectToSignin="fn.redirectToSignin"
+              />
+              <AuthSignupStudentComp
+                v-if="state.currentTab === EnumTab.STUDENT"
+                @redirectToSignin="fn.redirectToSignin"
+              />
             </template>
             <q-card-section class="text-center q-pa-none">
               <p

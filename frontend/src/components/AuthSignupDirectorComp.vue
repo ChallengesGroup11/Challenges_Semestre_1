@@ -1,9 +1,13 @@
 import { handleFileUpload } from '../utils/domUtil';
 <script setup lang="ts">
 // import { domUtil } from '~/utils/domUtil'
-import {reactive} from 'vue'
+import { reactive } from "vue"
 
-const router = useRouter();
+const router = useRouter()
+
+const emit = defineEmits<{
+  (e: "redirectToSignin", payload: boolean): void
+}>()
 
 const user = reactive({
   firstname: "",
@@ -12,20 +16,20 @@ const user = reactive({
   password: "",
   passwordSecond: "",
   identity: "",
-});
+})
 
 const error = reactive({
   type: "",
   message: "",
 })
 
-const onClickSignup = async (e: { preventDefault: () => void; }) => {
-  e.preventDefault();
-  if(user.password !== user.passwordSecond) {
+const onClickSignup = async (e: { preventDefault: () => void }) => {
+  e.preventDefault()
+  if (user.password !== user.passwordSecond) {
     error.type = "password"
     error.message = "Les mots de passe ne correspondent pas"
     return error
-  }else {
+  } else {
     error.type = ""
     error.message = ""
     const requestData = {
@@ -34,44 +38,51 @@ const onClickSignup = async (e: { preventDefault: () => void; }) => {
       email: user.email,
       password: user.password,
       roles: ["ROLE_DIRECTOR"],
-      status: false
-    };
+      status: false,
+    }
     const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/signup/director`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(requestData),
-    });
+    })
     // const data = await response.json();
     if (response.status === 201) {
       await router.push("/auth")
     }
     if (response.status === 422) {
-      const data = await response.json();
-      if(data.hydra.title === "An error occurred") {
+      const data = await response.json()
+      if (data.hydra.title === "An error occurred") {
         error.type = "email"
         error.message = "Cet email est déjà utilisé"
         return error
       }
     }
   }
+  emit("redirectToSignin", true)
 }
-
 </script>
 
 <template>
   <div>
     <q-card-section>
-      {{error.message}}
+      {{ error.message }}
       <q-form class="q-gutter-md">
         <q-input v-model="user.firstname" square filled clearable type="text" label="Prénom" />
         <q-input v-model="user.lastname" square filled clearable type="text" label="Nom" />
 
         <q-input v-model="user.email" square filled clearable type="email" label="email" />
         <q-input v-model="user.password" square filled clearable type="password" label="password" />
-        <q-input v-model="user.passwordSecond" square filled clearable type="password" label="Confirmer le mot de
-      passe" />
+        <q-input
+          v-model="user.passwordSecond"
+          square
+          filled
+          clearable
+          type="password"
+          label="Confirmer le mot de
+      passe"
+        />
       </q-form>
     </q-card-section>
     <q-card-actions class="q-px-md">
