@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { reactive } from "vue"
 
+const emit = defineEmits<{
+  (e: "redirectToSignin", payload: boolean): void
+}>()
+
 const user = reactive({
   firstname: "",
   lastname: "",
@@ -33,6 +37,7 @@ const onClickSignup = async (e: { preventDefault: () => void }) => {
   if (response.status === 422) {
     const data = await response.json()
   }
+  emit("redirectToSignin", true)
 }
 </script>
 
