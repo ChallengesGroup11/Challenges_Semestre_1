@@ -96,7 +96,6 @@ use App\Controller\DrivingSchoolPostController;
 )]
 #[GetCollection(
     normalizationContext: ['groups' => ['driving_school_cget']],
-    security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR") or is_granted("ROLE_USER")'
 )]
 #[Get(
     normalizationContext: ['groups' => ['driving_school_get']]
