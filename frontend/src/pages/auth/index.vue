@@ -19,16 +19,6 @@ const state = reactive({
   signupOrLogin: EnumSignupOrLogin.LOGIN as EnumSignupOrLogin,
   currentTab: EnumTab.STUDENT as EnumTab,
 })
-
-const fn = {
-  changeToSignupOrLogin() {
-    state.signupOrLogin =
-      state.signupOrLogin === EnumSignupOrLogin.LOGIN ? EnumSignupOrLogin.SIGNUP : EnumSignupOrLogin.LOGIN
-  },
-  redirectToSignin() {
-    state.signupOrLogin = EnumSignupOrLogin.LOGIN
-  },
-}
 </script>
 
 <template>
