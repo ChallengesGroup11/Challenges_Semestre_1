@@ -25,7 +25,12 @@ const fetchDirector = async () => {
     .then((response) => response.json())
     .then((data) => {
       directors.value = data['hydra:member']
-      
+      for (let i = directors.value.length - 1; i >= 0; i--) {
+        const element = directors.value[i];
+        if (element.drivingSchoolId) {
+          directors.value.splice(i, 1);
+        }
+      }
       console.log(directors.value)
     })
 }
@@ -85,9 +90,9 @@ const onSubmit = async () => {
               </option>
             </select>
 
-        
 
-          
+
+
           <div>
             <q-btn label="Valider" type="submit" color="primary" />
           </div>
