@@ -42,7 +42,8 @@ const deleteDirector = async (id: string) => {
 }
 
 const changeStatus = async (id: string) => {
-  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/directors/` + id + '/edit_status', {
+  console.log(id)
+  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/users/` + id + '/edit_status', {
     method: 'PATCH',
     headers: {
       accept: 'application/ld+json',
@@ -105,11 +106,11 @@ const changeStatus = async (id: string) => {
           <td>
             <q-btn color="negative" text-color="white" icon="delete" @click="deleteDirector(director.id)" />
           </td>
-          <td v-if="director.status === true">
-            <q-btn color="secondary" text-color="white" icon="sync" disabled @click="changeStatus(director.id)" />
+          <td v-if="director.userId.status === true">
+            <q-btn color="secondary" text-color="white" icon="sync" disabled @click="changeStatus(director.userId.id)" />
           </td>
           <td v-else>
-            <q-btn color="warning" text-color="white" icon="sync" @click="changeStatus(director.id)" />
+            <q-btn color="warning" text-color="white" icon="sync" @click="changeStatus(director.userId.id)" />
           </td>
         </tr>
       </tbody>
