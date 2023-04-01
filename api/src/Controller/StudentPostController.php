@@ -14,6 +14,7 @@ class StudentPostController extends AbstractController
 {
     public function __invoke(Request $request, UserRepository $userRepository): Student
     {
+        
         $uploadedFileCode = $request->files->get('fileCode');
         $uploadedFileCni = $request->files->get('fileCni');
         if (!$uploadedFileCni || !$uploadedFileCode) {

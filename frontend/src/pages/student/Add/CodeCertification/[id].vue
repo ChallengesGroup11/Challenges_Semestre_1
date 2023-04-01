@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { assertExpressionStatement } from '@babel/types'
-import { log } from 'console'
-import { reactive, defineComponent } from 'vue'
+import { assertExpressionStatement } from "@babel/types"
+import { log } from "console"
+import { reactive, defineComponent } from "vue"
 
 const router = useRouter()
 
 const user = reactive({
-  filePathCode: '',
-  filePathCni: '',
+  filePathCode: "",
+  filePathCni: "",
 })
 
 const isLoading = ref(false)
 
 onMounted(async () => {
-  if (localStorage.getItem('token') == null) {
-    await router.push('/auth')
+  if (localStorage.getItem("token") == null) {
+    await router.push("/auth")
   } else {
   }
 })
@@ -23,39 +23,38 @@ const { id } = params
 
 const onSubmit = async () => {
   const formData = new FormData()
-  formData.append('fileCode', user.filePathCode)
-  formData.append('fileCni', user.filePathCni)
-  formData.append('userId', id)
+  formData.append("fileCode", user.filePathCode)
+  formData.append("fileCni", user.filePathCni)
+  formData.append("userId", id)
+
   try {
     isLoading.value = true
-    const checked = await fetch(`${import.meta.env.VITE_KYC_URL}/student`, {
+    const validDocs = await fetch(`${import.meta.env.VITE_KYC_URL}/student`, {
       headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('token'),
-        'Content-Type': 'multipart/form-data',
+        Authorization: "Bearer " + localStorage.getItem("token"),
       },
-      method: 'POST',
+      method: "POST",
       body: formData,
     })
-    const validDocs = await checked
     if (validDocs.status == 200) {
       const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/student/pathCode`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('token'),
+          Authorization: "Bearer " + localStorage.getItem("token"),
         },
         body: formData,
       })
       if (response.ok) {
-        await router.push('/student/profil')
+        await router.push("/student/profil")
       } else {
         alert("Vos documents n'ont pas été enregistrés, veuillez réessayer")
       }
       isLoading.value = false
     } else {
-      alert('Vos documents ne sont pas valides, veuillez réessayer')
+      alert("Vos documents ne sont pas valides, veuillez réessayer")
     }
   } catch (error) {
-    console.error('Error:', error)
+    console.error("Error:", error)
   }
 }
 </script>
