@@ -3,12 +3,12 @@ import moment from "moment"
 import { useStoreUser } from "../../../stores/user"
 import { ApiService } from "~/services/api"
 
-const state = {
+const state = reactive({
   name: useStoreUser().user.firstname + " " + useStoreUser().user.lastname,
   monitorId: useStoreUser().user.monitor.id,
   ListBookingToValidate: [],
   ListBookingInFuture: [],
-}
+})
 
 const fn = {
   validateBooking: async (booking: any) => {
@@ -22,6 +22,13 @@ const fn = {
           countCredit: 2,
         }),
       ])
+  },
+  deleteBookingSlotByTheMonitor: async (booking: any) => {
+    await ApiService.patch("bookings", {
+      id: booking.id,
+      monitorId: [],
+    })
+    state.ListBookingInFuture = state.ListBookingInFuture.filter((item: any) => item.id !== booking.id)
   },
 }
 
@@ -45,8 +52,6 @@ const loadData = () => {
       moment(booking.slotBegin).isAfter(moment()) &&
       moment(booking.slotEnd).isAfter(moment()),
   ).sort((a: any, b: any) => moment(a.slotBegin).unix() - moment(b.slotBegin).unix())
-
-  console.table(state.ListBookingToValidate)
 }
 
 loadData()
@@ -78,7 +83,12 @@ loadData()
           {{ moment(bookingInFuture.slotBegin).locale("fr").format("DD/MM/YYYY à hh:ss") }} -
           {{ moment(bookingInFuture.slotEnd).format("hh:ss") }}
         </q-chip>
-        <q-btn flat label="Confirmer" color="primary" @click="fn.validateBooking(bookingInFuture)" />
+        <q-btn
+          flat
+          label="Libérer le créneau"
+          color="primary"
+          @click="fn.deleteBookingSlotByTheMonitor(bookingInFuture)"
+        />
       </q-card>
     </div>
   </div>

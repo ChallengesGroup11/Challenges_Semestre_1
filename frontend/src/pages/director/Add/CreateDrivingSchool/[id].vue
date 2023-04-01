@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { assertExpressionStatement } from '@babel/types'
-import { reactive, defineComponent } from 'vue'
+import { assertExpressionStatement } from "@babel/types"
+import { reactive, defineComponent } from "vue"
 
 const router = useRouter()
 
 const user = reactive({
-  name: '',
-  address: '',
-  city: '',
-  zipCode: '',
-  phone_number: '',
-  siret: '',
-  filePathKbis: '',
+  name: "",
+  address: "",
+  city: "",
+  zipCode: "",
+  phone_number: "",
+  siret: "",
+  filePathKbis: "",
 })
 const currentUser = reactive({ value: [] })
 const isLoading = ref(false)
@@ -21,7 +21,7 @@ const { id } = params
 const getUser = async () => {
   return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/me`, {
     headers: {
-      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      Authorization: "Bearer " + localStorage.getItem("token"),
     },
   })
     .then((response) => response.json())
@@ -29,63 +29,63 @@ const getUser = async () => {
       currentUser.value = data
     })
     .catch((error) => {
-      console.error('Error:', error)
+      console.error("Error:", error)
     })
 }
 
 onMounted(async () => {
-  if (localStorage.getItem('token') == null) {
-    await router.push('/auth')
+  if (localStorage.getItem("token") == null) {
+    await router.push("/auth")
   } else {
     await getUser()
   }
 })
 
 const onSubmit = async () => {
-  if (user.filePathKbis == '' || user.siret == '') {
-    alert('Veuillez remplir tous les champs')
+  if (user.filePathKbis == "" || user.siret == "") {
+    alert("Veuillez remplir tous les champs")
     return
   }
   const formData = new FormData()
-  formData.append('file', user.filePathKbis)
-  formData.append('siret', user.siret)
-  formData.append('director', currentUser.value.director.id)
-  formData.append('name', user.name)
-  formData.append('address', user.address)
-  formData.append('city', user.city)
-  formData.append('zipCode', user.zipCode)
-  formData.append('phone_number', user.phone_number)
+  formData.append("file", user.filePathKbis)
+  formData.append("siret", user.siret)
+  formData.append("director", currentUser.value.director.id)
+  formData.append("name", user.name)
+  formData.append("address", user.address)
+  formData.append("city", user.city)
+  formData.append("zipCode", user.zipCode)
+  formData.append("phone_number", user.phone_number)
   try {
     isLoading.value = true
     const checked = await fetch(`${import.meta.env.VITE_KYC_URL}/director`, {
       headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('token'),
-        'Content-Type': 'multipart/form-data',
+        Authorization: "Bearer " + localStorage.getItem("token"),
+        "Content-Type": "multipart/form-data",
       },
-      method: 'POST',
+      method: "POST",
       body: formData,
     })
     const validDocs = await checked
     if (validDocs.status == 200) {
       const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_school/create`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('token'),
+          Authorization: "Bearer " + localStorage.getItem("token"),
         },
         body: formData,
       })
-
+      console.log(response)
       isLoading.value = false
       if (response.ok) {
-        await router.push('/director')
+        await router.push("/director")
       } else {
         alert("Vos documents n'ont pas été enregistrés, veuillez réessayer")
       }
     } else {
-      alert('Vos documents ne sont pas valides, veuillez réessayer')
+      alert("Vos documents ne sont pas valides, veuillez réessayer")
     }
   } catch (error) {
-    console.error('Error:', error)
+    console.error("Error:", error)
   }
 }
 </script>

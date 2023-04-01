@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import moment from 'moment'
-import { ApiService } from '~/services/api'
-import { API_URL } from '../../services/api'
-import { useStoreUser } from '../../../stores/user'
-import { STATEMENT_TYPES } from '@babel/types';
+import moment from "moment"
+import { ApiService } from "~/services/api"
+import { API_URL } from "../../services/api"
+import { useStoreUser } from "../../../stores/user"
 
 interface Booking {
   slotBegin: string
@@ -19,53 +18,53 @@ interface Booking {
 
 const ListColumn = [
   {
-    name: 'slotBegin',
-    label: 'slot begin',
-    align: 'left',
+    name: "slotBegin",
+    label: "slot begin",
+    align: "left",
     sortable: true,
     field: (row: Booking) => fn.formatDisplayDate(row.slotBegin),
   },
   {
-    name: 'slotEnd',
-    label: 'slot end',
-    align: 'left',
+    name: "slotEnd",
+    label: "slot end",
+    align: "left",
     sortable: true,
     field: (row: Booking) => fn.formatDisplayDate(row.slotEnd),
   },
   {
-    name: 'comment',
-    label: 'comment',
-    align: 'left',
+    name: "comment",
+    label: "comment",
+    align: "left",
     sortable: true,
-    field: (row: { comment: any; }) => row.comment,
+    field: (row: { comment: any }) => row.comment,
   },
   {
-    name: 'statusValidate',
-    label: 'status validate',
-    align: 'left',
+    name: "statusValidate",
+    label: "status validate",
+    align: "left",
     sortable: true,
-    field: (row: { statusValidate: any; }) => row.statusValidate,
+    field: (row: { statusValidate: any }) => row.statusValidate,
   },
   {
-    name: 'statusDone',
-    label: 'status done',
-    align: 'left',
+    name: "statusDone",
+    label: "status done",
+    align: "left",
     sortable: true,
-    field: (row: { statusDone: any; }) => row.statusDone,
+    field: (row: { statusDone: any }) => row.statusDone,
   },
   {
-    name: 'studentId',
-    label: 'élève',
-    align: 'left',
+    name: "studentId",
+    label: "élève",
+    align: "left",
     sortable: true,
-    field: (row: { studentId: string; }) => row.firstname + ' ' + row.lastname,
+    field: (row: { studentId: string }) => row.firstname + " " + row.lastname,
   },
   {
-    name: 'monitorId',
-    label: 'moniteur',
-    align: 'left',
+    name: "monitorId",
+    label: "moniteur",
+    align: "left",
     sortable: true,
-    field: (row: { monitorId: string; }) => row.Monitorfirstname + ' ' + row.Monitorlastname,
+    field: (row: { monitorId: string }) => row.Monitorfirstname + " " + row.Monitorlastname,
   },
 ]
 const state = reactive({
@@ -74,43 +73,41 @@ const state = reactive({
   isLoading: false,
   isShownModal: false,
   newSlot: {
-    slotBegin: '',
-    slotEnd: '',
+    slotBegin: "",
+    slotEnd: "",
   },
   currentItemSelected: [] as Booking[],
   isShownModalEditing: false,
 })
 
 const fn = {
-
   async onClickResetRow() {
+    const data = {
+      id: state.currentItemSelected[0].id,
+      slotBegin: state.currentItemSelected[0].slotBegin,
+      slotEnd: state.currentItemSelected[0].slotEnd,
+      comment: state.currentItemSelected[0].comment,
+      statusValidate: state.currentItemSelected[0].statusValidate,
+      statusDone: state.currentItemSelected[0].statusDone,
+      drivingSchoolId: state.currentItemSelected[0].drivingSchoolId,
+      monitorId: [],
+      studentId: [],
+    }
+    await ApiService.patch("bookings", data)
+    //todo mettre à jour la liste
+    state.rows = state.rows.map((row) => {
+      if (row.id === data.id) {
+        // mettre studentID et monitorID à vide et non undefined
 
-      const data = {
-        id: state.currentItemSelected[0].id,
-        slotBegin: state.currentItemSelected[0].slotBegin,
-        slotEnd: state.currentItemSelected[0].slotEnd,
-        comment: state.currentItemSelected[0].comment,
-        statusValidate: state.currentItemSelected[0].statusValidate,
-        statusDone: state.currentItemSelected[0].statusDone,
-        drivingSchoolId: state.currentItemSelected[0].drivingSchoolId,
-        monitorId: [],
-        studentId: [],
+        data.firstname = ""
+        data.lastname = ""
+        data.Monitorfirstname = ""
+        data.Monitorlastname = ""
+
+        return data
       }
-      await ApiService.patch('bookings', data)
-      //todo mettre à jour la liste
-      state.rows = state.rows.map((row) => {
-        if (row.id === data.id) {
-         // mettre studentID et monitorID à vide et non undefined
-
-         data.firstname = ""
-         data.lastname = ""
-         data.Monitorfirstname = ""
-         data.Monitorlastname = ""
-
-         return data
-        }
-        return row
-      })
+      return row
+    })
   },
 
   onBookingEdited(booking: Booking) {
@@ -123,7 +120,7 @@ const fn = {
     state.isShownModalEditing = false
   },
   formatDisplayDate(date: moment.MomentInput) {
-    return moment(date).format('DD/MM/YYYY - hh:ss')
+    return moment(date).format("DD/MM/YYYY - hh:ss")
   },
 
   async onClickSaveBooking() {
@@ -147,15 +144,14 @@ const fn = {
     const newRowDb = {
       slotBegin: state.newSlot.slotBegin,
       slotEnd: state.newSlot.slotEnd,
-      comment: '',
+      comment: "",
       statusValidate: false,
       statusDone: false,
-      drivingSchoolId: "/driving_schools/"+useStoreUser().drivingSchool.id,
+      drivingSchoolId: "/driving_schools/" + useStoreUser().drivingSchool.id,
     }
 
     const res = await ApiService.insert(API_URL.BOOKINGS, newRowDb)
-    console.log(res)
-    state.rows.push(res.data)
+    state.rows.push(res)
 
     state.isShownModal = false
   },
@@ -170,16 +166,16 @@ const fn = {
   },
 
   verifySlot(slotBegin: string, slotEnd: string) {
-    if (slotBegin > slotEnd) return 'La date de début doit être inférieure à la date de fin'
+    if (slotBegin > slotEnd) return "La date de début doit être inférieure à la date de fin"
 
-    if (slotBegin === slotEnd) return 'La date de début doit être inférieure à la date de fin'
+    if (slotBegin === slotEnd) return "La date de début doit être inférieure à la date de fin"
 
-    if (slotBegin < moment().add(1, 'days').format('YYYY-MM-DD'))
-      return 'La date de début doit être supérieure à la date du jour'
+    if (slotBegin < moment().add(1, "days").format("YYYY-MM-DD"))
+      return "La date de début doit être supérieure à la date du jour"
 
-    const resDif = moment(slotEnd).diff(moment(slotBegin), 'minutes')
+    const resDif = moment(slotEnd).diff(moment(slotBegin), "minutes")
 
-    if (resDif !== 60 && resDif !== 120) return 'La durée du créneau doit être de 1h ou 2h'
+    if (resDif !== 60 && resDif !== 120) return "La durée du créneau doit être de 1h ou 2h"
 
     return true
   },
@@ -190,7 +186,7 @@ const fetchAll = async () => {
 
   const ListBooking = response.bookings
   console.log(ListBooking)
-  for await (const booking of ListBooking ) {
+  for await (const booking of ListBooking) {
     if (booking.studentId.length !== 0) {
       const responeStudent = await ApiService.fetchbById(API_URL.STUDENTS, booking.studentId[0].id)
       const firstname = responeStudent.userId.firstname
@@ -198,20 +194,18 @@ const fetchAll = async () => {
 
       booking.firstname = firstname
       booking.lastname = lastname
-    }
-    else {
+    } else {
       booking.firstname = ""
       booking.lastname = ""
     }
-    if(booking.monitorId.length !== 0) {
-      const responseMonitor  = await ApiService.fetchbById(API_URL.MONITORS, booking.monitorId[0].id)
+    if (booking.monitorId.length !== 0) {
+      const responseMonitor = await ApiService.fetchbById(API_URL.MONITORS, booking.monitorId[0].id)
       const firstnameMonitor = responseMonitor.userId.firstname
       const lastnameMonitor = responseMonitor.userId.lastname
 
       booking.Monitorfirstname = firstnameMonitor
       booking.Monitorlastname = lastnameMonitor
-    }
-    else {
+    } else {
       booking.Monitorfirstname = ""
       booking.Monitorlastname = ""
     }
@@ -229,8 +223,11 @@ loadData()
 
 <template>
   <div class="q-pa-md">
-    <ModalEditBookingComp v-if="state.isShownModalEditing" :booking="state.currentItemSelected[0]"
-      @booking-edited="fn.onBookingEdited" />
+    <ModalEditBookingComp
+      v-if="state.isShownModalEditing"
+      :booking="state.currentItemSelected[0]"
+      @booking-edited="fn.onBookingEdited"
+    />
 
     <q-dialog v-model="state.isShownModal">
       <q-card style="width: 600px">
@@ -303,19 +300,35 @@ loadData()
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <q-table v-model:selected="state.currentItemSelected" title="Treats" selection="single" :rows="state.rows"
-      :columns="state.columns" row-key="id" :loading="state.isLoading">
+    <q-table
+      v-model:selected="state.currentItemSelected"
+      title="Treats"
+      selection="single"
+      :rows="state.rows"
+      :columns="state.columns"
+      row-key="id"
+      :loading="state.isLoading"
+    >
       <template v-slot:top>
-        <q-btn color="primary" :disable="state.isLoading" label="Ajouter un créneau" @click="state.isShownModal = true" />
+        <q-btn
+          color="primary"
+          :disable="state.isLoading"
+          label="Ajouter un créneau"
+          @click="state.isShownModal = true"
+        />
         <template v-if="state.currentItemSelected[0]">
           <q-btn v-if="state.currentItemSelected" color="primary" label="Modifier" @click="fn.onClickModifyRow" />
           <q-btn v-if="state.currentItemSelected" color="primary" label="Supprimer" @click="fn.onClickDeleteRow" />
-          <q-btn v-if="state.currentItemSelected" color="primary" label="Liberer le créneau" @click="fn.onClickResetRow" />
+          <q-btn
+            v-if="state.currentItemSelected"
+            color="primary"
+            label="Liberer le créneau"
+            @click="fn.onClickResetRow"
+          />
         </template>
         <q-space />
         <q-input borderless dense debounce="300" color="primary">
-          <template v-slot:append>
-          </template>
+          <template v-slot:append> </template>
         </q-input>
       </template>
     </q-table>

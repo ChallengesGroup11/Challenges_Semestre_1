@@ -42,15 +42,15 @@ const fn = {
   },
   async handleTakingSlots() {
     for (let i = 0; i < state.ListCurrentItemSelected.length; i++) {
-      console.log({
-        id: state.ListCurrentItemSelected[i].id,
-        statusValidate: true,
-        monitorId: [`/monitors/${useStoreUser().user.monitor.id}`],
-      })
       await ApiService.patch("bookings", {
         id: state.ListCurrentItemSelected[i].id,
         monitorId: [`/monitors/${useStoreUser().user.monitor.id}`],
       })
+      // update in useStoreUser the list of bookings with the new booking
+      const currentBookingInStore = useStoreUser().drivingSchool.bookings.find(
+        (item: any) => item.id === state.ListCurrentItemSelected[i].id,
+      )
+      currentBookingInStore.monitorId = [`/monitors/${useStoreUser().user.monitor.id}`]
     }
 
     fn.removeFromListRowTheListCurrentItemSelected()
@@ -96,7 +96,7 @@ const loadData = async () => {
       slotEnd: item.slotEnd,
       // studentName: item.studentId[0].userId.firstname + " " + item.studentId[0].userId.lastname,
     }
-  })
+  }).filter((item: any) => item.slotBegin > moment().format())
   state.isLoading = false
 }
 loadData()
