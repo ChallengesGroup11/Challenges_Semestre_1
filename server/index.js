@@ -1,15 +1,12 @@
-'use strict';
+"use strict";
 
-const express = require('express');
-const bodyParser = require('body-parser');
-const multer = require('multer');
+const express = require("express");
+const bodyParser = require("body-parser");
+const multer = require("multer");
 const upload = multer();
-const cors = require('cors');
-
+const cors = require("cors");
 
 const app = express();
-
-
 
 app.use(cors("*"));
 app.use(bodyParser.json());
@@ -17,26 +14,45 @@ app.use(bodyParser.json());
 // app.use(upload.array());
 // app.use(express.static('public'));
 
-
 // Constants
 const PORT = 3200;
 
-app.get('/', (req, res) => {
-    res.send('Hello World');
+const checkFileType = (req, res, next) => {
+  const fileTypes = /^application\/pdf$|^image\/(jpeg|jpg)$/;
+
+  const fileCodeType = fileTypes.test(req.files.fileCode[0].mimetype);
+  const fileCniType = fileTypes.test(req.files.fileCni[0].mimetype);
+
+  console.log(fileCniType);
+
+  if (fileCodeType && fileCniType) {
+    next();
+  } else {
+    res.status(400).send("Invalid file type");
+  }
+};
+
+app.get("/", (req, res) => {
+  res.send("Hello World");
 });
 
-app.post('/api/student', (req, res) => {
+app.post(
+  "/api/student",
+  upload.fields([{ name: "fileCode" }, { name: "fileCni" }]),
+  checkFileType,
+  (req, res) => {
     setTimeout(() => {
-        res.send('Document are valid');
-    }, 5000);
-});
+      res.status(200).send("Document are valid");
+    }, 2000);
+  }
+);
 
-app.post('/api/director', (req, res) => {
-    setTimeout(() => {
-        res.send('Document are valid');
-    }, 1000);
+app.post("/api/director", (req, res) => {
+  setTimeout(() => {
+    res.send("Document are valid");
+  }, 1000);
 });
 
 app.listen(PORT, () => {
-    console.log(`Running on ${PORT}`);
+  console.log(`Running on ${PORT}`);
 });
