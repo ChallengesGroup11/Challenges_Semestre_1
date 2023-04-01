@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
-import { useStoreUser } from '../../../stores/user'
+import { reactive } from "vue"
+import { useStoreUser } from "../../../stores/user"
 const router = useRouter()
 
 const emit = defineEmits<{
@@ -9,22 +9,21 @@ const emit = defineEmits<{
 
 const currentUser = reactive({ value: [] })
 
-
 const logoutUser = async () => {
-  localStorage.removeItem('token')
-  await router.push('/auth')
+  localStorage.removeItem("token")
+  await router.push("/auth")
 }
 
 const getUser = async () => {
   return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/me`, {
     headers: {
-      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      Authorization: "Bearer " + localStorage.getItem("token"),
     },
   })
     .then((response) => response.json())
     .then((data) => {
       currentUser.value = data
-      console.log('Success:', data);
+      console.log("Success:", data)
 
       useStoreUser().user = data
       useStoreUser().ListMonitor = data.director.drivingSchoolId.monitors
@@ -33,13 +32,13 @@ const getUser = async () => {
       }
     })
     .catch((error) => {
-      console.error('Error:', error)
+      console.error("Error:", error)
     })
 }
 
 const loadData = async () => {
-  if (!localStorage.getItem('token')) {
-    await router.push('/auth')
+  if (!localStorage.getItem("token")) {
+    await router.push("/auth")
   } else {
     await getUser()
   }
@@ -62,7 +61,6 @@ loadData()
     </q-toolbar>
     <q-toolbar inset>
       <q-btn icon="home_filled" flat label="Home" to="/director" />
-      <q-btn icon="person" flat label="Mon profil" to="/director/profil" />
       <q-btn icon="person" flat label="Liste des moniteurs" to="/director/monitor" />
       <q-btn icon="school" flat label="Créneaux" to="/director/slots" />
       <!-- <q-btn icon="paid" flat label="Acheter des crédits" to="/student/package"/> -->
