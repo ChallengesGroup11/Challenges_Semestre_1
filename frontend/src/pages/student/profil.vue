@@ -1,30 +1,32 @@
 <script setup lang="ts">
-import { reactive, defineComponent } from 'vue'
-import moment from 'moment'
+import { reactive, defineComponent } from "vue"
+import moment from "moment"
+import { ApiService } from "~/services/api"
+import { useStoreUser } from "../../../stores/user"
 
 const router = useRouter()
 
 const currentUser = reactive({ value: [] })
 
 onMounted(async () => {
-  if (localStorage.getItem('token') == null) {
-    await router.push('/auth')
+  if (localStorage.getItem("token") == null) {
+    await router.push("/auth")
   } else {
     await getUser()
   }
 })
 
 const dateJour = (date: moment.MomentInput) => {
-  return moment(date).format(' DD/MM/YYYY ')
+  return moment(date).format(" DD/MM/YYYY ")
 }
 const dateHeure = (date: moment.MomentInput) => {
-  return moment(date).format('hh:ss ')
+  return moment(date).format("hh:ss ")
 }
 
 const getUser = async () => {
   return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/me`, {
     headers: {
-      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      Authorization: "Bearer " + localStorage.getItem("token"),
     },
   })
     .then((response) => response.json())
@@ -32,16 +34,26 @@ const getUser = async () => {
       currentUser.value = data
     })
     .catch((error) => {
-      console.error('Error:', error)
+      console.error("Error:", error)
     })
 }
 
 const editer = (id: string) => {
-  router.push('/student/edit/' + id)
+  router.push("/student/edit/" + id)
 }
 
 const addCodeAndCni = (id: string) => {
-  router.push('/student/add/codecertification/' + id)
+  router.push("/student/add/codecertification/" + id)
+}
+
+const fn = {
+  async cancelBooking(booking: any) {
+    await ApiService.patch("bookings", {
+      id: booking.id,
+      studentId: [],
+    })
+    currentUser.value.student.bookings = currentUser.value.student.bookings.filter((b: any) => b.id !== booking.id)
+  },
 }
 </script>
 
@@ -151,7 +163,7 @@ const addCodeAndCni = (id: string) => {
                   <q-btn disabled color="secondary" label="Annuler" />
                 </td>
                 <td v-else>
-                  <q-btn color="primary" label="Annuler" />
+                  <q-btn color="primary" label="Annuler" @click="fn.cancelBooking(bookings)" />
                 </td>
               </tr>
             </tbody>
