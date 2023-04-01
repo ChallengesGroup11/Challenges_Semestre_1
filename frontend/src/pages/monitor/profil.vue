@@ -83,8 +83,12 @@ loadData()
           {{ moment(bookingInFuture.slotBegin).locale("fr").format("DD/MM/YYYY à hh:ss") }} -
           {{ moment(bookingInFuture.slotEnd).format("hh:ss") }}
         </q-chip>
-        <q-btn flat label="Supprimer" color="primary" @click="fn.deleteBookingSlotByTheMonitor(bookingInFuture)" />
-        <q-btn flat label="Confirmer" color="primary" @click="fn.validateBooking(bookingInFuture)" />
+        <q-btn
+          flat
+          label="Libérer le créneau"
+          color="primary"
+          @click="fn.deleteBookingSlotByTheMonitor(bookingInFuture)"
+        />
       </q-card>
     </div>
   </div>
