@@ -121,7 +121,7 @@ class DrivingSchool
 
 
     #[ORM\Column(length: 255)]
-    #[Groups(['driving_school_cget', 'driving_school_get', 'driving_school_write','monitor_get'])]
+    #[Groups(['driving_school_cget', 'driving_school_get', 'driving_school_write','monitor_get','director_cget'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]

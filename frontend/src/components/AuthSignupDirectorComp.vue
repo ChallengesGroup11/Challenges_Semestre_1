@@ -39,6 +39,7 @@ const onClickSignup = async (e: { preventDefault: () => void }) => {
       password: user.password,
       roles: ["ROLE_DIRECTOR"],
       status: false,
+      createBy: "user",
     }
     const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/signup/director`, {
       method: "POST",

@@ -37,7 +37,7 @@ class SignUpDirectorController extends AbstractController
             $lastname = json_decode($this->requestStack->getCurrentRequest()->getContent())->lastname;
             $status = json_decode($this->requestStack->getCurrentRequest()->getContent())->status;
             $roles = json_decode($this->requestStack->getCurrentRequest()->getContent())->roles;
-
+            $createByAdmin = json_decode($this->requestStack->getCurrentRequest()->getContent())->createBy;
 
             $user = new User();
             $user->setEmail($email);
@@ -61,7 +61,11 @@ class SignUpDirectorController extends AbstractController
 
 
             $routeCheckAccount = "http://localhost:4010/auth/CheckAccount/". $user->getId()."?token=". $user->getToken();
-            $emailBody = $this->EmailBody($routeCheckAccount);
+            if($createByAdmin == 'admin'){
+                $emailBody = $this->EmailBodyCreateByAdmin($routeCheckAccount,$password);
+            }else{
+                $emailBody = $this->EmailBody($routeCheckAccount);
+            }
 
             $email = (new Email())
                 ->from('support@drivequeen.com')
@@ -105,6 +109,42 @@ class SignUpDirectorController extends AbstractController
 
             <h1>Confirmation de votre compte directeur</h1>
             !<p>Vous avez créé un compte sur DriveQueen</p>
+            <p>Vous devez confirmer votre compte en cliquant sur le lien ci-dessous</p>
+            <a href='{$routeCheckAccount}'>Confirmer mon compte</a>
+
+            </body>
+            </html>
+        ";
+    }
+
+    private function EmailBodyCreateByAdmin($routeCheckAccount,$password)
+    {
+        //tempalte email
+        return "
+        <!doctype html>
+            <html lang='fr'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Document</title>
+            </head>
+            <body>
+            <style>
+                h1{
+                    color: #000;
+                }
+                p{
+                    color: #000;
+                }
+
+            </style>
+           <img src='https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg' alt='logo drivequeen'>
+
+
+            <h1>Confirmation de votre compte directeur</h1>
+            !<p>Vous avez créé un compte sur DriveQueen</p>
+            <p>Votre mot de passe par defaut est : {$password}</p>
             <p>Vous devez confirmer votre compte en cliquant sur le lien ci-dessous</p>
             <a href='{$routeCheckAccount}'>Confirmer mon compte</a>
 

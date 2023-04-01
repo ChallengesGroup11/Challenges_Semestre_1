@@ -27,7 +27,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use App\Controller\UserEditStatusController;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -48,6 +48,16 @@ use Symfony\Component\Validator\Constraints as Assert;
         controller: SignUpDirectorController::class,
         openapiContext: ['description' => 'Signup Director'],
         denormalizationContext: ['groups' => ['user_write']],
+    ),
+    new Patch(
+        uriTemplate: '/users/{id}/edit_status',
+        controller: UserEditStatusController::class,
+        openapiContext: [
+            'summary' => 'Editer le status d\'un user',
+        ],
+        denormalizationContext: ['groups' => ['user_patch']],
+        security: '(is_granted("ROLE_DIRECTOR") and object.getDirector() == user) or (is_granted("ROLE_ADMIN"))',
+        name: 'user_edit_status'
     ),
     new Post(
         uriTemplate: '/CheckAccount',
@@ -92,7 +102,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[Patch(
     denormalizationContext: ['groups' => ['user_patch']],
-    security: 'object.getId() == user.getId()'
+
 )]
 #[Patch(
     uriTemplate: '/users/reset/password',
@@ -113,11 +123,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
-    #[Groups([ 'user_cget', 'user_get', 'student_get', 'student_cget'])]
+    #[Groups([ 'user_cget', 'user_get', 'student_get', 'student_cget','director_get','director_cget'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['user_get', 'user_cget', 'user_write', 'monitor_get', 'monitor_cget'])]
+    #[Groups(['user_get', 'user_cget', 'user_write', 'monitor_get', 'monitor_cget','director_cget','director_get'])]
     #[NotBlank]
     private ?string $email = null;
 
@@ -137,7 +147,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $token = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['user_get', 'user_cget', 'user_write', 'monitor_get', 'monitor_cget'])]
+    #[Groups(['user_get', 'user_cget', 'user_write', 'monitor_get', 'monitor_cget','director_cget'])]
     private ?bool $status = null;
 
     #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'],fetch: "EAGER")]
@@ -157,11 +167,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $payments;
 
     #[ORM\Column(length: 255)]
-    #[Groups([ 'user_get', 'user_cget', 'user_patch', 'user_write', 'monitor_get', 'monitor_cget','student_get','driving_school_get'])]
+    #[Groups([ 'user_get', 'user_cget', 'user_patch', 'user_write', 'monitor_get', 'monitor_cget','student_get','driving_school_get','director_cget','director_write','director_get'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups([ 'user_get',  'user_cget', 'user_patch',  'user_write', 'monitor_get', 'monitor_cget', 'student_get', 'student_cget','driving_school_get'])]
+    #[Groups([ 'user_get',  'user_cget', 'user_patch',  'user_write', 'monitor_get', 'monitor_cget', 'student_get', 'student_cget','driving_school_get','director_cget','director_write','director_get'])]
     private ?string $lastname = null;
 
 
