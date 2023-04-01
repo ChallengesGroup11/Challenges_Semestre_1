@@ -18,7 +18,9 @@ const fetchDrivingSchool = async () => {
     .then((response) => response.json())
     .then((data) => {
       drivingSchool.value = data['hydra:member']
+      console.log(drivingSchool.value)
     })
+
 }
 
 const editDrivingSchool = (id: string) => {

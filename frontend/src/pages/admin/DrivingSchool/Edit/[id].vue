@@ -2,6 +2,9 @@
 const router = useRouter()
 import {onMounted, reactive} from 'vue';
 
+
+const directors = reactive({value:[]})
+
 const drivingSchool = reactive({
   id: "",
   name: "",
@@ -11,13 +14,30 @@ const drivingSchool = reactive({
   phoneNumber: "",
   siret: "",
   kbis: "",
+  director: ""
 });
 
 onMounted(async () => {
   const {params} = useRoute();
   const {id} = params;
   await fetchOneDrivingSchool(id);
+  await fetchDirector()
 });
+
+const fetchDirector = async () => {
+  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/directors`, {
+    headers: {
+      accept: 'application/ld+json',
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      directors.value = data['hydra:member']
+      
+      console.log(directors.value)
+    })
+}
 
 const fetchOneDrivingSchool = async (id: string | string[]) => {
   return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_schools/`+id,
@@ -37,7 +57,9 @@ const fetchOneDrivingSchool = async (id: string | string[]) => {
       drivingSchool.phoneNumber = data.phoneNumber;
       drivingSchool.siret = data.siret;
       drivingSchool.kbis = data.kbis;
-    })
+      drivingSchool.director = data.director.filter((item) => item.drivingSchoolId === null);
+      console.log(drivingSchool.director)
+     })
     .catch((error) => {
       console.error('Error:', error);
     })
@@ -114,6 +136,13 @@ const onSubmit = async (id: string) => {
             lazy-rules
             :rules="[ val => val && val.length > 0 || 'Please type something']"
           />
+          <select v-model="drivingSchool.director" placeholder="Choisir un directeur">
+              <option selected v-if="drivingSchool?.director" :value="drivingSchool.director.id">{{   drivingSchool.director.userId.firstname }}</option>
+              <option v-else value="">Choisir un directeur</option>
+              <option v-for="director in directors.value" :value="directors.id">
+                {{ director.userId.firstname }}
+              </option>
+            </select>
           <div>
             <q-btn label="Submit" type="submit" color="primary"/>
           </div>

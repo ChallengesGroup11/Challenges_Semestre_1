@@ -167,11 +167,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $payments;
 
     #[ORM\Column(length: 255)]
-    #[Groups([ 'user_get', 'user_cget', 'user_patch', 'user_write', 'monitor_get', 'monitor_cget','student_get','driving_school_get','director_cget','director_write','director_get'])]
+    #[Groups([ 'user_get', 'user_cget', 'user_patch', 'user_write', 'monitor_get', 'monitor_cget','student_get','driving_school_get','driving_school_cget','director_cget','director_write','director_get'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups([ 'user_get',  'user_cget', 'user_patch',  'user_write', 'monitor_get', 'monitor_cget', 'student_get', 'student_cget','driving_school_get','director_cget','director_write','director_get'])]
+    #[Groups([ 'user_get',  'user_cget', 'user_patch',  'user_write', 'monitor_get', 'monitor_cget', 'student_get', 'student_cget','driving_school_get','driving_school_cget','director_cget','director_write','director_get'])]
     private ?string $lastname = null;
 
 
