@@ -19,12 +19,12 @@ services:
       retries: 3
       start_period: 30s
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-api-platform}:${POSTGRES_PASSWORD:-password-drive-queen}@database:5432/${POSTGRES_DB:-api}?serverVersion=${POSTGRES_VERSION:-13}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-api-platform}:${POSTGRES_PASSWORD:-!PasswordDriveQueen!}@database:5432/${POSTGRES_DB:-api}?serverVersion=${POSTGRES_VERSION:-13}
       TRUSTED_PROXIES: ${TRUSTED_PROXIES:-127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16}
       TRUSTED_HOSTS: ^${SERVER_NAME:-example\.com|localhost}|caddy$$
       MERCURE_URL: ${CADDY_MERCURE_URL:-http://caddy/.well-known/mercure}
       MERCURE_PUBLIC_URL: https://${SERVER_NAME:-localhost}/.well-known/mercure
-      MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET:-password-drive-queen}
+      MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET:-!PasswordDriveQueen!}
 
   # frontend:
   #   build:
@@ -54,8 +54,8 @@ services:
       - php
     environment:
       SERVER_NAME: ${SERVER_NAME:-localhost}, caddy:80
-      MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-password-drive-queen}
-      MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-password-drive-queen}
+      MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!PasswordDriveQueen!}
+      MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!PasswordDriveQueen!}
     restart: unless-stopped
     volumes:
       - php_socket:/var/run/php
@@ -80,7 +80,7 @@ services:
     environment:
       - POSTGRES_DB=${POSTGRES_DB:-api}
       # You should definitely change the password in production
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password-drive-queen}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-!PasswordDriveQueen!}
       - POSTGRES_USER=${POSTGRES_USER:-api-platform}
     volumes:
       - db_data:/var/lib/postgresql/data:rw
