@@ -45,12 +45,14 @@ const onSubmit = async () => {
   formData.append('file', filePath.value[0]);
   formData.append('name', name.value);
   formData.append('address', address.value);
-  formData.append('zipCode', zipcode.value);
+  formData.append('zipcode', zipcode.value);
   formData.append('city', city.value);
-  formData.append('phone_number', phoneNumber.value);
+  formData.append('phoneNumber', phoneNumber.value);
   formData.append('siret', siret.value);
-  formData.append('director',directorSelected.value);
-  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_school/create`, {
+  if(directorSelected.value != ""){
+    formData.append('director',"directors/"+directorSelected.value);
+  }
+  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_schools`, {
     method: 'POST',
     headers: {
       'Authorization': 'Bearer ' + localStorage.getItem('token'),
