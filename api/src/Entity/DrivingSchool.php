@@ -161,7 +161,7 @@ class DrivingSchool
     private ?bool $status = false;
 
     #[ORM\OneToOne(mappedBy: 'drivingSchoolId', cascade: ['persist', 'remove'],fetch: "EAGER")]
-    #[Groups(['driving_school_cget', 'driving_school_get'])]
+    #[Groups(['driving_school_cget', 'driving_school_get', 'driving_school_write'])]
     private ?Director $director = null;
 
     #[ORM\OneToMany(mappedBy: 'drivingSchoolId', targetEntity: Monitor::class,fetch: "EAGER")]
