@@ -32,6 +32,7 @@ declare module '@vue/runtime-core' {
     ModalEditBookingComp: typeof import('./components/director/ModalEditBookingComp.vue')['default']
     ModalEditBookingComp2: typeof import('./components/director/ModalEditBookingComp.vue')['default']
     MonitorList: typeof import('./components/director/Monitor/MonitorList.vue')['default']
+    MonitorListAdmin: typeof import('./components/admin/Monitor/MonitorListAdmin.vue')['default']
     OneSignalStatus: typeof import('./components/OneSignalStatus.vue')['default']
     ProfileEdit: typeof import('./components/ProfileEdit.vue')['default']
     QAvatar: typeof import('quasar')['QAvatar']
