@@ -9,12 +9,15 @@ use App\Repository\DirectorRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\Delete;
 
 #[ORM\Entity(repositoryClass: DirectorRepository::class)]
 #[ApiResource()]
 #[Get(normalizationContext: ['groups' => ['director_get']])]
 #[GetCollection(normalizationContext: ['groups' => ['director_cget']])]
-
+#[Delete(
+    security: 'is_granted("ROLE_ADMIN")'
+)]
 class Director
 {
     #[ORM\Id]
