@@ -47,6 +47,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
     security: 'is_granted("ROLE_ADMIN")',
 )]
 #[Get(normalizationContext: ['groups' => ['monitor_get']])]
+#[Delete(
+    security: 'is_granted("ROLE_ADMIN")'
+)]
 class Monitor
 {
     #[ORM\Id]
