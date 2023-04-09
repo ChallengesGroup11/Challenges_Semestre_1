@@ -16,6 +16,7 @@ use App\Entity\Monitor;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
+use App\Repository\DrivingSchoolRepository;
 
 
 #[AsController]
@@ -27,7 +28,7 @@ class CreateMonitorController extends AbstractController
     ) {
     }
     //MailerInterface $mailer
-    public function __invoke(DrivingSchool $drivingSchool,  SerializerInterface $serializer ,Request $request , MailerInterface $mailer, UserRepository $userRepository, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): JsonResponse
+    public function __invoke(DrivingSchoolRepository $drivingSchoolRepository, SerializerInterface $serializer ,Request $request , MailerInterface $mailer, UserRepository $userRepository, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): JsonResponse
     {
 
         // TODO : Secure if not email in body
@@ -41,8 +42,6 @@ class CreateMonitorController extends AbstractController
         $lastname = json_decode($this->requestStack->getCurrentRequest()->getContent())->lastname;
         $status = json_decode($this->requestStack->getCurrentRequest()->getContent())->status;
         $roles = json_decode($this->requestStack->getCurrentRequest()->getContent())->roles;
-        $drivingSchool = $serializer->deserialize($request->getContent(), DrivingSchool::class, 'json', ['object_to_populate' => $drivingSchool]);
-        $createByAdmin = json_decode($this->requestStack->getCurrentRequest()->getContent())->createBy;
 
 
         $user = new User();
@@ -54,14 +53,17 @@ class CreateMonitorController extends AbstractController
         $user->setRoles($roles);
         $user->setToken(bin2hex(random_bytes(32)));
 
-
         $entityManager->persist($user);
         $entityManager->flush();
+
+
+        $createByAdmin = json_decode($this->requestStack->getCurrentRequest()->getContent())->createBy;
 
         $userUnique = $userRepository->findOneBy(['email' => $email]);
         $monitor = new Monitor();
         $monitor->setUserId($userUnique);
-        $monitor->setDrivingSchoolId($drivingSchool);
+        $drive = $drivingSchoolRepository->find(json_decode($this->requestStack->getCurrentRequest()->getContent())->drivingSchoolId);
+        $monitor->setDrivingSchoolId($drive);
 
         $entityManager->persist($monitor);
         $entityManager->flush();

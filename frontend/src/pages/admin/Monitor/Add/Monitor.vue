@@ -45,6 +45,8 @@ onMounted(async () => {
 const onSubmit = async () => {
   console.log(drivingSchoolSelected.value)
   initProvisoryPassword()
+  console.log(drivingSchoolSelected.value.id)
+
   const requestData = {
     firstname: user.firstname,
     lastname: user.lastname,
@@ -53,7 +55,7 @@ const onSubmit = async () => {
     roles: ["ROLE_MONITOR"],
     status: false,
     createBy: 'admin',
-    drivingSchool: drivingSchoolSelected.value
+    drivingSchoolId: drivingSchoolSelected.value.id
     };
   const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/director/create_monitor`, {
     method: 'POST',
@@ -83,7 +85,7 @@ const onSubmit = async () => {
             v-model="user.lastname" />
           <q-input label="Email" filled lazy-rules :rules="[val => val.length > 0 || 'Veuillez saisir votre email']"
             v-model="user.email" />
-					
+
 						<select v-model="drivingSchoolSelected" placeholder="Choisir un directeur">
               <option value="" selected>Choisir une auto-école</option>
               <option v-for="drivingSchool in drivingSchools.value" :value="drivingSchool">

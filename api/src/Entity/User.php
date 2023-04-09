@@ -159,7 +159,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?Director $director = null;
 
     #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'],fetch: "EAGER")]
-    #[Groups(['user_get', 'user_cget', 'monitor_get', 'monitor_cget'])]
+    #[Groups(['user_get', 'user_cget', 'monitor_get', 'monitor_cget','user_write'])]
     private ?Monitor $monitor = null;
 
     #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Payment::class,fetch: "EAGER")]
