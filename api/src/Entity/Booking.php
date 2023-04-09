@@ -15,18 +15,25 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
-use App\Controller\BookingByDrivingSchoolController;
+use App\Controller\BookingPatchController;
 
 #[ORM\Entity(repositoryClass: BookingRepository::class)]
 // @ApiResource(attributes={"normalization_context": {"groups"={"todolist"}, "enable_max_depth"=true}})
-
-//TODO: ADD GUard needing already created a driving school
-#[ApiResource(
-    operations:[
+#[ApiResource(operations: [
+    new Patch (
+        uriTemplate: '/bookings/{id}',
+        controller: BookingPatchController::class,
+        openapiContext: [
+            'summary' => 'Editer un créneau',
+        ],
+        denormalizationContext: ['groups' => ['booking_write']],
+        name: 'booking_patch'
+    ),
     new Post(
         denormalizationContext: ['groups' => ['booking_write']],
-        // security: 'is_granted("ROLE_DIRECTOR")',
-    ),
+        security: 'is_granted("ROLE_DIRECTOR") or is_granted("ROLE_ADMIN")',
+    )
+    
 ]
 )]
 #[Get(
@@ -38,6 +45,7 @@ use App\Controller\BookingByDrivingSchoolController;
 
 #[Patch(
     denormalizationContext: ['groups' => ['booking_write']],
+    // security: 'is_granted("ROLE_DIRECTOR")'
 )]
 
 #[Delete(

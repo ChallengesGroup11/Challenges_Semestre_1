@@ -16,10 +16,14 @@ const fn = {
     state.isShownModal = true
   },
   takeBooking: async (booking: Booking) => {
-    ApiService.patch("bookings", { studentId: [`/students/${useStoreUser().user.student.id}`], id: booking.id })
-    data.ListInitialBooking = data.ListInitialBooking.filter((item: any) => item.id !== booking.id)
+    try {
+      await ApiService.patch("bookings", { studentId: [`/students/${useStoreUser().user.student.id}`], id: booking.id })
+      data.ListInitialBooking = data.ListInitialBooking.filter((item: any) => item.id !== booking.id)
 
-    makeListFreeBooking(data.ListInitialBooking)
+      makeListFreeBooking(data.ListInitialBooking)
+    } catch (e) {
+      console.log("vous n'avez pas assez de crédit: 2 minimum requis")
+    }
     fn.resetCurrentBooking()
   },
   resetCurrentBooking: () => {
