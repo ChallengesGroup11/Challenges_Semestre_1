@@ -8,14 +8,6 @@ const router = useRouter()
 
 const currentUser = reactive({ value: [] })
 
-onMounted(async () => {
-  if (localStorage.getItem("token") == null) {
-    await router.push("/auth")
-  } else {
-    await getUser()
-  }
-})
-
 const dateJour = (date: moment.MomentInput) => {
   return moment(date).format(" DD/MM/YYYY ")
 }
@@ -32,6 +24,7 @@ const getUser = async () => {
     .then((response) => response.json())
     .then((data) => {
       currentUser.value = data
+      useStoreUser().user = data
     })
     .catch((error) => {
       console.error("Error:", error)
@@ -55,6 +48,12 @@ const fn = {
     currentUser.value.student.bookings = currentUser.value.student.bookings.filter((b: any) => b.id !== booking.id)
   },
 }
+
+const loadData = () => {
+  getUser()
+}
+
+loadData()
 </script>
 
 <template>
