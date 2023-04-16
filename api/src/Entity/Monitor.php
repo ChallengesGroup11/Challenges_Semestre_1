@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
@@ -46,6 +47,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
     security: 'is_granted("ROLE_ADMIN")',
 )]
 #[Get(normalizationContext: ['groups' => ['monitor_get']])]
+#[Delete(
+    security: 'is_granted("ROLE_ADMIN")'
+)]
 class Monitor
 {
     #[ORM\Id]
@@ -61,7 +65,7 @@ class Monitor
 
     #[ORM\ManyToOne(inversedBy: 'monitors')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['monitor_cget',"monitor_get",'user_get'])]
+    #[Groups(['monitor_cget',"monitor_get",'user_get','user_write'])]
     private ?DrivingSchool $drivingSchoolId = null;
 
     #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'monitorId')]
