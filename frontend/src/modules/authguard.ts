@@ -47,7 +47,9 @@ export const install: UserModule = ({ isClient, router }) => {
                 path: hashUtil.pathToRedirectByRole(tokenParsed.roles),
               })
             } else {
-              next()
+              if (from.name === "student-Add-CodeCertification-id" && to.name === "student-profil") {
+                next()
+              }
             }
           }
         }
