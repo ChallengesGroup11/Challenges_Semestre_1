@@ -34,6 +34,7 @@ declare module '@vue/runtime-core' {
     MonitorList: typeof import('./components/director/Monitor/MonitorList.vue')['default']
     MonitorListAdmin: typeof import('./components/admin/Monitor/MonitorListAdmin.vue')['default']
     OneSignalStatus: typeof import('./components/OneSignalStatus.vue')['default']
+    PackageListAdmin: typeof import('./components/admin/PackageAdmin/PackageListAdmin.vue')['default']
     ProfileEdit: typeof import('./components/ProfileEdit.vue')['default']
     QAvatar: typeof import('quasar')['QAvatar']
     QBtn: typeof import('quasar')['QBtn']
