@@ -61,6 +61,7 @@ const getUser = async () => {
       <q-btn flat label="Auto-école" to="/admin/DrivingSchool" />
       <q-btn flat label="Directors" to="/admin/Director" />
       <q-btn flat label="Monitor" to="/admin/Monitor" />
+      <q-btn flat label="Package" to="/admin/Package" />
       <q-space />
       <q-btn @click="logoutUser" icon="logout" flat label="Déconnexion" />
     </q-toolbar>
