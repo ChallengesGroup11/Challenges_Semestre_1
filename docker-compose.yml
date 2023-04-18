@@ -3,7 +3,6 @@ version: "3.7"
 x-shared_environment: &shared_environment
   LOG_LEVEL: ${LOG_LEVEL:-debug}
 
-
 services:
   php:
     build:
@@ -20,23 +19,22 @@ services:
       retries: 3
       start_period: 30s
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-api-platform}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-api}?serverVersion=${POSTGRES_VERSION:-13}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-api-platform}:${POSTGRES_PASSWORD:-!PasswordDriveQueen!}@database:5432/${POSTGRES_DB:-api}?serverVersion=${POSTGRES_VERSION:-13}
       TRUSTED_PROXIES: ${TRUSTED_PROXIES:-127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16}
       TRUSTED_HOSTS: ^${SERVER_NAME:-example\.com|localhost}|caddy$$
       MERCURE_URL: ${CADDY_MERCURE_URL:-http://caddy/.well-known/mercure}
       MERCURE_PUBLIC_URL: https://${SERVER_NAME:-localhost}/.well-known/mercure
-      MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET:-!ChangeMe!}
+      MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET:-!PasswordDriveQueen!}
 
-
-  frontend:
-    build:
-      context: ./frontend
-      target: api_platform_frontend
-    environment:
-      <<: *shared_environment
-    ports:
-      - '4010:4010'
-    command: ["pnpm", "dev"]
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     target: api_platform_frontend
+  #   environment:
+  #     <<: *shared_environment
+  #   ports:
+  #     - "4010:4010"
+  #   command: ["pnpm", "dev"]
 
   # kyc:
   #   build:
@@ -56,8 +54,8 @@ services:
       - php
     environment:
       SERVER_NAME: ${SERVER_NAME:-localhost}, caddy:80
-      MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeMe!}
-      MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeMe!}
+      MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!PasswordDriveQueen!}
+      MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!PasswordDriveQueen!}
     restart: unless-stopped
     volumes:
       - php_socket:/var/run/php
@@ -82,7 +80,7 @@ services:
     environment:
       - POSTGRES_DB=${POSTGRES_DB:-api}
       # You should definitely change the password in production
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-!ChangeMe!}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-!PasswordDriveQueen!}
       - POSTGRES_USER=${POSTGRES_USER:-api-platform}
     volumes:
       - db_data:/var/lib/postgresql/data:rw

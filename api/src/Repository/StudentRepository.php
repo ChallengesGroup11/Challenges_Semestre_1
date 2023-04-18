@@ -33,7 +33,15 @@ class StudentRepository extends ServiceEntityRepository
     public function remove(Student $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
 
+    public function decrementCountCredit(Student $student,  $numberCreditToDecrement,  bool $flush = false): void
+    {
+        $student->setCountCredit($student->getCountCredit() - $numberCreditToDecrement);
+        $this->getEntityManager()->persist($student);
         if ($flush) {
             $this->getEntityManager()->flush();
         }

@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import { reactive } from "vue"
 
-import {reactive} from 'vue';
+const emit = defineEmits<{
+  (e: "redirectToSignin", payload: boolean): void
+}>()
 
 const user = reactive({
   firstname: "",
@@ -9,31 +12,32 @@ const user = reactive({
   password: "",
   passwordSecond: "",
   identity: "",
-});
+})
 
-const onClickSignup = async (e: { preventDefault: () => void; }) => {
-  e.preventDefault();
+const onClickSignup = async (e: { preventDefault: () => void }) => {
+  e.preventDefault()
   const requestData = {
     firstname: user.firstname,
     lastname: user.lastname,
     email: user.email,
     password: user.password,
     roles: ["ROLE_USER"],
-    status: false
-  };
+    status: false,
+  }
   const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/signup/student`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(requestData),
-  });
+  })
   // const data = await response.json();
   if (response.status === 201) {
   }
   if (response.status === 422) {
-    const data = await response.json();
+    const data = await response.json()
   }
+  emit("redirectToSignin", true)
 }
 </script>
 
@@ -61,7 +65,7 @@ const onClickSignup = async (e: { preventDefault: () => void; }) => {
       <q-btn
         @click="onClickSignup"
         unelevated
-        color="light-green-7"
+        color="positive"
         size="lg"
         class="full-width"
         label="Créer un compte étudiant"

@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Controller\StudentPostController;
+use App\Controller\DecrementCreditController;
 use App\Repository\StudentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -53,13 +54,25 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     normalizationContext: ['groups' => ['student_get_path_code']],
     denormalizationContext: ['groups' => ['student_write_path_code']],
     name: 'student_path_code'
- )]
+    ),
+    new Patch(
+        uriTemplate: '/students/{id}/decrementCountCredit',
+        normalizationContext: ['groups' => ['student_get_decrement_count_credit']],
+        denormalizationContext: ['groups' => ['student_write_decrement_count_credit']],
+        security: '(is_granted("ROLE_MONITOR")) or (is_granted("ROLE_ADMIN"))',
+        name: 'student_decrement_count_credit',
+        controller: DecrementCreditController::class,
+    ),
+],
 )]
 
 
+
+
+
 #[GetCollection(
-    normalizationContext: ['groups' => ['user_cget']],
-    security: 'object.getId() == student.getId()'
+    normalizationContext: ['groups' => ['student_cget']],
+    security: 'is_granted("ROLE_DIRECTOR", "ROLE_ADMIN")'
 )]
 //TODO CREER LE USER QUAND IL ENVOIE SES FILES
 #[Get(normalizationContext: ['groups' => ['student_get']])]
@@ -68,7 +81,7 @@ class Student
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
-    #[Groups(['student_get'])]
+    #[Groups(['student_get','user_cget','driving_school_get'])]
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
@@ -97,24 +110,14 @@ class Student
     #[ORM\Column(nullable: true)]
     public ?string $filePathCni = null;
 
-
-//    #[ORM\Column(length: 255, nullable:true)]
-//    #[Groups(['student_get'])]
-//    private ?string $urlCodeCertification = null;
-//
-//    #[ORM\Column(length: 255, nullable:true)]
-//    #[Groups(['student_get'])]
-//    private ?string $urlCni = null;
-
     #[ORM\OneToOne(inversedBy: 'student', cascade: ['persist', 'remove'], fetch: "EAGER")]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['user_get'])]
+    #[Groups(['user_get','student_cget','student_get','monitor_get'])]
     private ?User $userId = null;
 
 
     #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'studentId', fetch: "EAGER")]
-    #[Groups(['student_get'])]
-    #[ApiProperty(fetchEager: true)]
+    #[Groups(['student_cget','student_get','booking_cget'])]
     private Collection $bookings;
 
 
@@ -231,6 +234,7 @@ class Student
         return $this;
     }
 
+
     public function removeBooking(Booking $booking): self
     {
         if ($this->bookings->removeElement($booking)) {
@@ -244,6 +248,7 @@ class Student
     public function getCountCredit(): ?int
     {
         return $this->countCredit;
+        
     }
 
     public function setCountCredit(?int $countCredit): self

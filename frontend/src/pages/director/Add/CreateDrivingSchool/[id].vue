@@ -1,9 +1,6 @@
 <script setup lang="ts">
-
-
-import { assertExpressionStatement } from "@babel/types";
-import { reactive, defineComponent } from "vue";
-
+import { assertExpressionStatement } from "@babel/types"
+import { reactive, defineComponent } from "vue"
 
 const router = useRouter()
 
@@ -15,72 +12,72 @@ const user = reactive({
   phone_number: "",
   siret: "",
   filePathKbis: "",
-});
-const currentUser = reactive({ value: [] });
-const isLoading = ref(false);
-const { params } = useRoute();
-const { id } = params;
+})
+const currentUser = reactive({ value: [] })
+const isLoading = ref(false)
+const { params } = useRoute()
+const { id } = params
 
 const getUser = async () => {
   return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/me`, {
     headers: {
-      'Authorization': 'Bearer ' + localStorage.getItem('token'),
-    }
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
   })
     .then((response) => response.json())
     .then((data) => {
-      currentUser.value = data;
+      currentUser.value = data
     })
     .catch((error) => {
-      console.error("Error:", error);
-    });
-};
+      console.error("Error:", error)
+    })
+}
 
 onMounted(async () => {
-  if (localStorage.getItem('token') == null) {
-    await router.push('/auth')
+  if (localStorage.getItem("token") == null) {
+    await router.push("/auth")
   } else {
     await getUser()
   }
-});
+})
 
 const onSubmit = async () => {
-  if(user.filePathKbis == "" || user.siret == ""){
+  if (user.filePathKbis == "" || user.siret == "") {
     alert("Veuillez remplir tous les champs")
     return
   }
-  const formData = new FormData();
-  formData.append('file', user.filePathKbis);
-  formData.append('siret', user.siret);
-  formData.append('director', currentUser.value.director.id);
-  formData.append('name', user.name);
-  formData.append('address', user.address);
-  formData.append('city', user.city);
-  formData.append('zipCode', user.zipCode);
-  formData.append('phone_number', user.phone_number);
+  const formData = new FormData()
+  formData.append("file", user.filePathKbis)
+  formData.append("siret", user.siret)
+  formData.append("director", currentUser.value.director.id)
+  formData.append("name", user.name)
+  formData.append("address", user.address)
+  formData.append("city", user.city)
+  formData.append("zipCode", user.zipCode)
+  formData.append("phone_number", user.phone_number)
   try {
-    isLoading.value = true;
-    const checked = await fetch(`${import.meta.env.VITE_KYC_URL}/api/director`, {
+    isLoading.value = true
+    const checked = await fetch(`${import.meta.env.VITE_KYC_URL}/director`, {
       headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('token'),
-        'Content-Type': 'multipart/form-data'
+        Authorization: "Bearer " + localStorage.getItem("token"),
+        "Content-Type": "multipart/form-data",
       },
-      method: 'POST',
+      method: "POST",
       body: formData,
     })
-    const validDocs = await checked;
+    const validDocs = await checked
     if (validDocs.status == 200) {
       const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_school/create`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('token'),
+          Authorization: "Bearer " + localStorage.getItem("token"),
         },
         body: formData,
-      });
-
-      isLoading.value = false;
+      })
+      console.log(response)
+      isLoading.value = false
       if (response.ok) {
-        await router.push('/director')
+        await router.push("/director")
       } else {
         alert("Vos documents n'ont pas été enregistrés, veuillez réessayer")
       }
@@ -88,16 +85,14 @@ const onSubmit = async () => {
       alert("Vos documents ne sont pas valides, veuillez réessayer")
     }
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error)
   }
 }
-
-
 </script>
 
 <template>
-  <q-page class="bg-light-grey  items-center">
-    <div class=" q-mt-sl  row justify-center">
+  <q-page class="bg-light-grey items-center">
+    <div class="q-mt-sl row justify-center">
       <q-card class="q-ma-lg">
         <div class="q-pa-md">
           <h2 class="text-h5 q-mb-xl">Enregistrez votre auto-école</h2>
@@ -107,8 +102,17 @@ const onSubmit = async () => {
             <q-input filled v-model="user.city" label="Ville" />
             <q-input filled v-model="user.zipCode" label="Code postal" />
             <q-input filled v-model="user.phone_number" label="Numéro de téléphone" />
-            <q-file @update:model-value="val => { file = val[0] }" filled label="Ajouter votre Kbis" type="file"
-              v-model="user.filePathKbis">
+            <q-file
+              @update:model-value="
+                (val) => {
+                  file = val[0]
+                }
+              "
+              filled
+              label="Ajouter votre Kbis"
+              type="file"
+              v-model="user.filePathKbis"
+            >
               <template v-slot:append>
                 <q-icon name="attach_file" />
               </template>
@@ -118,8 +122,16 @@ const onSubmit = async () => {
               <q-btn label="Submit" type="submit" color="primary" />
             </div>
           </q-form>
-          <q-circular-progress v-if="isLoading" indeterminate size="50px" :thickness="0.22" rounded color="lime"
-            track-color="grey-3" class="q-ma-md" />
+          <q-circular-progress
+            v-if="isLoading"
+            indeterminate
+            size="50px"
+            :thickness="0.22"
+            rounded
+            color="lime"
+            track-color="grey-3"
+            class="q-ma-md"
+          />
         </div>
       </q-card>
     </div>

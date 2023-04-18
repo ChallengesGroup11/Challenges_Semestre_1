@@ -1,6 +1,10 @@
 <script setup lang="ts">
 const router = useRouter()
-import {onMounted, reactive} from 'vue';
+import { onMounted, reactive } from 'vue';
+
+
+const Alldirectors = reactive({ value: [] })
+const selectedDirector = ref('')
 
 const drivingSchool = reactive({
   id: "",
@@ -11,18 +15,46 @@ const drivingSchool = reactive({
   phoneNumber: "",
   siret: "",
   kbis: "",
+  director: ""
 });
 
 onMounted(async () => {
-  const {params} = useRoute();
-  const {id} = params;
+  const { params } = useRoute();
+  const { id } = params;
   await fetchOneDrivingSchool(id);
+  await fetchDirector()
 });
 
+const fetchDirector = async () => {
+  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/directors`, {
+    headers: {
+      accept: 'application/ld+json',
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      // directors.value = data['hydra:member'].filter((item) => item.drivingSchoolId === null);
+      //filter directors who have not a driving school
+      Alldirectors.value = data['hydra:member']
+
+
+      for (let i = Alldirectors.value.length - 1; i >= 0; i--) {
+        const element = Alldirectors.value[i];
+        if (element.drivingSchoolId) {
+          Alldirectors.value.splice(i, 1);
+        }
+      }
+
+      console.log(Alldirectors.value)
+
+    })
+}
+
 const fetchOneDrivingSchool = async (id: string | string[]) => {
-  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_schools/`+id,
+  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_schools/` + id,
     {
-      headers:{
+      headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token'),
       }
     }
@@ -37,6 +69,11 @@ const fetchOneDrivingSchool = async (id: string | string[]) => {
       drivingSchool.phoneNumber = data.phoneNumber;
       drivingSchool.siret = data.siret;
       drivingSchool.kbis = data.kbis;
+      if (data.director) {
+        drivingSchool.director = data.director
+        selectedDirector.value = data.director
+      }
+      console.log(drivingSchool.director)
     })
     .catch((error) => {
       console.error('Error:', error);
@@ -44,7 +81,9 @@ const fetchOneDrivingSchool = async (id: string | string[]) => {
 };
 
 const onSubmit = async (id: string) => {
-  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_schools/`+id, {
+  console.log(drivingSchool)
+  drivingSchool.director = "/directors/" + drivingSchool.director.id
+  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_schools/` + id, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -55,6 +94,10 @@ const onSubmit = async (id: string) => {
   const data = await response.json();
   await router.push('/admin/drivingSchool')
 };
+
+function isset(drivingSchoolId: any) {
+  throw new Error('Function not implemented.');
+}
 </script>
 
 
@@ -63,59 +106,35 @@ const onSubmit = async (id: string) => {
     <div class=" q-mt-sl  row justify-center">
       <div class="q-pa-md">
         <h2 class="text-h5 w-100 q-mb-xl">Editer une auto-école </h2>
-        <q-form
-          @submit="onSubmit(drivingSchool.id)"
-          class="q-gutter-md"
-        >
-          <q-input
-            v-model="drivingSchool.name"
-            label="Nom de l'école de conduite"
-            filled
-            lazy-rules
-            :rules="[ val => val && val.length > 0 || 'Please type something']"
-          />
-          <q-input
-            filled
-            v-model="drivingSchool.address"
-            label="Your address *"
-            hint="Address"
-            lazy-rules
-            :rules="[ val => val && val.length > 0 || 'Please type something']"
-          />
-          <q-input
-            filled
-            v-model="drivingSchool.zipcode"
-            label="Your zipcode *"
-            hint="Zipcode"
-            lazy-rules
-            :rules="[ val => val && val.length > 0 || 'Please type something']"
-          />
-          <q-input
-            filled
-            v-model="drivingSchool.city"
-            label="Your city *"
-            hint="City"
-            lazy-rules
-            :rules="[ val => val && val.length > 0 || 'Please type something']"
-          />
-          <q-input
-            filled
-            v-model="drivingSchool.phoneNumber"
-            label="Your phone number *"
-            hint="Phone number"
-            lazy-rules
-            :rules="[ val => val && val.length > 0 || 'Please type something']"
-          />
-          <q-input
-            filled
-            v-model="drivingSchool.siret"
-            label="Your siret *"
-            hint="Siret"
-            lazy-rules
-            :rules="[ val => val && val.length > 0 || 'Please type something']"
-          />
+        <q-form @submit="onSubmit(drivingSchool.id)" class="q-gutter-md">
+          <q-input v-model="drivingSchool.name" label="Nom de l'école de conduite" filled lazy-rules
+            :rules="[val => val && val.length > 0 || 'Please type something']" />
+          <q-input filled v-model="drivingSchool.address" label="Your address *" hint="Address" lazy-rules
+            :rules="[val => val && val.length > 0 || 'Please type something']" />
+          <q-input filled v-model="drivingSchool.zipcode" label="Your zipcode *" hint="Zipcode" lazy-rules
+            :rules="[val => val && val.length > 0 || 'Please type something']" />
+          <q-input filled v-model="drivingSchool.city" label="Your city *" hint="City" lazy-rules
+            :rules="[val => val && val.length > 0 || 'Please type something']" />
+          <q-input filled v-model="drivingSchool.phoneNumber" label="Your phone number *" hint="Phone number" lazy-rules
+            :rules="[val => val && val.length > 0 || 'Please type something']" />
+          <q-input filled v-model="drivingSchool.siret" label="Your siret *" hint="Siret" lazy-rules
+            :rules="[val => val && val.length > 0 || 'Please type something']" />
+          <div v-if="selectedDirector">
+            <select disabled v-model="selectedDirector" placeholder="Choisir un directeur">
+              <option selected v-if="selectedDirector != ''" :value="selectedDirector">{{
+                selectedDirector.userId?.firstname }}</option>
+            </select>
+          </div>
+          <div v-else>
+            <select v-model="drivingSchool.director" placeholder="Choisir un directeur">
+              <option value="">Choisir un directeur</option>
+              <option v-for="director in Alldirectors.value" :value="director">
+                {{ director.userId.firstname }}
+              </option>
+            </select>
+          </div>
           <div>
-            <q-btn label="Submit" type="submit" color="primary"/>
+            <q-btn label="Submit" type="submit" color="primary" />
           </div>
         </q-form>
       </div>
@@ -124,10 +143,7 @@ const onSubmit = async (id: string) => {
 </template>
 
 
-<style>
-
-
-</style>
+<style></style>
 
 
 <route lang="yaml">

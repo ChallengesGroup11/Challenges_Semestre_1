@@ -27,7 +27,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[Post(
     normalizationContext: ['groups' => ['package_get']],
     denormalizationContext: ['groups' => ['package_post']],
-    security: 'is_granted("ROLE_ADMIN")'
+    // security: 'is_granted("ROLE_ADMIN")'
 )]
 #[Patch(
     denormalizationContext: ['groups' => ['package_patch']],

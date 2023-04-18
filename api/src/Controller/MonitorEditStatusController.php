@@ -28,6 +28,4 @@ class MonitorEditStatusController extends AbstractController
         return $this->json($monitor, 200, ['success']);
     }
 
-
-
 }

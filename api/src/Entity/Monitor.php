@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
@@ -36,7 +37,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     new GetCollection(
         uriTemplate: '/monitors/getAll',
         openapiContext: ['description' => 'Get all monitors'],
-        normalizationContext: ['groups' => ['monitor_get']],
+        normalizationContext: ['groups' => ['monitor_cget']],
     ),
 
     ])
@@ -46,26 +47,29 @@ use Symfony\Component\Serializer\Annotation\Groups;
     security: 'is_granted("ROLE_ADMIN")',
 )]
 #[Get(normalizationContext: ['groups' => ['monitor_get']])]
+#[Delete(
+    security: 'is_granted("ROLE_ADMIN")'
+)]
 class Monitor
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
-    #[Groups(['monitor_get','monitor_cget'])]
+    #[Groups(['monitor_get','monitor_cget','user_get','driving_school_get'])]
     private ?int $id = null;
 
     #[ORM\OneToOne(inversedBy: 'monitor', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['booking_get','booking_cget', 'monitor_get', 'monitor_cget'])]
+    #[Groups(['booking_get','booking_cget', 'monitor_get', 'monitor_cget','user_cget','user_get'])]
     private ?User $userId = null;
 
     #[ORM\ManyToOne(inversedBy: 'monitors')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['monitor_cget'])]
+    #[Groups(['monitor_cget',"monitor_get",'user_get','user_write'])]
     private ?DrivingSchool $drivingSchoolId = null;
 
-    #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'monitor_cget')]
-    #[Groups(['monitor_cget'])]
+    #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'monitorId')]
+    #[Groups(['booking_cget', 'monitor_get', 'monitor_cget'])]
     private Collection $bookings;
 
     public function __construct()
