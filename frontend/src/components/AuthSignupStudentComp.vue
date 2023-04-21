@@ -23,6 +23,7 @@ const onClickSignup = async (e: { preventDefault: () => void }) => {
     password: user.password,
     roles: ["ROLE_USER"],
     status: false,
+    createdBy: 'user'
   }
   const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/signup/student`, {
     method: "POST",

@@ -24,7 +24,7 @@ onMounted(async () => {
 
 
 const validateAccount = (id: any, token: any) => {
-  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}CheckAccount`, {
+  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/CheckAccount`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

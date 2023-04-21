@@ -81,7 +81,7 @@ class Student
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
-    #[Groups(['student_get','user_cget','driving_school_get'])]
+    #[Groups(['student_get','user_cget','driving_school_get', 'student_cget'])]
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
@@ -248,7 +248,7 @@ class Student
     public function getCountCredit(): ?int
     {
         return $this->countCredit;
-        
+
     }
 
     public function setCountCredit(?int $countCredit): self
