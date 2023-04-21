@@ -112,7 +112,7 @@ class Student
 
     #[ORM\OneToOne(inversedBy: 'student', cascade: ['persist', 'remove'], fetch: "EAGER")]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['user_get','student_cget','student_get','monitor_get'])]
+    #[Groups(['student_cget','student_get','monitor_get'])]
     private ?User $userId = null;
 
 

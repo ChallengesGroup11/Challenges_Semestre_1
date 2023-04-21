@@ -98,7 +98,7 @@ use App\Controller\UserEditStatusController;
 )]
 #[Get(
     normalizationContext: ['groups' => ['user_get']],
-    security: 'object.getId() == user.getId()'
+    security: 'object.getId() == user.getId() or is_granted("ROLE_ADMIN")',
 )]
 #[Patch(
     denormalizationContext: ['groups' => ['user_patch']],

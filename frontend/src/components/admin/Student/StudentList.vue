@@ -31,7 +31,7 @@ const addStudent = () => {
 }
 
 const deleteStudent = async (id: string) => {
-  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/students/` + id, {
+  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/users/` + id, {
     method: 'DELETE',
     headers: {
       accept: 'application/ld+json',
