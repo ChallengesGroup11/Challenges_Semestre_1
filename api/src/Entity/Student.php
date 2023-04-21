@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Controller\StudentPostController;
 use App\Controller\DecrementCreditController;
+use App\Controller\Ping;
 use App\Repository\StudentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -62,6 +63,13 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         security: '(is_granted("ROLE_MONITOR")) or (is_granted("ROLE_ADMIN"))',
         name: 'student_decrement_count_credit',
         controller: DecrementCreditController::class,
+    ),
+    new Post(
+        uriTemplate: '/ping',
+        name: 'ping',
+        normalizationContext: ['groups' => ['student_get_decrement_count_credit']],
+        denormalizationContext: ['groups' => ['student_write_decrement_count_credit']],
+        controller: Ping::class,
     ),
 ],
 )]
