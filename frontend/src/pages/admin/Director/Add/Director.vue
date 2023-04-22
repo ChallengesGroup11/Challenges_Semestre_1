@@ -53,7 +53,7 @@ const onSubmit = async () => {
     body: JSON.stringify(requestData),
   });
   if (response.status === 400) {
-    viewNotif("thumb_down", "red", "L'auto école ne peut pas être supprimé", "white", "top-right")
+    viewNotif("thumb_down", "red", "L'auto école ne peut pas être créer", "white", "top-right")
     return
   }
   if (response.status === 500) {

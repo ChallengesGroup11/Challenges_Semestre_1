@@ -57,7 +57,7 @@ const deleteDirector = async (id: string) => {
     viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
     return
   }
-  if (response.status === 200) {
+  if (response.status === 204) {
     viewNotif("thumb_up", "green", "Le directeur à bien été supprimé", "white", "top-right")
   }
   await fetchDirector()
@@ -82,7 +82,7 @@ const changeStatus = async (id: string) => {
     viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
     return
   }
-  if (response.status === 200) {
+  if (response.status === 201) {
     viewNotif("thumb_up", "green", "Le directeur à bien été modifié", "white", "top-right")
   }
   await fetchDirector()
