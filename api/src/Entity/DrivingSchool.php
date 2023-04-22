@@ -115,11 +115,11 @@ class DrivingSchool
     #[Groups(['driving_school_cget', 'driving_school_get', 'driving_school_write'])]
     private ?Director $director = null;
 
-    #[ORM\OneToMany(mappedBy: 'drivingSchoolId', targetEntity: Monitor::class,fetch: "EAGER")]
+    #[ORM\OneToMany(mappedBy: 'drivingSchoolId', cascade: ['persist', 'remove'] ,targetEntity: Monitor::class,fetch: "EAGER")]
     #[Groups(['driving_school_get','driving_school_cget'])]
     private Collection $monitors;
 
-    #[ORM\OneToMany(mappedBy: 'drivingSchoolId', targetEntity: Booking::class)]
+    #[ORM\OneToMany(mappedBy: 'drivingSchoolId', cascade: ['persist', 'remove'], targetEntity: Booking::class)]
     #[Groups(['driving_school_get','booking_cget',"user_get"])]
     private Collection $bookings;
 
