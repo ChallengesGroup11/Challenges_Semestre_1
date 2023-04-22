@@ -33,7 +33,7 @@ use App\Controller\BookingPatchController;
         denormalizationContext: ['groups' => ['booking_write']],
         security: 'is_granted("ROLE_DIRECTOR") or is_granted("ROLE_ADMIN")',
     )
-    
+
 ]
 )]
 #[Get(
@@ -72,7 +72,7 @@ class Booking
     private ?\DateTimeInterface $slotEnd = null;
 
     #[ORM\Column(length: 255,nullable: true)]
-    #[Groups(['booking_get','get', 'booking_cget'])]
+    #[Groups(['booking_get','get', 'booking_cget','driving_school_get'])]
     private ?string $comment = null;
 
     #[ORM\Column]
@@ -80,7 +80,7 @@ class Booking
     private ?bool $statusValidate = null;
 
     #[ORM\Column]
-    #[Groups(['booking_get','get','booking_cget','booking_write'])]
+    #[Groups(['booking_get','get','booking_cget','booking_write','driving_school_get'])]
     private ?bool $statusDone = null;
 
     #[ORM\ManyToMany(targetEntity: Student::class, inversedBy: 'bookings',fetch: "EAGER")]
