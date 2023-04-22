@@ -1,7 +1,18 @@
 <script setup lang="ts">
 const router = useRouter()
 import { onMounted, reactive } from 'vue'
+import { useQuasar } from "quasar"
 
+const $q = useQuasar()
+const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
+  $q.notify({
+    icon,
+    color,
+    message,
+    textColor,
+    position,
+  })
+}
 const packages = reactive({ value: [] })
 
 onMounted(async () => {
@@ -31,13 +42,24 @@ const addPackage = () => {
 }
 
 const deletePackage = async (id: string) => {
-  await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/packages/` + id, {
+  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/packages/` + id, {
     method: 'DELETE',
     headers: {
       accept: 'application/ld+json',
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     },
-  }).then((response) => console.log(response))
+  })
+  if (response.status === 400) {
+    viewNotif("thumb_down", "red", "Le package ne peut pas être supprimé", "white", "top-right")
+    return
+  }
+  if (response.status === 500) {
+    viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
+    return
+  }
+  if (response.status === 204) {
+    viewNotif("thumb_up", "green", "Le package à bien été supprimé", "white", "top-right")
+  }
   await fetchPackages()
 }
 
