@@ -21,7 +21,6 @@ use ApiPlatform\OpenApi\Model;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\File;
-use App\Controller\DrivingSchoolPostController;
 
 
 #[Vich\Uploadable]
@@ -42,56 +41,8 @@ use App\Controller\DrivingSchoolPostController;
         inputFormats: ['multipart' => ['multipart/form-data']],
         normalizationContext: ['groups' => ['driving_school_get']],
         denormalizationContext: ['groups' => ['driving_school_write']],
-        security: 'is_granted("ROLE_ADMIN","ROLE_DIRECTOR")',
+        security: 'is_granted("ROLE_ADMIN") or is_granted("ROLE_DIRECTOR")',
     ),
-    new Post(
-        uriTemplate: '/driving_school/create',
-        inputFormats: ['multipart' => ['multipart/form-data']],
-        controller: DrivingSchoolPostController::class,
-        openapiContext: [
-            'summary' => 'Création de l\'auto-école',
-            'requestBody' => [
-                'content' => [
-                    'multipart/form-data' => [
-                        'schema' => [
-                            'type' => 'object',
-                            'properties' => [
-                                'file' => [
-                                    'type' => 'string',
-                                    'format' => 'binary'
-                                ],
-                                'siret' => [
-                                    'type' => 'string',
-                                ],
-                                'name' => [
-                                    'type' => 'string'
-                                ],
-                                'address' => [
-                                    'type' => 'string'
-                                ],
-                                'city' => [
-                                    'type' => 'string'
-                                ],
-
-                                'zipCode' => [
-                                    'type' => 'string'
-                                ],
-                                'phone_number' => [
-                                    'type' => 'string'
-                                ],
-                                'director' => [
-                                    'type' => 'integer'
-                                ],
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ],
-    normalizationContext: ['groups' => ['driving_school_get']],
-    denormalizationContext: ['groups' => ['driving_school_write']],
-    name: 'driving_school_create'
- )
 ],
 )]
 #[GetCollection(
