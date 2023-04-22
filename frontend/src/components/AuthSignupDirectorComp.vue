@@ -2,7 +2,18 @@ import { handleFileUpload } from '../utils/domUtil';
 <script setup lang="ts">
 // import { domUtil } from '~/utils/domUtil'
 import { reactive } from "vue"
+import { useQuasar } from "quasar"
 
+const $q = useQuasar()
+const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
+  $q.notify({
+    icon,
+    color,
+    message,
+    textColor,
+    position,
+  })
+}
 const router = useRouter()
 
 const emit = defineEmits<{
@@ -26,9 +37,7 @@ const error = reactive({
 const onClickSignup = async (e: { preventDefault: () => void }) => {
   e.preventDefault()
   if (user.password !== user.passwordSecond) {
-    error.type = "password"
-    error.message = "Les mots de passe ne correspondent pas"
-    return error
+    viewNotif("thumb_down", "red", "Les mots de passe doivent être identique", "white", "top-right")
   } else {
     error.type = ""
     error.message = ""
@@ -50,18 +59,16 @@ const onClickSignup = async (e: { preventDefault: () => void }) => {
     })
     // const data = await response.json();
     if (response.status === 201) {
-      await router.push("/auth")
+      viewNotif("thumb_up", "green", "Votre compte à bien été enregistré", "white", "top-right")
+      emit("redirectToSignin", true)
     }
-    if (response.status === 422) {
-      const data = await response.json()
-      if (data.hydra.title === "An error occurred") {
-        error.type = "email"
-        error.message = "Cet email est déjà utilisé"
-        return error
-      }
+    if (response.status === 400) {
+      viewNotif("thumb_down", "red", "L'email est déjà utilisé", "white", "top-right")
+    }
+    if(response.status === 500){
+      viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
     }
   }
-  emit("redirectToSignin", true)
 }
 </script>
 
