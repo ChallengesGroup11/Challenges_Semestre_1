@@ -1,7 +1,18 @@
 <script setup lang='ts'>
 
 import { ref } from 'vue'
+import { useQuasar } from "quasar"
 
+const $q = useQuasar()
+const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
+  $q.notify({
+    icon,
+    color,
+    message,
+    textColor,
+    position,
+  })
+}
 const router = useRouter()
 
 // const firstname = ref('')
@@ -12,7 +23,7 @@ const user = reactive({
   firstname: "",
   lastname: "",
   email: "",
-  password:"",
+  password: "",
 });
 
 const initProvisoryPassword = () => {
@@ -41,10 +52,18 @@ const onSubmit = async () => {
     },
     body: JSON.stringify(requestData),
   });
-
-    if (response.status === 201) {
-        await router.push("/admin/Director")
-    }
+  if (response.status === 400) {
+    viewNotif("thumb_down", "red", "L'auto école ne peut pas être supprimé", "white", "top-right")
+    return
+  }
+  if (response.status === 500) {
+    viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
+    return
+  }
+  if (response.status === 201) {
+    viewNotif("thumb_up", "green", "Le directeur à bien été créer", "white", "top-right")
+    await router.push("/admin/Director")
+  }
 
 }
 
