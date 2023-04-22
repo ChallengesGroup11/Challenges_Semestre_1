@@ -27,7 +27,6 @@ class BookingPatchController extends AbstractController
         // $booking = $serializer->deserialize($request->getContent(), Booking::class, 'json', ['object_to_populate' => $booking]);
 
         $user = $security->getUser();
-        var_dump($user->getRoles());
         if (in_array('ROLE_DIRECTOR', $user->getRoles()) != true) {
             $studentURI = json_decode($this->requestStack->getCurrentRequest()->getContent())->studentId[0];
             // extract the id from the URI
