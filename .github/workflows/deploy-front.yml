@@ -14,7 +14,9 @@ jobs:
     - name:  Checkout the front repository
       uses: actions/checkout@v2
       with:
-        path: frontend
+        path: 'frontend'
+    - name: Show files in frontend
+      run: ls -la
     - name: Setup NodeJS
       uses: actions/setup-node@v2
       with:
