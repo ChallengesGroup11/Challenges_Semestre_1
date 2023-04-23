@@ -16,7 +16,7 @@ jobs:
       with:
         path: 'frontend'
     - name: Show files in frontend
-      run: ls -la
+      run: tree
     - name: Setup NodeJS
       uses: actions/setup-node@v2
       with:
