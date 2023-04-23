@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 // app.use(express.static('public'));
 
 // Constants
-const PORT = 3200;
+const PORT = 3000;
 
 const checkFileType = (req, res, next) => {
   const fileTypes = /^application\/pdf$|^image\/(jpeg|jpg)$/;
