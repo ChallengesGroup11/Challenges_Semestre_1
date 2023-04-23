@@ -2,8 +2,6 @@ name: Deploy Drive Queen server
 
 on:
   push:
-    branches:
-      - master
     tags:
       - 'server-v*'
 
