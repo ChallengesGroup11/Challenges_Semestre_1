@@ -4,8 +4,6 @@ on:
   push:
     tags:
       - 'front-v*'
-    branches:
-      - main
 
 jobs:
   deploy:
