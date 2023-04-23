@@ -13,8 +13,6 @@ jobs:
     steps: 
     - name:  Checkout the front repository
       uses: actions/checkout@v2
-    - name: Show files in frontend
-      run: tree
     - name: Setup NodeJS
       uses: actions/setup-node@v2
       with:
