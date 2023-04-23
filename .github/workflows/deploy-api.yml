@@ -4,8 +4,6 @@ on:
   push:
     tags:
       - 'api-v*'
-    branches:
-      - main
 
 jobs:
   deploy:
