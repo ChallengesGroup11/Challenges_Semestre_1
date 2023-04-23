@@ -89,7 +89,7 @@ class Student
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
-    #[Groups(['student_get','user_cget','driving_school_get'])]
+    #[Groups(['student_get','user_cget','driving_school_get', 'student_cget'])]
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
@@ -120,7 +120,7 @@ class Student
 
     #[ORM\OneToOne(inversedBy: 'student', cascade: ['persist', 'remove'], fetch: "EAGER")]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['user_get','student_cget','student_get','monitor_get'])]
+    #[Groups(['student_cget','student_get','monitor_get'])]
     private ?User $userId = null;
 
 
@@ -256,7 +256,7 @@ class Student
     public function getCountCredit(): ?int
     {
         return $this->countCredit;
-        
+
     }
 
     public function setCountCredit(?int $countCredit): self
