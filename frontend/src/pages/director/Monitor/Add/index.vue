@@ -59,18 +59,7 @@ const onSubmit = async () => {
       <q-form class="q-gutter-md">
         <q-input v-model="user.firstname" square filled clearable type="text" label="Prénom" />
         <q-input v-model="user.lastname" square filled clearable type="text" label="Nom" />
-
         <q-input v-model="user.email" square filled clearable type="email" label="email" />
-        <q-input v-model="user.password" square filled clearable type="password" label="password" />
-        <q-input
-          v-model="user.passwordSecond"
-          square
-          filled
-          clearable
-          type="password"
-          label="Confirmer le mot de
-      passe"
-        />
       </q-form>
     </q-card-section>
     <q-card-actions class="q-px-md">

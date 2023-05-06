@@ -5,6 +5,10 @@ const router = useRouter()
 const monitors = reactive({ value: [] })
 const currentUser = reactive({ value: [] })
 
+const state = reactive({
+  monitorSelected: "",
+})
+
 onMounted(async () => {
   if (localStorage.getItem("token") == null) {
     await router.push("/auth")
@@ -81,6 +85,9 @@ console.log(monitors)
 </script>
 
 <template>
+  <Teleport to="body">
+    <MonitorModal :monitorId="state.monitorSelected" />
+  </Teleport>
   <!--    Tableau qui liste les auto école -->
   <div class="q-pt-lg window-height window-width row justify-center">
     <q-markup-table>
