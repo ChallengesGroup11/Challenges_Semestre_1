@@ -2,8 +2,8 @@ name: Deploy Drive Queen API
 
 on:
   push:
-    tags:
-      - 'api-v*'
+    # tags:
+    #   - 'api-v*'
 
 jobs:
   deploy:
@@ -15,7 +15,7 @@ jobs:
         env:
           API_ENV: ${{ secrets.API_ENV }} 
         run: |
-          echo "APP_ENV=$API_ENV" >> .env
+          echo "$API_ENV" > .env
         working-directory: ./api
 
       - name: Generating .htaccess for the server
