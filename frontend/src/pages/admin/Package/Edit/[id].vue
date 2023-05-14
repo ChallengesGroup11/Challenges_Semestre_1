@@ -1,6 +1,18 @@
 <script setup lang="ts">
-import {onMounted, reactive} from 'vue';
+import { onMounted, reactive } from 'vue';
 const router = useRouter()
+import { useQuasar } from "quasar"
+
+const $q = useQuasar()
+const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
+  $q.notify({
+    icon,
+    color,
+    message,
+    textColor,
+    position,
+  })
+}
 
 const packageDS = reactive({
   id: "",
@@ -11,15 +23,15 @@ const packageDS = reactive({
 });
 
 onMounted(async () => {
-  const {params} = useRoute();
-  const {id} = params;
+  const { params } = useRoute();
+  const { id } = params;
   await fetchOnePackage(id);
 });
 
 const fetchOnePackage = async (id: string | string[]) => {
-  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/packages/`+id,
+  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/packages/` + id,
     {
-      headers:{
+      headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token'),
       }
     }
@@ -33,12 +45,12 @@ const fetchOnePackage = async (id: string | string[]) => {
       packageDS.price = data.price;
     })
     .catch((error) => {
-      console.error('Error:', error);
+      viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
     })
 };
 
 const onSubmit = async (id: string) => {
-  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/packages/`+id, {
+  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/packages/` + id, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/merge-patch+json',
@@ -46,8 +58,19 @@ const onSubmit = async (id: string) => {
     },
     body: JSON.stringify(packageDS),
   });
-  const data = await response.json();
-  await router.push('/admin/Package')
+  if (response.status === 400) {
+    viewNotif("thumb_down", "red", "Le package ne peut pas être modifié", "white", "top-right")
+    return
+  }
+  if (response.status === 500) {
+    viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
+    return
+  }
+  if (response.status === 200) {
+    viewNotif("thumb_up", "green", "Le package à bien été modifié", "white", "top-right")
+    await router.push('/admin/Package')
+  }
+
 };
 </script>
 
@@ -56,40 +79,17 @@ const onSubmit = async (id: string) => {
     <div class=" q-mt-sl  row justify-center">
       <div class="q-pa-md">
         <h2 class="text-h5 w-100 q-mb-xl">Editer un package</h2>
-        <q-form
-          @submit="onSubmit(packageDS.id)"
-          class="q-gutter-md"
-        >
-          <q-input
-            v-model="packageDS.name"
-            label="Name"
-            filled
-            lazy-rules
-            :rules="[ val => val && val.length > 0 || 'Please type something']"
-          />
-          <q-input
-            filled
-            v-model="packageDS.description"
-            label="Description"
-            lazy-rules
-            :rules="[ val => val && val.length > 0 || 'Please type something']"
-          />
-          <q-input
-            filled
-            v-model.number="packageDS.nbCredit"
-            label="Number of credit"
-            lazy-rules
-            :rules="[ val => val && val > 0 || 'Please type something']"
-          />
-            <q-input
-                filled
-                v-model.number="packageDS.price"
-                label="Price"
-                lazy-rules
-                :rules="[ val => val && val > 0 || 'Please type something']"
-            />
+        <q-form @submit="onSubmit(packageDS.id)" class="q-gutter-md">
+          <q-input v-model="packageDS.name" label="Name" filled lazy-rules
+            :rules="[val => val && val.length > 0 || 'Please type something']" />
+          <q-input filled v-model="packageDS.description" label="Description" lazy-rules
+            :rules="[val => val && val.length > 0 || 'Please type something']" />
+          <q-input filled v-model.number="packageDS.nbCredit" label="Number of credit" lazy-rules
+            :rules="[val => val && val > 0 || 'Please type something']" />
+          <q-input filled v-model.number="packageDS.price" label="Price" lazy-rules
+            :rules="[val => val && val > 0 || 'Please type something']" />
           <div>
-            <q-btn label="Submit" type="submit" color="primary"/>
+            <q-btn label="Submit" type="submit" color="primary" />
           </div>
         </q-form>
       </div>
@@ -97,10 +97,7 @@ const onSubmit = async (id: string) => {
   </q-page>
 </template>
 
-<style>
-
-
-</style>
+<style></style>
 
 <route lang="yaml">
 meta:

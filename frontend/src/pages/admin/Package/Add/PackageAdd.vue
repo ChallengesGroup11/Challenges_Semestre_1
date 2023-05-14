@@ -1,7 +1,18 @@
 <script setup lang='ts'>
 import { number } from 'zod';
 
+import { useQuasar } from "quasar"
 
+const $q = useQuasar()
+const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
+  $q.notify({
+    icon,
+    color,
+    message,
+    textColor,
+    position,
+  })
+}
 const router = useRouter()
 const packageDS = reactive({
   name: "",
@@ -24,10 +35,19 @@ const onSubmit = async () => {
     },
     body: JSON.stringify(requestData),
   });
+  if (response.status === 400) {
+    viewNotif("thumb_down", "red", "Le package ne peut pas être ajouté", "white", "top-right")
+    return
+  }
+  if (response.status === 500) {
+    viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
+    return
+  }
+  if (response.status === 201) {
+    viewNotif("thumb_up", "green", "Le package à bien été ajouté", "white", "top-right")
+    await router.push("/admin/Package")
+  }
 
-    if (response.status === 201) {
-        await router.push("/admin/Package")
-    }
 
 }
 

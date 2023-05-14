@@ -3,7 +3,18 @@ import moment from "moment"
 import { ApiService } from "~/services/api"
 import { API_URL } from "../../services/api"
 import { useStoreUser } from "../../../stores/user"
+import { useQuasar } from "quasar"
 
+const $q = useQuasar()
+const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
+  $q.notify({
+    icon,
+    color,
+    message,
+    textColor,
+    position,
+  })
+}
 interface Booking {
   slotBegin: string
   slotEnd: string
@@ -108,6 +119,7 @@ const fn = {
       }
       return row
     })
+    viewNotif("thumb_up", "green", "Votre session à bien été vidé", "white", "top-right")
   },
 
   onBookingEdited(booking: Booking) {
@@ -124,21 +136,10 @@ const fn = {
   },
 
   async onClickSaveBooking() {
-    // state.rows.push({
-    //   slotBegin: '2021-06-01',
-    //   slotEnd: '2021-06-01',
-    //   comment: 'comment',
-    //   statusValidate: true,
-    //   statusDone: true,
-    //   drivingSchoolId: 1,
-    //   studentId: 1,
-    //   monitorId: 1,
-    // })
-
     const resVerification = fn.verifySlot(state.newSlot.slotBegin, state.newSlot.slotEnd)
 
     if (resVerification !== true) {
-      return alert(resVerification)
+      return
     }
 
     const newRowDb = {
@@ -151,13 +152,24 @@ const fn = {
     }
 
     const res = await ApiService.insert(API_URL.BOOKINGS, newRowDb)
+    viewNotif("thumb_up", "green", "Votre session à bien été créer", "white", "top-right")
+
+    //mettre monitor et student à vide avant de push
+    res.firstname = ""
+    res.lastname = ""
+    res.Monitorfirstname = ""
+    res.Monitorlastname = ""
+
+
     state.rows.push(res)
+
 
     state.isShownModal = false
   },
   async onClickDeleteRow() {
     const itemToDelete = state.currentItemSelected[0]
     await ApiService.deleteById(API_URL.BOOKINGS, itemToDelete.id)
+    viewNotif("thumb_up", "green", "Votre seession à bien été supprimée ", "white", "top-right")
     state.rows = state.rows.filter((item) => item.id !== itemToDelete.id)
   },
 
@@ -166,16 +178,20 @@ const fn = {
   },
 
   verifySlot(slotBegin: string, slotEnd: string) {
-    if (slotBegin > slotEnd) return "La date de début doit être inférieure à la date de fin"
+    if (slotBegin > slotEnd)
+      return viewNotif("thumb_down", "red", "La date de début doit être inférieure à la date de fin", "white", "top-right")
 
-    if (slotBegin === slotEnd) return "La date de début doit être inférieure à la date de fin"
+    if (slotBegin === slotEnd)
+      return viewNotif("thumb_down", "red", "La date de début doit être inférieure à la date de fin", "white", "top-right")
+
 
     if (slotBegin < moment().add(1, "days").format("YYYY-MM-DD"))
-      return "La date de début doit être supérieure à la date du jour"
+      return viewNotif("thumb_down", "red", "La date de début doit être supérieure à la date du jour", "white", "top-right")
 
     const resDif = moment(slotEnd).diff(moment(slotBegin), "minutes")
 
-    if (resDif !== 60 && resDif !== 120) return "La durée du créneau doit être de 1h ou 2h"
+    if (resDif !== 60 && resDif !== 120)
+      return viewNotif("thumb_down", "red", "La durée du créneau doit être de 1h ou 2h", "white", "top-right")
 
     return true
   },

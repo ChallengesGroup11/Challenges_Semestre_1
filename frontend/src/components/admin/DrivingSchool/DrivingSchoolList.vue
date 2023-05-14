@@ -1,7 +1,18 @@
 <script setup lang="ts">
 const router = useRouter()
 import { onMounted, reactive } from 'vue'
+import { useQuasar } from "quasar"
 
+const $q = useQuasar()
+const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
+  $q.notify({
+    icon,
+    color,
+    message,
+    textColor,
+    position,
+  })
+}
 const drivingSchool = reactive({ value: [] })
 
 onMounted(async () => {
@@ -39,7 +50,19 @@ const deleteDrivingSchool = async (id: string) => {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     },
   })
+  if (response.status === 400) {
+    viewNotif("thumb_down", "red", "L'auto école ne peut pas être supprimé", "white", "top-right")
+    return
+  }
+  if (response.status === 500) {
+    viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
+    return
+  }
+  if (response.status === 200) {
+    viewNotif("thumb_up", "green", "L'auto école à bien été supprimé", "white", "top-right")
+  }
   await fetchDrivingSchool()
+
 }
 
 const changeStatus = async (id: string) => {
@@ -52,6 +75,8 @@ const changeStatus = async (id: string) => {
     },
     body: '{}',
   })
+  viewNotif("thumb_up", "green", "L'auto école à bien été modifié", "white", "top-right")
+
   const data = await response.json()
   await fetchDrivingSchool()
 }

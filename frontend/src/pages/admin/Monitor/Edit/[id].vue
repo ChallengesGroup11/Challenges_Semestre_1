@@ -1,7 +1,18 @@
 <script setup lang="ts">
 const router = useRouter()
 import {onMounted, reactive} from 'vue';
+import { useQuasar } from "quasar"
 
+const $q = useQuasar()
+const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
+  $q.notify({
+    icon,
+    color,
+    message,
+    textColor,
+    position,
+  })
+}
 const monitor = reactive({
   id: "",
   firstname: "",
@@ -47,8 +58,19 @@ const onSubmit = async (id: string) => {
     },
     body: JSON.stringify(monitor),
   });
-  const data = await response.json();
-  await router.push('/admin/Monitor')
+  if (response.status === 400) {
+    viewNotif("thumb_down", "red", "Le moniteur ne peut pas être modifié", "white", "top-right")
+    return
+  }
+  if (response.status === 500) {
+    viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
+    return
+  }
+  if (response.status === 200) {
+    viewNotif("thumb_up", "green", "Le moniteur à bien été modifié", "white", "top-right")
+    await router.push('/admin/Monitor')
+  }
+
 };
 </script>
 
@@ -72,7 +94,6 @@ const onSubmit = async (id: string) => {
             filled
             v-model="monitor.lastname"
             label="Lastname"
-            hint="Address"
             lazy-rules
             :rules="[ val => val && val.length > 0 || 'Please type something']"
           />
@@ -80,7 +101,6 @@ const onSubmit = async (id: string) => {
             filled
             v-model="monitor.email"
             label="Email"
-            hint="Zipcode"
             lazy-rules
             :rules="[ val => val && val.length > 0 || 'Please type something']"
           />

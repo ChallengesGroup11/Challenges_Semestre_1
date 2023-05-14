@@ -1,7 +1,18 @@
 <script setup lang="ts">
 const router = useRouter()
 import { onMounted, reactive } from 'vue'
+import { useQuasar } from "quasar"
 
+const $q = useQuasar()
+const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
+  $q.notify({
+    icon,
+    color,
+    message,
+    textColor,
+    position,
+  })
+}
 const students = reactive({ value: [] })
 
 onMounted(async () => {
@@ -38,6 +49,15 @@ const deleteStudent = async (id: string) => {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     },
   })
+  if (response.status === 400) {
+    viewNotif("thumb_down", "red", "L'étudiant ne peut pas être supprimé", "white", "top-right")
+  }
+  if (response.status === 500) {
+    viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
+  }
+  if (response.status === 204) {
+    viewNotif("thumb_up", "green", "L'étudiant à bien été supprimé", "white", "top-right")
+  }
   await fetchStudent()
 }
 
@@ -52,7 +72,15 @@ const changeStatus = async (id: string) => {
     },
     body: '{}',
   })
-  const data = await response.json()
+  if (response.status === 400) {
+    viewNotif("thumb_down", "red", "L'étudiant  ne peut pas être modifié", "white", "top-right")
+  }
+  if (response.status === 500) {
+    viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
+  }
+  if (response.status === 201) {
+    viewNotif("thumb_up", "green", "L'étudiant  à bien été modifié", "white", "top-right")
+  }
   await fetchStudent()
 }
 </script>

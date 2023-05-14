@@ -1,6 +1,18 @@
 <script setup lang='ts'>
 
 import { ref } from 'vue'
+import { useQuasar } from "quasar"
+
+const $q = useQuasar()
+const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
+  $q.notify({
+    icon,
+    color,
+    message,
+    textColor,
+    position,
+  })
+}
 
 const router = useRouter()
 
@@ -12,11 +24,10 @@ const user = reactive({
   firstname: "",
   lastname: "",
   email: "",
-  password:"",
+  password: "",
 });
 const drivingSchoolSelected = ref('')
-var drivingSchoolSelectedSend = ""
-const drivingSchools = reactive({value:[]})
+const drivingSchools = reactive({ value: [] })
 
 const initProvisoryPassword = () => {
   for (let i = 0; i < 16; i++) {
@@ -56,7 +67,7 @@ const onSubmit = async () => {
     status: false,
     createBy: 'admin',
     drivingSchoolId: drivingSchoolSelected.value.id
-    };
+  };
   const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/director/create_monitor`, {
     method: 'POST',
     headers: {
@@ -64,10 +75,20 @@ const onSubmit = async () => {
     },
     body: JSON.stringify(requestData),
   });
+  if (response.status === 400) {
+    viewNotif("thumb_down", "red", "Le moniteur ne peut pas être créer", "white", "top-right")
+    return
+  }
+  if (response.status === 500) {
+    viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
+    return
+  }
+  if (response.status === 201) {
+    viewNotif("thumb_up", "green", "Le moniteur à bien été créer", "white", "top-right")
+    await router.push("/admin/Monitor")
 
-    if (response.status === 201) {
-        await router.push("/admin/Monitor")
-    }
+  }
+
 
 }
 
@@ -86,12 +107,12 @@ const onSubmit = async () => {
           <q-input label="Email" filled lazy-rules :rules="[val => val.length > 0 || 'Veuillez saisir votre email']"
             v-model="user.email" />
 
-						<select v-model="drivingSchoolSelected" placeholder="Choisir un directeur">
-              <option value="" selected>Choisir une auto-école</option>
-              <option v-for="drivingSchool in drivingSchools.value" :value="drivingSchool">
-                {{ drivingSchool.name }}
-              </option>
-            </select>
+          <select v-model="drivingSchoolSelected" placeholder="Choisir un directeur">
+            <option value="" selected>Choisir une auto-école</option>
+            <option v-for="drivingSchool in drivingSchools.value" :value="drivingSchool">
+              {{ drivingSchool.name }}
+            </option>
+          </select>
           <div>
             <q-btn label="Valider" type="submit" color="primary" />
           </div>

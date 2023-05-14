@@ -1,7 +1,18 @@
 <script setup lang="ts">
 const router = useRouter()
 import { onMounted, reactive } from 'vue';
+import { useQuasar } from "quasar"
 
+const $q = useQuasar()
+const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
+  $q.notify({
+    icon,
+    color,
+    message,
+    textColor,
+    position,
+  })
+}
 
 const Alldirectors = reactive({ value: [] })
 const selectedDirector = ref('')
@@ -45,9 +56,6 @@ const fetchDirector = async () => {
           Alldirectors.value.splice(i, 1);
         }
       }
-
-      console.log(Alldirectors.value)
-
     })
 }
 
@@ -73,16 +81,19 @@ const fetchOneDrivingSchool = async (id: string | string[]) => {
         drivingSchool.director = data.director
         selectedDirector.value = data.director
       }
-      console.log(drivingSchool.director)
     })
     .catch((error) => {
-      console.error('Error:', error);
+      viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
     })
 };
 
 const onSubmit = async (id: string) => {
   console.log(drivingSchool)
-  drivingSchool.director = "/directors/" + drivingSchool.director.id
+  if (drivingSchool.director) {
+    drivingSchool.director = "/directors/" + drivingSchool.director.id
+  }else{
+    delete drivingSchool.director;
+  }
   const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_schools/` + id, {
     method: 'PUT',
     headers: {
@@ -91,8 +102,13 @@ const onSubmit = async (id: string) => {
     },
     body: JSON.stringify(drivingSchool),
   });
-  const data = await response.json();
-  await router.push('/admin/drivingSchool')
+  if (response.status === 400 || response.status === 500) {
+    viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
+  }
+  if (response.status === 200) {
+    viewNotif("thumb_up", "green", "L'auto école à bien été modifié", "white", "top-right")
+    await router.push('/admin/drivingSchool')
+  }
 };
 
 function isset(drivingSchoolId: any) {
