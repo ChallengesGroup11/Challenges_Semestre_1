@@ -1,10 +1,29 @@
 <script setup lang="ts">
+import * as R from "ramda"
+const props = defineProps({
+  monitor: {
+    type: Object as () => any,
+    required: false,
+  },
+})
+
+watch(
+  () => props.monitor,
+  (newValue) => {
+    state.monitor = R.clone(newValue)
+    state.isShownModal = newValue !== null
+  },
+)
+
 const state = reactive({
-  isShownModal: false,
+  isShownModal: props.monitor !== null,
+  monitor: R.clone(props.monitor),
 })
 
 const fn = {
-  onClickSaveMonitor: async () => {},
+  onClickSaveMonitor: async () => {
+    state.isShownModal = false
+  },
 }
 </script>
 
@@ -17,9 +36,11 @@ const fn = {
 
       <q-card-section class="q-pt-none">
         <q-form>
-          <div class="q-pa-md" style="max-width: 300px"></div>
-
-          <div class="q-pa-md" style="max-width: 300px"></div>
+          <div class="q-pa-md" style="max-width: 300px">
+            <q-input filled v-model="state.monitor.firstname" label="Prénom" />
+            <q-input filled v-model="state.monitor.lastname" label="Nom" />
+            <q-input filled v-model="state.monitor.email" label="Email" />
+          </div>
         </q-form>
       </q-card-section>
 
