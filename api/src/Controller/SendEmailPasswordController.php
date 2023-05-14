@@ -11,17 +11,15 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsController]
-class ResetPasswordController extends AbstractController
+class SendEmailPasswordController extends AbstractController
 {
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private UserRepository $userRepository,
-        private MailerInterface $mailer,
-        private UserPasswordHasherInterface $passwordHasher
+        private MailerInterface $mailer
     ) {
     }
 
@@ -29,33 +27,34 @@ class ResetPasswordController extends AbstractController
     {
 
         // TODO : Secure if not email in body
+        $email = json_decode($this->requestStack->getCurrentRequest()->getContent())->email;
+        $user = $this->userRepository->findOneBy(['email' => $email]);
 
-        $password = json_decode($this->requestStack->getCurrentRequest()->getContent())->password;
-        $userId = json_decode($this->requestStack->getCurrentRequest()->getContent())->userId;
-        $token = json_decode($this->requestStack->getCurrentRequest()->getContent())->token;
-        $user = $this->userRepository->findOneBy(['id' => $userId]);
-        if ($user->getToken() === $token) {
-            $user->setPassword($this->passwordHasher->hashPassword($user,$password));
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
+        if(!$user){
+            return $this->json(['error' => 'Aucun compte n\'est associé à cet email'], 510);
 
-            $emailBody = $this->EmailBody();
-            // TODO : send email
-            $email = (new Email())
-                ->from('support@drivequeen.com')
-                ->to($user->getEmail())
-                ->subject('Confirmation de votre compte')
-                ->html($emailBody);
-
-            $this->mailer->send($email);
-            return $this->json('Success');
-        }else{
-            return $this->json(['error' => 'Token invalide'], 510);
         }
+
+        $user->setToken(bin2hex(random_bytes(32)));
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+
+        $routeChangeMdp = "http://localhost:4010/auth/ChangeMdp/" . $user->getId() . "?token=" . $user->getToken();
+        $emailBody = $this->EmailBody($routeChangeMdp);
+        // TODO : send email
+        $email = (new Email())
+            ->from('support@drivequeen.com')
+            ->to($user->getEmail())
+            ->subject('Confirmation de votre compte')
+            ->html($emailBody);
+
+        $this->mailer->send($email);
+        return $this->json('Success');
     }
 
 
-    private function EmailBody()
+    private function EmailBody($routeChangeMdp)
     {
         //tempalte email
         return "
@@ -81,7 +80,8 @@ class ResetPasswordController extends AbstractController
 
 
             <h1>Modification de mot de passe</h1>
-            <p>Votre mot de passe à bien été modifié </p>
+            <p>Veuillez vous rendre sous le lien ci dessous pour modifier votre mot de passe </p>
+            <a href='{$routeChangeMdp}'>Confirmer mon compte</a>
 
             </body>
             </html>
