@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {reactive, ref} from 'vue'
 import { useQuasar } from 'quasar'
 const router = useRouter()
 const $q = useQuasar()
@@ -13,8 +12,6 @@ const viewNotif = (icon:any ,color: string, message: string, textColor: string, 
   })
 }
 
-let id = ref('');
-let token = ref('');
 onMounted(async () => {
   const {params} = useRoute()
   const { id } = params

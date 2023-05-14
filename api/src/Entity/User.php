@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Patch;
 use App\Controller\CheckAccountController;
 use App\Controller\GetCurrentUserController;
 use App\Controller\ResetPasswordController;
+use App\Controller\SendEmailPasswordController;
 use App\Controller\SignUpStudentController;
 use App\Controller\SignUpDirectorController;
 use App\Controller\CreateMonitorController;
@@ -85,6 +86,56 @@ use App\Controller\UserEditStatusController;
         description: 'Check account'
     ),
     new Post(
+        uriTemplate: '/reset_password',
+        controller: ResetPasswordController::class,
+        openapiContext: [
+            'requestBody' => [
+                'content' => [
+                    'application/json' => [
+                        'schema' => [
+                            'type' => 'object',
+                            'properties' => [
+                                'token' => [
+                                    'type' => 'string',
+                                ],
+                                'userId' => [
+                                    'type' => 'integer'
+                                ],
+                                'password' => [
+                                    'type' => 'string'
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+
+        ],
+        description: 'Check account'
+    ),
+    new Post(
+        uriTemplate: '/users/send_email/password',
+        controller: SendEmailPasswordController::class,
+        openapiContext: [
+            'requestBody' => [
+                'content' => [
+                    'application/json' => [
+                        'schema' => [
+                            'type' => 'object',
+                            'properties' => [
+                                'email' => [
+                                    'type' => 'string'
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+
+        ],
+        description: 'reset-password'
+    ),
+    new Post(
         uriTemplate: 'director/create_monitor',
         controller: CreateMonitorController::class,
         openapiContext: ['description' => 'Create Monitor'],
@@ -103,12 +154,6 @@ use App\Controller\UserEditStatusController;
 #[Patch(
     denormalizationContext: ['groups' => ['user_patch']],
 
-)]
-#[Patch(
-    uriTemplate: '/users/reset/password',
-    controller: ResetPasswordController::class,
-    security: 'object.getId() == user.getId()',
-    name: 'reset-password'
 )]
 #[Delete(
     security: 'is_granted("ROLE_ADMIN")'
@@ -139,7 +184,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
-    #[Groups(['user_write'])]
+    #[Groups(['user_get','user_write'])]
     private ?string $password = null;
 
     #[ORM\Column(length: 255, nullable: true)]
