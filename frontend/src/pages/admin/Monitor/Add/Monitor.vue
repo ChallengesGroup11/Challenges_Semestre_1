@@ -3,10 +3,6 @@ import { ref } from "vue"
 
 const router = useRouter()
 
-// const firstname = ref('')
-// const lastname = ref('')
-// const email = ref('')
-
 const user = reactive({
   firstname: "",
   lastname: "",
@@ -43,7 +39,6 @@ onMounted(async () => {
 const onSubmit = async () => {
   console.log(drivingSchoolSelected.value)
   initProvisoryPassword()
-  console.log(drivingSchoolSelected.value.id)
 
   const requestData = {
     firstname: user.firstname,

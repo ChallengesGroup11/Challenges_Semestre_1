@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import * as R from "ramda"
+import { useStoreUser } from "../../../../stores/user"
+
 const props = defineProps({
   monitor: {
     type: Object as () => any,
@@ -22,7 +24,29 @@ const state = reactive({
 
 const fn = {
   onClickSaveMonitor: async () => {
-    state.isShownModal = false
+    const drivingSchoolId = useStoreUser().drivingSchool.id
+    debugger
+    const requestData = {
+      firstname: state.monitor.firstname,
+      lastname: state.monitor.lastname,
+      email: state.monitor.email,
+      password: state.monitor.password,
+      roles: ["ROLE_MONITOR"],
+      status: false,
+      createBy: "director",
+      drivingSchoolId: drivingSchoolId,
+    }
+    const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/director/create_monitor`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestData),
+    })
+    debugger
+    if (response.status === 201) {
+      state.isShownModal = false
+    }
   },
 }
 </script>
