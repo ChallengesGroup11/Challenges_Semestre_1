@@ -103,7 +103,7 @@ loadData()
 
 <template>
   <Teleport to="body">
-    <MonitorModal :monitor="state.currentMonitor" />
+    <MonitorModal :monitor="state.currentMonitor" @on-save="fetchMonitor()" />
   </Teleport>
   <!--    Tableau qui liste les auto école -->
   <div class="q-pt-lg window-height window-width row justify-center">

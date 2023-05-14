@@ -2,6 +2,10 @@
 import * as R from "ramda"
 import { useStoreUser } from "../../../../stores/user"
 
+const emit = defineEmits<{
+  (e: "on-save"): void
+}>()
+
 const props = defineProps({
   monitor: {
     type: Object as () => any,
@@ -45,6 +49,7 @@ const fn = {
     })
     debugger
     if (response.status === 201) {
+      emit("on-save")
       state.isShownModal = false
     }
   },
