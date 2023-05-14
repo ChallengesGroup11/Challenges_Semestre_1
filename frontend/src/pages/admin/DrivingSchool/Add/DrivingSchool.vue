@@ -1,10 +1,21 @@
 <script setup lang='ts'>
 
 import { ref } from 'vue'
+import { useQuasar } from "quasar"
 
+const $q = useQuasar()
+const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
+  $q.notify({
+    icon,
+    color,
+    message,
+    textColor,
+    position,
+  })
+}
 const router = useRouter()
 
-const directors = reactive({value:[]})
+const directors = reactive({ value: [] })
 const directorSelected = ref('')
 
 const name = ref('')
@@ -49,9 +60,10 @@ const onSubmit = async () => {
   formData.append('city', city.value);
   formData.append('phoneNumber', phoneNumber.value);
   formData.append('siret', siret.value);
-  if(directorSelected.value != ""){
-    formData.append('director',"directors/"+directorSelected.value);
+  if (directorSelected.value != "") {
+    formData.append('director', "directors/" + directorSelected.value);
   }
+
   const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_schools`, {
     method: 'POST',
     headers: {
@@ -59,8 +71,16 @@ const onSubmit = async () => {
     },
     body: formData
   })
-  const data = await response.json()
-  await router.push('/admin/drivingSchool')
+  if (response.status === 400) {
+    viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
+  }
+  if (response.status === 500) {
+    viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
+  }
+  if (response.status === 201) {
+    viewNotif("thumb_up", "green", "L'auto école à bien été ajouté", "white", "top-right")
+    await router.push('/admin/drivingSchool')
+  }
 }
 
 </script>
@@ -85,12 +105,12 @@ const onSubmit = async () => {
             :rules="[val => val.length > 0 || 'Veuillez saisir un numéro de SIRET']" v-model="siret" />
           <q-input @update:model-value="val => { file = val[0] }" filled type="file" v-model="filePath" />
 
-            <select v-model="directorSelected" placeholder="Choisir un directeur">
-              <option value="" selected>Choisir un directeur</option>
-              <option v-for="director in directors.value" :value="director.id">
-                {{ director.userId.firstname }}
-              </option>
-            </select>
+          <select v-model="directorSelected" placeholder="Choisir un directeur">
+            <option value="" selected>Choisir un directeur</option>
+            <option v-for="director in directors.value" :value="director.id">
+              {{ director.userId.firstname }}
+            </option>
+          </select>
 
 
 

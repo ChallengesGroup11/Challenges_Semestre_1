@@ -39,6 +39,10 @@ class SignUpDirectorController extends AbstractController
             $roles = json_decode($this->requestStack->getCurrentRequest()->getContent())->roles;
             $createByAdmin = json_decode($this->requestStack->getCurrentRequest()->getContent())->createBy;
 
+            if ($userRepository->findOneBy(['email' => $email])) {
+                return $this->json(['error' => 'Email already exist'], 400);
+            }
+
             $user = new User();
             $user->setEmail($email);
             $user->setPassword($passwordHasher->hashPassword($user,$password));
