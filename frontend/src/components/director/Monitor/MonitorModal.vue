@@ -29,8 +29,8 @@ const state = reactive({
 const fn = {
   onClickSaveMonitor: async () => {
     const drivingSchoolId = useStoreUser().drivingSchool.id
-    debugger
     const requestData = {
+      id: state.monitor.id,
       firstname: state.monitor.firstname,
       lastname: state.monitor.lastname,
       email: state.monitor.email,
@@ -40,17 +40,35 @@ const fn = {
       createBy: "director",
       drivingSchoolId: drivingSchoolId,
     }
-    const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/director/create_monitor`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestData),
-    })
-    debugger
-    if (response.status === 201) {
-      emit("on-save")
-      state.isShownModal = false
+
+    if (state.monitor.id === "") {
+      const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/director/create_monitor`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      })
+      if (response.status === 201) {
+        emit("on-save")
+        state.isShownModal = false
+      }
+    } else {
+      const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/users/` + requestData.id, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/merge-patch+json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        body: JSON.stringify(requestData),
+      })
+
+      debugger
+
+      if (response.status === 200) {
+        emit("on-save")
+        state.isShownModal = false
+      }
     }
   },
 }

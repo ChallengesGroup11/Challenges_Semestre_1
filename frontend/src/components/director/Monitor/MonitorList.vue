@@ -27,6 +27,16 @@ const fn = {
       password: fn.initProvisoryPassword(),
     }
   },
+
+  makeMonitor(monitor: any) {
+    return {
+      id: monitor.userId.id,
+      firstname: monitor.userId.firstname,
+      lastname: monitor.userId.lastname,
+      email: monitor.userId.email,
+      password: "",
+    }
+  },
 }
 
 const getUser = async () => {
@@ -60,7 +70,10 @@ const fetchMonitor = async () => {
 }
 
 const editMonitor = (monitor: any) => {
-  state.currentMonitor = monitor
+  state.currentMonitor = fn.makeMonitor(monitor)
+  debugger
+
+  debugger
 }
 
 const addMonitor = () => {
