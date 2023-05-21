@@ -1,7 +1,19 @@
 <script setup lang="ts">
 import AuthSigninComp from "~/components/AuthSigninComp.vue"
 import AuthSignupStudentComp from "~/components/AuthSignupStudentComp.vue"
+import { useQuasar } from 'quasar'
 
+
+const $q = useQuasar()
+const viewNotif = (icon:any ,color: string, message: string, textColor: string, position:any) => {
+  $q.notify({
+    icon,
+    color,
+    message,
+    textColor,
+    position,
+  })
+}
 const router = useRouter()
 
 const ee = "d"
@@ -18,6 +30,9 @@ const enum EnumSignupOrLogin {
 const state = reactive({
   signupOrLogin: EnumSignupOrLogin.LOGIN as EnumSignupOrLogin,
   currentTab: EnumTab.STUDENT as EnumTab,
+  isShownModal: false,
+  email: "",
+
 })
 
 const fn = {
@@ -27,6 +42,29 @@ const fn = {
   },
   redirectToSignin() {
     state.signupOrLogin = EnumSignupOrLogin.LOGIN
+  },
+  forgetPassword() {
+    state.isShownModal = true
+    // router.push("/forget-password")
+  },
+  async sendEmailPassword() {
+    const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/users/send_email/password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({email : state.email}),
+    })
+    if(response.status === 200) {
+      viewNotif('thumb_up','green-4', "Un email vous a été envoyé", 'white', 'top-right')
+      state.isShownModal = false
+    }
+    if(response.status === 404){
+      viewNotif('thumb_down','red-4', "Une erreur c'est produite", 'white', 'top-right')
+    }
+    if(response.status === 510){
+      viewNotif('thumb_down','red-4', "L'email n'exite pas", 'white', 'top-right')
+    }
   },
 }
 </script>
@@ -51,34 +89,44 @@ const fn = {
                 <q-tab :name="EnumTab.SCHOOL_DRIVING" label="Gérant d'auto-école" />
               </q-tabs>
 
-              <AuthSignupDirectorComp
-                v-if="state.currentTab === EnumTab.SCHOOL_DRIVING"
-                @redirectToSignin="fn.redirectToSignin"
-              />
-              <AuthSignupStudentComp
-                v-if="state.currentTab === EnumTab.STUDENT"
-                @redirectToSignin="fn.redirectToSignin"
-              />
+              <AuthSignupDirectorComp v-if="state.currentTab === EnumTab.SCHOOL_DRIVING"
+                @redirectToSignin="fn.redirectToSignin" />
+              <AuthSignupStudentComp v-if="state.currentTab === EnumTab.STUDENT"
+                @redirectToSignin="fn.redirectToSignin" />
             </template>
             <q-card-section class="text-center q-pa-none">
-              <p
-                v-if="state.signupOrLogin === EnumSignupOrLogin.LOGIN"
-                @click="fn.changeToSignupOrLogin"
-                class="text-grey-6 cursor-pointer"
-              >
+              <p v-if="state.signupOrLogin === EnumSignupOrLogin.LOGIN" @click="fn.changeToSignupOrLogin"
+                class="text-grey-6 cursor-pointer">
                 Pas encore de compte ? En créer un.
               </p>
-              <p
-                v-else-if="state.signupOrLogin === EnumSignupOrLogin.SIGNUP"
-                @click="fn.changeToSignupOrLogin"
-                class="text-grey-6 cursor-pointer"
-              >
+              <p v-if="state.signupOrLogin === EnumSignupOrLogin.LOGIN" @click="fn.forgetPassword"
+                class="text-grey-6 cursor-pointer">
+                Mot de passe oublié ?
+              </p>
+              <p v-else-if="state.signupOrLogin === EnumSignupOrLogin.SIGNUP" @click="fn.changeToSignupOrLogin"
+                class="text-grey-6 cursor-pointer">
                 Se connecter à son compte.
               </p>
             </q-card-section>
           </q-card>
         </div>
       </div>
+      <q-dialog v-model="state.isShownModal">
+        <q-card style="width: 600px">
+          <q-card-section>
+            <div class="text-h6">Modifier mon mot de passe</div>
+          </q-card-section>
+          <q-card-section>
+            <q-form class="q-gutter-md">
+              <q-input square filled clearable v-model="state.email" type="email" label="email" />
+            </q-form>
+          </q-card-section>
+          <q-card-actions align="right">
+            <q-btn flat label="Envoyer" color="secondary" @click="fn.sendEmailPassword" />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+
     </q-page>
   </div>
 </template>

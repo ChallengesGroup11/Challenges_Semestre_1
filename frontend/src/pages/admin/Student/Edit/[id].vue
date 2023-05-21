@@ -13,22 +13,22 @@ const viewNotif = (icon: any, color: string, message: string, textColor: string,
     position,
   })
 }
-const monitor = reactive({
+
+const user = reactive({
   id: "",
   firstname: "",
   lastname: "",
   email: "",
-  drivingSchoolId: "",
 });
 
 onMounted(async () => {
   const {params} = useRoute();
   const {id} = params;
-  await fetchOneMonitor(id);
+  await fetchOneStudent(id);
 });
 
-const fetchOneMonitor = async (id: string | string[]) => {
-  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/monitors/`+id,
+const fetchOneStudent = async (id: string | string[]) => {
+  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/users/`+id,
     {
       headers:{
         'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -38,14 +38,14 @@ const fetchOneMonitor = async (id: string | string[]) => {
     .then((response) => response.json())
     .then((data) => {
         console.log(data)
-      monitor.id = data.userId.id;
-      monitor.firstname = data.userId.firstname;
-      monitor.lastname = data.userId.lastname;
-      monitor.email = data.userId.email;
+        user.id = data.id;
+        user.firstname = data.firstname;
+        user.lastname = data.lastname;
+        user.email = data.email;
     //   director.drivingSchoolId.name = data.drivingSchoolId.name;
     })
     .catch((error) => {
-      console.error('Error:', error);
+      viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
     })
 };
 
@@ -56,10 +56,10 @@ const onSubmit = async (id: string) => {
       'Content-Type': 'application/merge-patch+json',
       'Authorization': 'Bearer ' + localStorage.getItem('token'),
     },
-    body: JSON.stringify(monitor),
+    body: JSON.stringify(user),
   });
   if (response.status === 400) {
-    viewNotif("thumb_down", "red", "Le moniteur ne peut pas être modifié", "white", "top-right")
+    viewNotif("thumb_down", "red", "L'étudiant ne peut pas être modifié", "white", "top-right")
     return
   }
   if (response.status === 500) {
@@ -67,10 +67,10 @@ const onSubmit = async (id: string) => {
     return
   }
   if (response.status === 200) {
-    viewNotif("thumb_up", "green", "Le moniteur à bien été modifié", "white", "top-right")
-    await router.push('/admin/Monitor')
-  }
+    viewNotif("thumb_up", "green", "L'étudiant  à bien été mofidié", "white", "top-right")
+    await router.push('/admin/Student')
 
+  }
 };
 </script>
 
@@ -80,11 +80,11 @@ const onSubmit = async (id: string) => {
       <div class="q-pa-md">
         <h2 class="text-h5 w-100 q-mb-xl">Editer un moniteur d'auto-école </h2>
         <q-form
-          @submit="onSubmit(monitor.id)"
+          @submit="onSubmit(user.id)"
           class="q-gutter-md"
         >
           <q-input
-            v-model="monitor.firstname"
+            v-model="user.firstname"
             label="Prénom"
             filled
             lazy-rules
@@ -92,14 +92,14 @@ const onSubmit = async (id: string) => {
           />
           <q-input
             filled
-            v-model="monitor.lastname"
+            v-model="user.lastname"
             label="Nom"
             lazy-rules
             :rules="[ val => val && val.length > 0 || 'Veuillez écrire quelque chose']"
           />
           <q-input
             filled
-            v-model="monitor.email"
+            v-model="user.email"
             label="Email"
             lazy-rules
             :rules="[ val => val && val.length > 0 || 'Veuillez écrire quelque chose']"

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {reactive, ref} from 'vue'
 import { useQuasar } from 'quasar'
 const router = useRouter()
 const $q = useQuasar()
@@ -13,8 +12,6 @@ const viewNotif = (icon:any ,color: string, message: string, textColor: string, 
   })
 }
 
-let id = ref('');
-let token = ref('');
 onMounted(async () => {
   const {params} = useRoute()
   const { id } = params
@@ -24,7 +21,7 @@ onMounted(async () => {
 
 
 const validateAccount = (id: any, token: any) => {
-  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}CheckAccount`, {
+  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/CheckAccount`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -57,7 +54,7 @@ const validateAccount = (id: any, token: any) => {
       <q-page class="bg-light-grey window-height window-width row justify-center items-center">
         <div class="column">
           <div class="row">
-            <h2 class="text-h5 text-white q-my-md">DRIVING SHCOOL</h2>
+            <h2 class="text-h5 text-black q-my-md">DRIVING SHCOOL</h2>
           </div>
           <div >
 

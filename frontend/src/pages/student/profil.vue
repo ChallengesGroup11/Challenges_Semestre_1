@@ -97,7 +97,7 @@ loadData()
         <q-card-section>
           <div class="text-h4">Mon crédit</div>
           <div v-if="currentUser.value.student" class="vertical text-h1">
-            <span v-if="currentUser.value.student.countCredit !== null">
+            <span v-if="currentUser.value.student.countCredit !== NULL ">
               {{ currentUser.value.student.countCredit }}
             </span>
             <span v-else class="vertical text-h1"> 0</span>
@@ -110,7 +110,7 @@ loadData()
         <q-card-section class="vertical-middle">
           <div class="text-h4">Nombre d'heure effectué(e)</div>
           <div v-if="currentUser.value.student" class="vertical text-h1">
-            <span v-if="currentUser.value.student.nbHourDone !== null">
+            <span v-if="currentUser.value.student.nbHourDone !== NULL">
               {{ currentUser.value.student.nbHourDone }}
             </span>
             <span v-else class="vertical text-h1"> 0</span>
@@ -119,7 +119,7 @@ loadData()
       </q-card>
     </div>
 
-    <div v-if="currentUser.value.student && currentUser.value.student.bookings">
+    <div v-if="currentUser.value.student">
       <q-card class="my-card q-ma-lg">
         <q-card-section>
           <div class="text-h5">Mes Réservations</div>
@@ -137,9 +137,11 @@ loadData()
                 <th>Action</th>
               </tr>
             </thead>
-            <tbody v-if="currentUser.value.student && currentUser.value.student.bookings">
+            <tbody v-if="currentUser.value.student">
+              <tr v-if="!currentUser.value.student.bookings">
+                <td colspan="9">Pas de réservation de session effectué(e)</td>
+              </tr>
               <tr v-for="(bookings, index) in currentUser.value.student.bookings" :key="index">
-                <td v-if="!bookings" colspan="9">Pas de réservation de session effectué(e)</td>
                 <td>{{ dateJour(bookings.slotBegin) }}</td>
                 <td>{{ dateHeure(bookings.slotBegin) }}</td>
                 <td>{{ dateHeure(bookings.slotEnd) }}</td>

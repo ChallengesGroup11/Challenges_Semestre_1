@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Patch;
 use App\Controller\CheckAccountController;
 use App\Controller\GetCurrentUserController;
 use App\Controller\ResetPasswordController;
+use App\Controller\SendEmailPasswordController;
 use App\Controller\SignUpStudentController;
 use App\Controller\SignUpDirectorController;
 use App\Controller\CreateMonitorController;
@@ -85,6 +86,56 @@ use App\Controller\UserEditStatusController;
         description: 'Check account'
     ),
     new Post(
+        uriTemplate: '/reset_password',
+        controller: ResetPasswordController::class,
+        openapiContext: [
+            'requestBody' => [
+                'content' => [
+                    'application/json' => [
+                        'schema' => [
+                            'type' => 'object',
+                            'properties' => [
+                                'token' => [
+                                    'type' => 'string',
+                                ],
+                                'userId' => [
+                                    'type' => 'integer'
+                                ],
+                                'password' => [
+                                    'type' => 'string'
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+
+        ],
+        description: 'Check account'
+    ),
+    new Post(
+        uriTemplate: '/users/send_email/password',
+        controller: SendEmailPasswordController::class,
+        openapiContext: [
+            'requestBody' => [
+                'content' => [
+                    'application/json' => [
+                        'schema' => [
+                            'type' => 'object',
+                            'properties' => [
+                                'email' => [
+                                    'type' => 'string'
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+
+        ],
+        description: 'reset-password'
+    ),
+    new Post(
         uriTemplate: 'director/create_monitor',
         controller: CreateMonitorController::class,
         openapiContext: ['description' => 'Create Monitor'],
@@ -98,17 +149,11 @@ use App\Controller\UserEditStatusController;
 )]
 #[Get(
     normalizationContext: ['groups' => ['user_get']],
-    security: 'object.getId() == user.getId()'
+    security: 'object.getId() == user.getId() or is_granted("ROLE_ADMIN")',
 )]
 #[Patch(
     denormalizationContext: ['groups' => ['user_patch']],
 
-)]
-#[Patch(
-    uriTemplate: '/users/reset/password',
-    controller: ResetPasswordController::class,
-    security: 'object.getId() == user.getId()',
-    name: 'reset-password'
 )]
 #[Delete(
     security: 'is_granted("ROLE_ADMIN")'
@@ -123,11 +168,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
-    #[Groups([ 'user_cget', 'user_get', 'student_get', 'student_cget','director_get','director_cget','monitor_get','monitor_cget'])]
+    #[Groups([ 'user_cget', 'user_get', 'student_get', 'student_cget','director_get','director_cget','monitor_get','monitor_cget', 'student_cget'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['user_get', 'user_cget', 'user_write', 'monitor_get', 'monitor_cget','director_cget','director_get'])]
+    #[Groups(['user_get', 'user_cget', 'user_write', 'monitor_get', 'monitor_cget','director_cget','director_get', 'student_cget'])]
     #[NotBlank]
     private ?string $email = null;
 
@@ -139,7 +184,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
-    #[Groups(['user_write'])]
+    #[Groups(['user_get','user_write'])]
     private ?string $password = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -147,7 +192,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $token = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['user_get', 'user_cget', 'user_write', 'monitor_get', 'monitor_cget','director_cget'])]
+    #[Groups(['user_get', 'user_cget', 'user_write', 'monitor_get', 'monitor_cget','director_cget', 'student_cget'])]
     private ?bool $status = null;
 
     #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'],fetch: "EAGER")]
@@ -167,7 +212,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $payments;
 
     #[ORM\Column(length: 255)]
-    #[Groups([ 'user_get', 'user_cget', 'user_patch', 'user_write', 'monitor_get', 'monitor_cget','student_get','driving_school_get','driving_school_cget','director_cget','director_write','director_get'])]
+    #[Groups([ 'user_get', 'user_cget', 'user_patch', 'user_write', 'monitor_get', 'monitor_cget','student_get', 'student_cget','driving_school_get','driving_school_cget','director_cget','director_write','director_get'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]

@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 // app.use(express.static('public'));
 
 // Constants
-const PORT = 3200;
+const PORT = 3000;
 
 const checkFileType = (req, res, next) => {
   const fileTypes = /^application\/pdf$|^image\/(jpeg|jpg)$/;
@@ -26,6 +26,18 @@ const checkFileType = (req, res, next) => {
   console.log(fileCniType);
 
   if (fileCodeType && fileCniType) {
+    next();
+  } else {
+    res.status(400).send("Invalid file type");
+  }
+};
+
+const checkFileTypeDirector = (req, res, next) => {
+  const fileTypes = /^application\/pdf$|^image\/(jpeg|jpg)$/;
+
+  const file = fileTypes.test(req.files.file[0].mimetype);
+  console.log(file)
+  if (file) {
     next();
   } else {
     res.status(400).send("Invalid file type");
@@ -47,11 +59,13 @@ app.post(
   }
 );
 
-app.post("/api/director", (req, res) => {
-  setTimeout(() => {
-    res.send("Document are valid");
-  }, 1000);
-});
+app.post("/api/director", upload.fields([{ name: "file" }]),
+  checkFileTypeDirector,
+  (req, res) => {
+    setTimeout(() => {
+      res.status(200).send("Document are valid");
+    }, 2000);
+  });
 
 app.listen(PORT, () => {
   console.log(`Running on ${PORT}`);

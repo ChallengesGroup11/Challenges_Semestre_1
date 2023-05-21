@@ -1,6 +1,5 @@
 <script setup lang='ts'>
-
-import { ref } from 'vue'
+const router = useRouter()
 import { useQuasar } from "quasar"
 
 const $q = useQuasar()
@@ -13,18 +12,13 @@ const viewNotif = (icon: any, color: string, message: string, textColor: string,
     position,
   })
 }
-const router = useRouter()
-
-// const firstname = ref('')
-// const lastname = ref('')
-// const email = ref('')
-
 const user = reactive({
   firstname: "",
   lastname: "",
   email: "",
-  password: "",
+  password:"",
 });
+
 
 const initProvisoryPassword = () => {
   for (let i = 0; i < 16; i++) {
@@ -32,20 +26,20 @@ const initProvisoryPassword = () => {
   }
 }
 
-
-
 const onSubmit = async () => {
   initProvisoryPassword()
+
   const requestData = {
     firstname: user.firstname,
     lastname: user.lastname,
     email: user.email,
     password: user.password,
-    roles: ["ROLE_DIRECTOR"],
+    roles: ["ROLE_USER"],
     status: false,
-    createBy: 'admin'
-  };
-  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/signup/director`, {
+    createBy: 'admin',
+    };
+
+  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/signup/student`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -53,7 +47,7 @@ const onSubmit = async () => {
     body: JSON.stringify(requestData),
   });
   if (response.status === 400) {
-    viewNotif("thumb_down", "red", "L'auto école ne peut pas être créer", "white", "top-right")
+    viewNotif("thumb_down", "red", "L'étudiant ne peut pas être ajouté", "white", "top-right")
     return
   }
   if (response.status === 500) {
@@ -61,13 +55,12 @@ const onSubmit = async () => {
     return
   }
   if (response.status === 201) {
-    viewNotif("thumb_up", "green", "Le directeur à bien été créer", "white", "top-right")
-    await router.push("/admin/Director")
+    viewNotif("thumb_up", "green", "L'étudiant à bien été ajouté", "white", "top-right")
+    await router.push("/admin/Student")
   }
 
+
 }
-
-
 
 </script>
 
@@ -75,7 +68,7 @@ const onSubmit = async () => {
   <q-page class="bg-light-grey  items-center">
     <div class=" q-mt-sl  row justify-center">
       <div class="q-pa-md">
-        <h2 class="text-h5 w-100 q-mb-xl">Ajouter un Directeur d'auto-école</h2>
+        <h2 class="text-h5 w-100 q-mb-xl">Ajouter un nouvel étudiant </h2>
         <q-form @submit.prevent="onSubmit" class="q-gutter-md">
           <q-input label="Prénom" filled lazy-rules :rules="[val => val.length > 0 || 'Veuillez saisir votre prénom']"
             v-model="user.firstname" />

@@ -1,0 +1,57 @@
+name: Deploy Drive Queen API
+
+on:
+  push:
+    tags:
+      - 'api-v*'
+    
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build development env
+        env:
+          API_ENV: ${{ secrets.API_ENV }} 
+        run: |
+          echo "$API_ENV" > .env
+        working-directory: ./api
+
+      - name: Generating .htaccess for the server
+        env:
+          HTACCESS: ${{ secrets.HTACCESS_API }}
+        run: |
+          echo "$HTACCESS" >> public/.htaccess
+        working-directory: ./api
+
+      - name: Create JWT keys
+        env:
+          JWT_PUBLIC_KEY: ${{ secrets.JWT_PUBLIC_KEY }}
+          JWT_PRIVATE_KEY: ${{ secrets.JWT_PRIVATE_KEY }}
+        run: |
+          mkdir -p config/jwt
+          echo "$JWT_PUBLIC_KEY" >> config/jwt/public.pem
+          echo "$JWT_PRIVATE_KEY" >> config/jwt/private.pem          
+        working-directory: ./api
+
+      - name: Generate vendors
+        run: |
+          composer install --optimize-autoloader
+        working-directory: ./api
+
+      - name: Upload to FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.3.3
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: "./api/"
+          server-dir: "/api/"
+          exclude: |
+            **/.git*
+            **/.github*
+            **/.gitignore
+            **/.gitattributes
+            **/var/**
+            **/docker/**

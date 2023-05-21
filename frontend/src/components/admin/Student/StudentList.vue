@@ -13,14 +13,14 @@ const viewNotif = (icon: any, color: string, message: string, textColor: string,
     position,
   })
 }
-const directors = reactive({ value: [] })
+const students = reactive({ value: [] })
 
 onMounted(async () => {
-  await fetchDirector()
+  await fetchStudent()
 })
 
-const fetchDirector = async () => {
-  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/directors`, {
+const fetchStudent = async () => {
+  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/users`, {
     headers: {
       accept: 'application/ld+json',
       Authorization: 'Bearer ' + localStorage.getItem('token'),
@@ -28,21 +28,21 @@ const fetchDirector = async () => {
   })
     .then((response) => response.json())
     .then((data) => {
-      directors.value = data['hydra:member']
-      console.log(directors.value)
+      students.value = data['hydra:member'].filter((student: any) => student.roles[0] !== 'ROLE_DIRECTOR' && student.roles[0] !== 'ROLE_ADMIN' && student.roles[0] !== 'ROLE_MONITOR')
+      console.log(students.value)
     })
 }
 
-const editDirector = (id: string) => {
-  router.push('/admin/Director/Edit/' + id)
+const editStudent = (id: string) => {
+  router.push('/admin/Student/Edit/' + id)
 }
 
-const addDirector = () => {
-  router.push('/admin/Director/Add/Director')
+const addStudent = () => {
+  router.push('/admin/Student/Add/Student')
 }
 
-const deleteDirector = async (id: string) => {
-  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/directors/` + id, {
+const deleteStudent = async (id: string) => {
+  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/users/` + id, {
     method: 'DELETE',
     headers: {
       accept: 'application/ld+json',
@@ -50,17 +50,15 @@ const deleteDirector = async (id: string) => {
     },
   })
   if (response.status === 400) {
-    viewNotif("thumb_down", "red", "Le directeur ne peut pas être supprimé", "white", "top-right")
-    return
+    viewNotif("thumb_down", "red", "L'étudiant ne peut pas être supprimé", "white", "top-right")
   }
   if (response.status === 500) {
     viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
-    return
   }
   if (response.status === 204) {
-    viewNotif("thumb_up", "green", "Le directeur à bien été supprimé", "white", "top-right")
+    viewNotif("thumb_up", "green", "L'étudiant à bien été supprimé", "white", "top-right")
   }
-  await fetchDirector()
+  await fetchStudent()
 }
 
 const changeStatus = async (id: string) => {
@@ -75,17 +73,15 @@ const changeStatus = async (id: string) => {
     body: '{}',
   })
   if (response.status === 400) {
-    viewNotif("thumb_down", "red", "Le directeur ne peut pas être modifié", "white", "top-right")
-    return
+    viewNotif("thumb_down", "red", "L'étudiant  ne peut pas être modifié", "white", "top-right")
   }
   if (response.status === 500) {
     viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
-    return
   }
   if (response.status === 201) {
-    viewNotif("thumb_up", "green", "Le directeur à bien été modifié", "white", "top-right")
+    viewNotif("thumb_up", "green", "L'étudiant  à bien été modifié", "white", "top-right")
   }
-  await fetchDirector()
+  await fetchStudent()
 }
 </script>
 
@@ -97,8 +93,8 @@ const changeStatus = async (id: string) => {
         <tr>
           <th colspan="13">
             <div class="text-h4 q-ml-md">
-              Liste des directeurs
-              <q-btn class="float-right" color="positive" text-color="white" icon="add" @click="addDirector()" />
+              Liste des students
+              <q-btn class="float-right" color="positive" text-color="white" icon="add" @click="addStudent()" />
             </div>
           </th>
         </tr>
@@ -107,7 +103,6 @@ const changeStatus = async (id: string) => {
           <th>Prénom</th>
           <th>Nom</th>
 					<th>Email</th>
-					<th>Auto-école</th>
           <th>Status</th>
           <th>Editer</th>
           <th>Supprimer</th>
@@ -115,34 +110,28 @@ const changeStatus = async (id: string) => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(director, index) in directors.value" :key="index">
-          <td>{{ director.id }}</td>
-          <td>{{ director.userId.firstname }}</td>
-          <td>{{ director.userId.lastname }}</td>
-          <td>{{ director.userId.email }}</td>
-          <td v-if="director.drivingSchoolId">
-            {{ director.drivingSchoolId.name }}
-          </td>
-          <td v-else>
-            <span> Pas d'auto école </span>
-          </td>
-          <td v-if="director.userId.status === true">
+        <tr v-for="(student, index) in students.value" :key="index">
+          <td>{{ student.id }}</td>
+          <td>{{ student.firstname }}</td>
+          <td>{{ student.lastname }}</td>
+          <td>{{ student.email }}</td>
+          <td v-if="student.status === true">
             <span> Valider </span>
           </td>
           <td v-else>
             <span> En attente </span>
           </td>
           <td>
-            <q-btn color="warning" text-color="white" icon="edit" @click="editDirector(director.id)" />
+            <q-btn color="warning" text-color="white" icon="edit" @click="editStudent(student.id)" />
           </td>
           <td>
-            <q-btn color="negative" text-color="white" icon="delete" @click="deleteDirector(director.id)" />
+            <q-btn color="negative" text-color="white" icon="delete" @click="deleteStudent(student.id)" />
           </td>
-          <td v-if="director.userId.status === true">
-            <q-btn color="secondary" text-color="white" icon="sync" disabled @click="changeStatus(director.userId.id)" />
+          <td v-if="student.status === true">
+            <q-btn color="secondary" text-color="white" icon="sync" disabled @click="changeStatus(student.id)" />
           </td>
           <td v-else>
-            <q-btn color="warning" text-color="white" icon="sync" @click="changeStatus(director.userId.id)" />
+            <q-btn color="warning" text-color="white" icon="sync" @click="changeStatus(student.id)" />
           </td>
         </tr>
       </tbody>
