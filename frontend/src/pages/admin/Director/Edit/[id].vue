@@ -81,14 +81,14 @@ const onSubmit = async (id: string) => {
       <div class="q-pa-md">
         <h2 class="text-h5 w-100 q-mb-xl">Editer un Directeur d'auto-école </h2>
         <q-form @submit="onSubmit(director.id)" class="q-gutter-md">
-          <q-input v-model="director.firstname" label="Firstname" filled lazy-rules
-            :rules="[val => val && val.length > 0 || 'Please type something']" />
-          <q-input filled v-model="director.lastname" label="Lastname"  lazy-rules
-            :rules="[val => val && val.length > 0 || 'Please type something']" />
+          <q-input v-model="director.firstname" label="Prénom" filled lazy-rules
+            :rules="[val => val && val.length > 0 || 'Veuillez écrire quelque chose']" />
+          <q-input filled v-model="director.lastname" label="Nom"  lazy-rules
+            :rules="[val => val && val.length > 0 || 'Veuillez écrire quelque chose']" />
           <q-input filled v-model="director.email" label="Email"  lazy-rules
-            :rules="[val => val && val.length > 0 || 'Please type something']" />
+            :rules="[val => val && val.length > 0 || 'Veuillez écrire quelque chose']" />
           <div>
-            <q-btn label="Submit" type="submit" color="primary" />
+            <q-btn label="Valider" type="submit" color="primary" />
           </div>
         </q-form>
       </div>

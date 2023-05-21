@@ -83,7 +83,7 @@ const deletePackage = async (id: string) => {
           <th>Nom du package</th>
           <th>Description</th>
           <th>Nombre de crédit</th>
-          <th>prix</th>
+          <th>Prix</th>
           <th>Modifier</th>
           <th>Supprimer</th>
         </tr>

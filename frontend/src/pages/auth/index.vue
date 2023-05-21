@@ -48,7 +48,6 @@ const fn = {
     // router.push("/forget-password")
   },
   async sendEmailPassword() {
-    console.log("send email password")
     const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/users/send_email/password`, {
       method: "POST",
       headers: {

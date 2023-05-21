@@ -124,17 +124,17 @@ function isset(drivingSchoolId: any) {
         <h2 class="text-h5 w-100 q-mb-xl">Editer une auto-école </h2>
         <q-form @submit="onSubmit(drivingSchool.id)" class="q-gutter-md">
           <q-input v-model="drivingSchool.name" label="Nom de l'école de conduite" filled lazy-rules
-            :rules="[val => val && val.length > 0 || 'Please type something']" />
-          <q-input filled v-model="drivingSchool.address" label="Your address *" hint="Address" lazy-rules
-            :rules="[val => val && val.length > 0 || 'Please type something']" />
-          <q-input filled v-model="drivingSchool.zipcode" label="Your zipcode *" hint="Zipcode" lazy-rules
-            :rules="[val => val && val.length > 0 || 'Please type something']" />
-          <q-input filled v-model="drivingSchool.city" label="Your city *" hint="City" lazy-rules
-            :rules="[val => val && val.length > 0 || 'Please type something']" />
-          <q-input filled v-model="drivingSchool.phoneNumber" label="Your phone number *" hint="Phone number" lazy-rules
-            :rules="[val => val && val.length > 0 || 'Please type something']" />
-          <q-input filled v-model="drivingSchool.siret" label="Your siret *" hint="Siret" lazy-rules
-            :rules="[val => val && val.length > 0 || 'Please type something']" />
+            :rules="[val => val && val.length > 0 || 'Veuillez écrire quelque chose']" />
+          <q-input filled v-model="drivingSchool.address" label="Adresse *" hint="Address" lazy-rules
+            :rules="[val => val && val.length > 0 || 'Veuillez écrire quelque chose']" />
+          <q-input filled v-model="drivingSchool.zipcode" label="Code postal " hint="Zipcode" lazy-rules
+            :rules="[val => val && val.length > 0 || 'Veuillez écrire quelque chose']" />
+          <q-input filled v-model="drivingSchool.city" label="Ville" hint="City" lazy-rules
+            :rules="[val => val && val.length > 0 || 'Veuillez écrire quelque chose']" />
+          <q-input filled v-model="drivingSchool.phoneNumber" label="Numéro de téléphone" hint="Phone number" lazy-rules
+            :rules="[val => val && val.length > 0 || 'Veuillez écrire quelque chose']" />
+          <q-input filled v-model="drivingSchool.siret" label="Numéro de siret" hint="Siret" lazy-rules
+            :rules="[val => val && val.length > 0 || 'Veuillez écrire quelque chose']" />
           <div v-if="selectedDirector">
             <select disabled v-model="selectedDirector" placeholder="Choisir un directeur">
               <option selected v-if="selectedDirector != ''" :value="selectedDirector">{{
@@ -150,7 +150,7 @@ function isset(drivingSchoolId: any) {
             </select>
           </div>
           <div>
-            <q-btn label="Submit" type="submit" color="primary" />
+            <q-btn label="Valider" type="submit" color="primary" />
           </div>
         </q-form>
       </div>

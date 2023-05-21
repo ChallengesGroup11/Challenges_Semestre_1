@@ -83,7 +83,7 @@ const onSubmit = async (id: string | string[]) =>{
             hint="Prénom"
             filled
             lazy-rules
-            :rules="[ val => val && val.length > 0 || 'Please type something']"
+            :rules="[ val => val && val.length > 0 || 'Veuillez écrire quelque chose']"
           />
           <q-input
             filled
@@ -91,10 +91,10 @@ const onSubmit = async (id: string | string[]) =>{
             label="Nom"
             hint="Nom"
             lazy-rules
-            :rules="[ val => val && val.length > 0 || 'Please type something']"
+            :rules="[ val => val && val.length > 0 || 'Veuillez écrire quelque chose']"
           />
           <div>
-            <q-btn label="Submit" type="submit" color="primary"/>
+            <q-btn label="Valider" type="submit" color="primary"/>
           </div>
         </q-form>
       </div>
