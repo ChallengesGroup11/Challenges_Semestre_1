@@ -62,9 +62,6 @@ const fn = {
         },
         body: JSON.stringify(requestData),
       })
-
-      debugger
-
       if (response.status === 200) {
         emit("on-save")
         state.isShownModal = false

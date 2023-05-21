@@ -56,7 +56,7 @@ use App\Controller\UserEditStatusController;
             'summary' => 'Editer le status d\'un user',
         ],
         denormalizationContext: ['groups' => ['user_patch']],
-        security: '(is_granted("ROLE_DIRECTOR") and object.getDirector() == user) or (is_granted("ROLE_ADMIN"))',
+        security: '(is_granted("ROLE_DIRECTOR")) or (is_granted("ROLE_ADMIN"))',
         name: 'user_edit_status'
     ),
     new Post(

@@ -71,9 +71,6 @@ const fetchMonitor = async () => {
 
 const editMonitor = (monitor: any) => {
   state.currentMonitor = fn.makeMonitor(monitor)
-  debugger
-
-  debugger
 }
 
 const addMonitor = () => {
@@ -93,17 +90,15 @@ const deleteMonitor = async (id: object) => {
 }
 
 const changeStatus = async (id: string) => {
-  const response = await fetch(`https://localhost/monitors/${id}/edit_status`, {
+  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/users/` + id.userId.id + "/edit_status", {
     method: "PATCH",
     headers: {
       accept: "application/ld+json",
       "Content-type": "application/merge-patch+json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: "Bearer " + localStorage.getItem("token"),
     },
     body: "{}",
   })
-  const data = await response.json()
-  console.log("Success:", data)
   await fetchMonitor()
 }
 
@@ -158,10 +153,10 @@ loadData()
             <q-btn color="negative" text-color="white" icon="delete" @click="deleteMonitor(monitor)" />
           </td>
           <td v-if="monitor.status === true">
-            <q-btn color="secondary" text-color="white" icon="sync" @click="changeStatus(monitor.id)" />
+            <q-btn color="secondary" text-color="white" icon="sync" @click="changeStatus(monitor)" />
           </td>
           <td v-else>
-            <q-btn color="warning" text-color="white" icon="sync" @click="changeStatus(monitor.id)" />
+            <q-btn color="warning" text-color="white" icon="sync" @click="changeStatus(monitor)" />
           </td>
         </tr>
       </tbody>
