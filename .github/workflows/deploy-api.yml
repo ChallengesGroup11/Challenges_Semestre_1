@@ -2,9 +2,8 @@ name: Deploy Drive Queen API
 
 on:
   push:
-    # tags:
-    #   - 'api-v*'
-  workflow_dispatch: ~
+    tags:
+      - 'api-v*'
     
 jobs:
   deploy:
