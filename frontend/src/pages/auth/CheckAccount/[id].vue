@@ -54,7 +54,7 @@ const validateAccount = (id: any, token: any) => {
       <q-page class="bg-light-grey window-height window-width row justify-center items-center">
         <div class="column">
           <div class="row">
-            <h2 class="text-h5 text-white q-my-md">DRIVING SHCOOL</h2>
+            <h2 class="text-h5 text-black q-my-md">DRIVING SHCOOL</h2>
           </div>
           <div >
 

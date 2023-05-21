@@ -80,16 +80,16 @@ const onSubmit = async (id: string) => {
       <div class="q-pa-md">
         <h2 class="text-h5 w-100 q-mb-xl">Editer un package</h2>
         <q-form @submit="onSubmit(packageDS.id)" class="q-gutter-md">
-          <q-input v-model="packageDS.name" label="Name" filled lazy-rules
-            :rules="[val => val && val.length > 0 || 'Please type something']" />
+          <q-input v-model="packageDS.name" label="Nom du package" filled lazy-rules
+            :rules="[val => val && val.length > 0 || 'Veuillez écrire quelque chose']" />
           <q-input filled v-model="packageDS.description" label="Description" lazy-rules
-            :rules="[val => val && val.length > 0 || 'Please type something']" />
-          <q-input filled v-model.number="packageDS.nbCredit" label="Number of credit" lazy-rules
-            :rules="[val => val && val > 0 || 'Please type something']" />
-          <q-input filled v-model.number="packageDS.price" label="Price" lazy-rules
-            :rules="[val => val && val > 0 || 'Please type something']" />
+            :rules="[val => val && val.length > 0 || 'Veuillez écrire quelque chose']" />
+          <q-input filled v-model.number="packageDS.nbCredit" label="Nombre de crédit" lazy-rules
+            :rules="[val => val && val > 0 || 'Veuillez écrire quelque chose']" />
+          <q-input filled v-model.number="packageDS.price" label="Prix" lazy-rules
+            :rules="[val => val && val > 0 || 'Veuillez écrire quelque chose']" />
           <div>
-            <q-btn label="Submit" type="submit" color="primary" />
+            <q-btn label="Valider" type="submit" color="primary" />
           </div>
         </q-form>
       </div>

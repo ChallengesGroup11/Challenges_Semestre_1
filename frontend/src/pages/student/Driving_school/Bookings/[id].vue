@@ -5,7 +5,18 @@ import { ApiService } from "~/services/api"
 import { useStoreUser } from "../../../../../stores/user"
 import * as R from "ramda"
 const router = useRouter()
+import { useQuasar } from "quasar"
 
+const $q = useQuasar()
+const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
+  $q.notify({
+    icon,
+    color,
+    message,
+    textColor,
+    position,
+  })
+}
 const data = {
   ListInitialBooking: [] as any[],
 }
@@ -22,7 +33,7 @@ const fn = {
 
       makeListFreeBooking(data.ListInitialBooking)
     } catch (e) {
-      console.log("vous n'avez pas assez de crédit: 2 minimum requis")
+      viewNotif("thumb_down", "red", "Vous n'avez pas assez de crédit: 2 minimum requis", "white", "top-right")
     }
     fn.resetCurrentBooking()
   },

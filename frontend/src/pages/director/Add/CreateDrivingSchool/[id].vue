@@ -130,7 +130,7 @@ const onSubmit = async () => {
             </q-file>
             <q-input filled v-model="user.siret" label="Votre n° de Siret" />
             <div>
-              <q-btn label="Submit" type="submit" color="primary" />
+              <q-btn label="Valider" type="submit" color="primary" />
             </div>
           </q-form>
           <q-circular-progress v-if="isLoading" indeterminate size="50px" :thickness="0.22" rounded color="lime"

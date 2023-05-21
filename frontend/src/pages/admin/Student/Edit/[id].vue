@@ -85,27 +85,27 @@ const onSubmit = async (id: string) => {
         >
           <q-input
             v-model="user.firstname"
-            label="Firstname"
+            label="Prénom"
             filled
             lazy-rules
-            :rules="[ val => val && val.length > 0 || 'Please type something']"
+            :rules="[ val => val && val.length > 0 || 'Veuillez écrire quelque chose']"
           />
           <q-input
             filled
             v-model="user.lastname"
-            label="Lastname"
+            label="Nom"
             lazy-rules
-            :rules="[ val => val && val.length > 0 || 'Please type something']"
+            :rules="[ val => val && val.length > 0 || 'Veuillez écrire quelque chose']"
           />
           <q-input
             filled
             v-model="user.email"
             label="Email"
             lazy-rules
-            :rules="[ val => val && val.length > 0 || 'Please type something']"
+            :rules="[ val => val && val.length > 0 || 'Veuillez écrire quelque chose']"
           />
           <div>
-            <q-btn label="Submit" type="submit" color="primary"/>
+            <q-btn label="Valider" type="submit" color="primary"/>
           </div>
         </q-form>
       </div>
