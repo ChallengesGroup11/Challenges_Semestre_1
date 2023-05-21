@@ -199,7 +199,6 @@ const fn = {
 }
 
 const fetchAll = async () => {
-  console.log("LOG")
   if( useStoreUser().drivingSchool.id === undefined) return
   const response = await ApiService.fetchbById(API_URL.DRIVING_SHCOOLS, useStoreUser().drivingSchool.id)
   const ListBooking = response.bookings
