@@ -16,10 +16,6 @@ const viewNotif = (icon: any, color: string, message: string, textColor: string,
 
 const router = useRouter()
 
-// const firstname = ref('')
-// const lastname = ref('')
-// const email = ref('')
-
 const user = reactive({
   firstname: "",
   lastname: "",
@@ -38,16 +34,15 @@ const initProvisoryPassword = () => {
 const fetchDrivingSchools = async () => {
   return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_schools`, {
     headers: {
-      accept: 'application/ld+json',
-      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      accept: "application/ld+json",
+      Authorization: "Bearer " + localStorage.getItem("token"),
     },
   })
     .then((response) => response.json())
     .then((data) => {
-      drivingSchools.value = data['hydra:member']
+      drivingSchools.value = data["hydra:member"]
     })
 }
-
 
 onMounted(async () => {
   await fetchDrivingSchools()
@@ -56,7 +51,6 @@ onMounted(async () => {
 const onSubmit = async () => {
   console.log(drivingSchoolSelected.value)
   initProvisoryPassword()
-  console.log(drivingSchoolSelected.value.id)
 
   const requestData = {
     firstname: user.firstname,
@@ -65,13 +59,13 @@ const onSubmit = async () => {
     password: user.password,
     roles: ["ROLE_MONITOR"],
     status: false,
-    createBy: 'admin',
-    drivingSchoolId: drivingSchoolSelected.value.id
-  };
+    createBy: "admin",
+    drivingSchoolId: drivingSchoolSelected.value.id,
+  }
   const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/director/create_monitor`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(requestData),
   });
@@ -91,21 +85,35 @@ const onSubmit = async () => {
 
 
 }
-
 </script>
 
 <template>
-  <q-page class="bg-light-grey  items-center">
-    <div class=" q-mt-sl  row justify-center">
+  <q-page class="bg-light-grey items-center">
+    <div class="q-mt-sl row justify-center">
       <div class="q-pa-md">
-        <h2 class="text-h5 w-100 q-mb-xl">Ajouter un moiteur d'auto-école</h2>
+        <h2 class="text-h5 w-100 q-mb-xl">Ajouter un moniteur d'auto-école</h2>
         <q-form @submit.prevent="onSubmit" class="q-gutter-md">
-          <q-input label="Prénom" filled lazy-rules :rules="[val => val.length > 0 || 'Veuillez saisir votre prénom']"
-            v-model="user.firstname" />
-          <q-input label="Nom" filled lazy-rules :rules="[val => val.length > 0 || 'Veuillez saisir votre nom']"
-            v-model="user.lastname" />
-          <q-input label="Email" filled lazy-rules :rules="[val => val.length > 0 || 'Veuillez saisir votre email']"
-            v-model="user.email" />
+          <q-input
+            label="Prénom"
+            filled
+            lazy-rules
+            :rules="[(val) => val.length > 0 || 'Veuillez saisir votre prénom']"
+            v-model="user.firstname"
+          />
+          <q-input
+            label="Nom"
+            filled
+            lazy-rules
+            :rules="[(val) => val.length > 0 || 'Veuillez saisir votre nom']"
+            v-model="user.lastname"
+          />
+          <q-input
+            label="Email"
+            filled
+            lazy-rules
+            :rules="[(val) => val.length > 0 || 'Veuillez saisir votre email']"
+            v-model="user.email"
+          />
 
           <select v-model="drivingSchoolSelected" placeholder="Choisir un directeur">
             <option value="" selected>Choisir une auto-école</option>
