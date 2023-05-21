@@ -81,12 +81,12 @@ const addMonitor = () => {
   console.log(state.currentMonitor)
 }
 
-const deleteMonitor = async (id: string) => {
-  const response = await fetch(`https://localhost/monitors/${id}/delete`, {
+const deleteMonitor = async (id: object) => {
+  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/monitors/` + id.id, {
     method: "DELETE",
     headers: {
       accept: "application/ld+json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: "Bearer " + localStorage.getItem("token"),
     },
   })
   await fetchMonitor()
