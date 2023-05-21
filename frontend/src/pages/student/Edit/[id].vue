@@ -1,7 +1,18 @@
 <script setup lang="ts">
 
 import { reactive, defineComponent } from "vue";
+import { useQuasar } from "quasar"
 
+const $q = useQuasar()
+const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
+  $q.notify({
+    icon,
+    color,
+    message,
+    textColor,
+    position,
+  })
+}
 
 const router = useRouter()
 
@@ -50,6 +61,7 @@ const onSubmit = async (id: string | string[]) =>{
     body: JSON.stringify(user),
   });
   const data = await response.json();
+  viewNotif("thumb_up", "green", "Votre profil à bien été édité", "white", "top-right")
   await router.push('/student/profil')
 }
 
@@ -71,7 +83,7 @@ const onSubmit = async (id: string | string[]) =>{
             hint="Prénom"
             filled
             lazy-rules
-            :rules="[ val => val && val.length > 0 || 'Please type something']"
+            :rules="[ val => val && val.length > 0 || 'Veuillez écrire quelque chose']"
           />
           <q-input
             filled
@@ -79,10 +91,10 @@ const onSubmit = async (id: string | string[]) =>{
             label="Nom"
             hint="Nom"
             lazy-rules
-            :rules="[ val => val && val.length > 0 || 'Please type something']"
+            :rules="[ val => val && val.length > 0 || 'Veuillez écrire quelque chose']"
           />
           <div>
-            <q-btn label="Submit" type="submit" color="primary"/>
+            <q-btn label="Valider" type="submit" color="primary"/>
           </div>
         </q-form>
       </div>

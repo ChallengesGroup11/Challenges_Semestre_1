@@ -21,6 +21,8 @@ declare module '@vue/runtime-core' {
     ModalEditBookingComp: typeof import('./components/director/ModalEditBookingComp.vue')['default']
     MonitorList: typeof import('./components/director/Monitor/MonitorList.vue')['default']
     MonitorListAdmin: typeof import('./components/admin/Monitor/MonitorListAdmin.vue')['default']
+    MonitorModal: typeof import('./components/director/Monitor/MonitorModal.vue')['default']
+    OneSignalStatus: typeof import('./components/OneSignalStatus.vue')['default']
     PackageListAdmin: typeof import('./components/admin/PackageAdmin/PackageListAdmin.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

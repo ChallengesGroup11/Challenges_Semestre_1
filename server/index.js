@@ -32,6 +32,18 @@ const checkFileType = (req, res, next) => {
   }
 };
 
+const checkFileTypeDirector = (req, res, next) => {
+  const fileTypes = /^application\/pdf$|^image\/(jpeg|jpg)$/;
+
+  const file = fileTypes.test(req.files.file[0].mimetype);
+  console.log(file)
+  if (file) {
+    next();
+  } else {
+    res.status(400).send("Invalid file type");
+  }
+};
+
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
@@ -47,11 +59,13 @@ app.post(
   }
 );
 
-app.post("/api/director", (req, res) => {
-  setTimeout(() => {
-    res.send("Document are valid");
-  }, 1000);
-});
+app.post("/api/director", upload.fields([{ name: "file" }]),
+  checkFileTypeDirector,
+  (req, res) => {
+    setTimeout(() => {
+      res.status(200).send("Document are valid");
+    }, 2000);
+  });
 
 app.listen(PORT, () => {
   console.log(`Running on ${PORT}`);

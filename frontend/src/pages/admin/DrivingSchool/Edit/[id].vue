@@ -1,7 +1,18 @@
 <script setup lang="ts">
 const router = useRouter()
 import { onMounted, reactive } from 'vue';
+import { useQuasar } from "quasar"
 
+const $q = useQuasar()
+const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
+  $q.notify({
+    icon,
+    color,
+    message,
+    textColor,
+    position,
+  })
+}
 
 const Alldirectors = reactive({ value: [] })
 const selectedDirector = ref('')
@@ -45,9 +56,6 @@ const fetchDirector = async () => {
           Alldirectors.value.splice(i, 1);
         }
       }
-
-      console.log(Alldirectors.value)
-
     })
 }
 
@@ -73,16 +81,19 @@ const fetchOneDrivingSchool = async (id: string | string[]) => {
         drivingSchool.director = data.director
         selectedDirector.value = data.director
       }
-      console.log(drivingSchool.director)
     })
     .catch((error) => {
-      console.error('Error:', error);
+      viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
     })
 };
 
 const onSubmit = async (id: string) => {
   console.log(drivingSchool)
-  drivingSchool.director = "/directors/" + drivingSchool.director.id
+  if (drivingSchool.director) {
+    drivingSchool.director = "/directors/" + drivingSchool.director.id
+  }else{
+    delete drivingSchool.director;
+  }
   const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/driving_schools/` + id, {
     method: 'PUT',
     headers: {
@@ -91,8 +102,13 @@ const onSubmit = async (id: string) => {
     },
     body: JSON.stringify(drivingSchool),
   });
-  const data = await response.json();
-  await router.push('/admin/drivingSchool')
+  if (response.status === 400 || response.status === 500) {
+    viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
+  }
+  if (response.status === 200) {
+    viewNotif("thumb_up", "green", "L'auto école à bien été modifié", "white", "top-right")
+    await router.push('/admin/drivingSchool')
+  }
 };
 
 function isset(drivingSchoolId: any) {
@@ -108,17 +124,17 @@ function isset(drivingSchoolId: any) {
         <h2 class="text-h5 w-100 q-mb-xl">Editer une auto-école </h2>
         <q-form @submit="onSubmit(drivingSchool.id)" class="q-gutter-md">
           <q-input v-model="drivingSchool.name" label="Nom de l'école de conduite" filled lazy-rules
-            :rules="[val => val && val.length > 0 || 'Please type something']" />
-          <q-input filled v-model="drivingSchool.address" label="Your address *" hint="Address" lazy-rules
-            :rules="[val => val && val.length > 0 || 'Please type something']" />
-          <q-input filled v-model="drivingSchool.zipcode" label="Your zipcode *" hint="Zipcode" lazy-rules
-            :rules="[val => val && val.length > 0 || 'Please type something']" />
-          <q-input filled v-model="drivingSchool.city" label="Your city *" hint="City" lazy-rules
-            :rules="[val => val && val.length > 0 || 'Please type something']" />
-          <q-input filled v-model="drivingSchool.phoneNumber" label="Your phone number *" hint="Phone number" lazy-rules
-            :rules="[val => val && val.length > 0 || 'Please type something']" />
-          <q-input filled v-model="drivingSchool.siret" label="Your siret *" hint="Siret" lazy-rules
-            :rules="[val => val && val.length > 0 || 'Please type something']" />
+            :rules="[val => val && val.length > 0 || 'Veuillez écrire quelque chose']" />
+          <q-input filled v-model="drivingSchool.address" label="Adresse *" hint="Address" lazy-rules
+            :rules="[val => val && val.length > 0 || 'Veuillez écrire quelque chose']" />
+          <q-input filled v-model="drivingSchool.zipcode" label="Code postal " hint="Zipcode" lazy-rules
+            :rules="[val => val && val.length > 0 || 'Veuillez écrire quelque chose']" />
+          <q-input filled v-model="drivingSchool.city" label="Ville" hint="City" lazy-rules
+            :rules="[val => val && val.length > 0 || 'Veuillez écrire quelque chose']" />
+          <q-input filled v-model="drivingSchool.phoneNumber" label="Numéro de téléphone" hint="Phone number" lazy-rules
+            :rules="[val => val && val.length > 0 || 'Veuillez écrire quelque chose']" />
+          <q-input filled v-model="drivingSchool.siret" label="Numéro de siret" hint="Siret" lazy-rules
+            :rules="[val => val && val.length > 0 || 'Veuillez écrire quelque chose']" />
           <div v-if="selectedDirector">
             <select disabled v-model="selectedDirector" placeholder="Choisir un directeur">
               <option selected v-if="selectedDirector != ''" :value="selectedDirector">{{
@@ -134,7 +150,7 @@ function isset(drivingSchoolId: any) {
             </select>
           </div>
           <div>
-            <q-btn label="Submit" type="submit" color="primary" />
+            <q-btn label="Valider" type="submit" color="primary" />
           </div>
         </q-form>
       </div>

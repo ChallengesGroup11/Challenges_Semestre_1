@@ -1,8 +1,17 @@
 <script setup lang="ts">
-import { assertExpressionStatement } from "@babel/types"
-import { log } from "console"
-import { reactive, defineComponent } from "vue"
+import { reactive } from "vue"
+import { useQuasar } from "quasar"
 
+const $q = useQuasar()
+const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
+  $q.notify({
+    icon,
+    color,
+    message,
+    textColor,
+    position,
+  })
+}
 const router = useRouter()
 
 const user = reactive({
@@ -45,17 +54,17 @@ const onSubmit = async () => {
         body: formData,
       })
       if (response.ok) {
-        await router.push("/student/profil")
+          viewNotif("thumb_up", "green", "Vos fichiers ont bien été ajoutées", "white", "top-right")
+          await router.push("/student/profil")
+        } else {
+          viewNotif("thumb_down", "red", "Vos fichiers ont n'à pas été ajoutées", "white", "top-right")
+        }
       } else {
-        alert("Vos documents n'ont pas été enregistrés, veuillez réessayer")
+        viewNotif("thumb_down", "red", "Vos documents ne sont pas valides, veuillez réessayer", "white", "top-right")
       }
-      isLoading.value = false
-    } else {
-      alert("Vos documents ne sont pas valides, veuillez réessayer")
+    } catch (error) {
+      viewNotif("thumb_down", "red", "Un problème st survenue", "white", "top-right")
     }
-  } catch (error) {
-    console.error("Error:", error)
-  }
 }
 </script>
 
