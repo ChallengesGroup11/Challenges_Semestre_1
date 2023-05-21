@@ -121,7 +121,7 @@ loadData()
           <th colspan="13">
             <div class="text-h4 q-ml-md">
               Liste des moniteurs
-              <q-btn class="float-right" color="positive" text-color="white" icon="add" @click="addMonitor()" />
+              <q-btn class="float-right" color="positive" text-color="white" icon="add" @click="addMonitor()" :disable="currentUser.value.director?.drivingSchoolId === null" />
             </div>
           </th>
         </tr>

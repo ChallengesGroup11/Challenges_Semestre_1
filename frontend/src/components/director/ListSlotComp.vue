@@ -4,6 +4,7 @@ import { ApiService } from "~/services/api"
 import { API_URL } from "../../services/api"
 import { useStoreUser } from "../../../stores/user"
 import { useQuasar } from "quasar"
+import DrivingSchoolList from "../admin/DrivingSchool/DrivingSchoolList.vue"
 
 const $q = useQuasar()
 const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
@@ -198,8 +199,8 @@ const fn = {
 }
 
 const fetchAll = async () => {
+  if( useStoreUser().drivingSchool.id === undefined) return
   const response = await ApiService.fetchbById(API_URL.DRIVING_SHCOOLS, useStoreUser().drivingSchool.id)
-
   const ListBooking = response.bookings
   console.log(ListBooking)
   for await (const booking of ListBooking) {
@@ -328,7 +329,7 @@ loadData()
       <template v-slot:top>
         <q-btn
           color="primary"
-          :disable="state.isLoading"
+          :disable="state.isLoading || state.rows.length === 0"
           label="Ajouter un créneau"
           @click="state.isShownModal = true"
         />
