@@ -56,7 +56,39 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->add($user, true);
     }
 
-//    /**
+    public function findAllUserDoneByDrivingSchool($id)
+    {
+        $qb = $this->createQueryBuilder('u')
+          // user in student table , student in booking_student table , booking_student in booking table , booking in driving_school table
+          // count le nombre de user par booking
+            ->select('COUNT(bs.statusDone) as done')
+            ->join('u.student', 's')
+            ->join('s.bookings', 'bs')
+            ->join('bs.drivingSchoolId', 'b')
+            ->where('b.id = :id and bs.statusDone = true')
+            ->setParameter('id', $id)
+            ->groupBy('bs.statusDone')
+            ->getQuery();
+
+        return $qb->execute();
+    }
+
+    public function findAllUserValidateByDrivingSchool($id)
+    {
+        $qb = $this->createQueryBuilder('u')
+          // user in student table , student in booking_student table , booking_student in booking table , booking in driving_school table
+          // count le nombre de user par booking
+            ->select('COUNT(bs.statusValidate) as validate')
+            ->join('u.student', 's')
+            ->join('s.bookings', 'bs')
+            ->join('bs.drivingSchoolId', 'b')
+            ->where('b.id = :id and bs.statusValidate = true')
+            ->setParameter('id', $id)
+            ->groupBy('bs.statusValidate')
+            ->getQuery();
+
+        return $qb->execute();
+    }
 //     * @return User[] Returns an array of User objects
 //     */
 //    public function findByExampleField($value): array

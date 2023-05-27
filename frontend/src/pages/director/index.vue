@@ -2,18 +2,25 @@
 import { reactive, defineComponent } from "vue";
 import moment from 'moment';
 import { log } from "console";
-
+import { Chart, PieController, ArcElement, Legend, Title } from 'chart.js';
 const router = useRouter()
 
 const currentUser = reactive({ value: [] })
 
+const statisticsChartUserDone = reactive({ value: [] });
+const statisticsChartUserValidate = reactive({ value: [] });
 onMounted(async () => {
   if (localStorage.getItem('token') == null) {
     await router.push('/auth')
   } else {
     await getUser()
+    await getUserBookingDone();
+    await getUserBookingValidate();
+    await createChart();
   }
+
 })
+
 
 const getUser = async () => {
   return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/me`, {
@@ -30,6 +37,65 @@ const getUser = async () => {
     })
 }
 
+const getUserBookingDone = async () => {
+  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/users_booking_done/` + currentUser.value?.director?.drivingSchoolId?.id,
+    {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      statisticsChartUserDone.value = data;
+      console.log(statisticsChartUserDone.value);
+    })
+    .catch((error) => {
+      console.error('Error:', error)
+    })
+}
+
+const getUserBookingValidate = async () => {
+  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/users_booking_validate/` + currentUser.value?.director?.drivingSchoolId?.id,
+    {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      statisticsChartUserValidate.value = data;
+      console.log(statisticsChartUserValidate.value);
+    })
+    .catch((error) => {
+      console.error('Error:', error)
+    })
+}
+
+const createChart = () => {
+  Chart.register(PieController, Title, ArcElement, Legend);
+  new Chart(document.getElementById('statisticsChart'), {
+    type: 'pie',
+    data: {
+      datasets: [{
+        label: 'Nombre d\'utilisateurs',
+        data: [statisticsChartUserDone.value.map((item: any) => item.done), statisticsChartUserValidate.value.map((item: any) => item.validate)],
+        backgroundColor: [
+          'rgb(255, 99, 132)',
+          'rgb(54, 162, 235)',
+        ],
+        hoverOffset: 4
+      }],
+      labels: ['Done', 'Validate'],
+      options: {
+        plugins: {
+          legend: {
+            display: true,
+          }
+        }
+      }
+    },
+  });
+}
 const editer = (id: string) => {
   router.push('/director/edit/' + id)
 }
@@ -99,25 +165,21 @@ const editAutoEcole = (id: string) => {
                   <q-icon style="vertical-align: text-top" size="sm" color="positive" name="check" />
                 </span>
               </div>
-              <q-btn label="Modifier l'auto école" push size="md" @click='editAutoEcole(currentUser.value.director?.drivingSchoolId.id)'
-                  color="positive" icon="add" />
+              <q-btn label="Modifier l'auto école" push size="md"
+                @click='editAutoEcole(currentUser.value.director?.drivingSchoolId.id)' color="positive" icon="add" />
             </div>
           </q-card-section>
         </q-card>
-
-        <!-- <q-card class="my-card q-ma-lg  col ">
-          <q-card-section class="vertical-middle">
-            <div class="text-h4">Nombre d'heure effectué(e)</div>
-            <div v-if="currentUser.value.director" class="vertical text-h1">
-              <span v-if="currentUser.value.director.nbHourDone !== null">
-                {{ currentUser.value.director.nbHourDone }}
-              </span>
-              <span v-else class="vertical text-h1"> 0</span>
-            </div>
-
-          </q-card-section>
-        </q-card> -->
       </div>
+    </div>
+  </div>
+  <div class="q-pa-md  ">
+      <div class=" row ">
+      <q-card class="my-card q-ma-lg col-4">
+        <h2>Nombre d'heure validé / terminé </h2>
+        <canvas id="statisticsChart"></canvas>
+      </q-card>
+
     </div>
   </div>
 </template>
