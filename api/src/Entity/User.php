@@ -144,13 +144,13 @@ use App\Controller\GetUserValidateByDrivingSchoolController;
         denormalizationContext: ['groups' => ['user_write']],
     ),
     new Get(
-        uriTemplate: '/users_booking_done/{id}',
+        uriTemplate: 'users_booking_done/{id}',
         controller: GetUserDoneByDrivingSchoolController::class,
         openapiContext: ['description' => 'Get User booking Done'],
         normalizationContext: ['groups' => ['user_cget']],
     ),
     new Get(
-        uriTemplate: '/users_booking_validate/{id}',
+        uriTemplate: 'users_booking_validate/{id}',
         controller: GetUserValidateByDrivingSchoolController::class,
         openapiContext: ['description' => 'Get User booking Validate'],
         normalizationContext: ['groups' => ['user_cget']],

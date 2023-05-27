@@ -99,7 +99,6 @@ const changeStatus = async (id: string) => {
           </th>
         </tr>
         <tr>
-          <th>Id</th>
           <th>Prénom</th>
           <th>Nom</th>
 					<th>Email</th>
@@ -111,7 +110,6 @@ const changeStatus = async (id: string) => {
       </thead>
       <tbody>
         <tr v-for="(student, index) in students.value" :key="index">
-          <td>{{ student.id }}</td>
           <td>{{ student.firstname }}</td>
           <td>{{ student.lastname }}</td>
           <td>{{ student.email }}</td>

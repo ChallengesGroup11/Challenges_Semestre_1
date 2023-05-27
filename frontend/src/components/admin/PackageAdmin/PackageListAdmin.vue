@@ -79,7 +79,6 @@ const deletePackage = async (id: string) => {
           </th>
         </tr>
         <tr>
-          <th>Id</th>
           <th>Nom du package</th>
           <th>Description</th>
           <th>Nombre de crédit</th>
@@ -90,7 +89,6 @@ const deletePackage = async (id: string) => {
       </thead>
       <tbody>
         <tr v-for="(packageDS, index) in packages.value" :key="index">
-          <td>{{ packageDS.id }}</td>
           <td>{{ packageDS.name }}</td>
           <td>{{ packageDS.description }}</td>
           <td>{{ packageDS.nbCredit }}</td>

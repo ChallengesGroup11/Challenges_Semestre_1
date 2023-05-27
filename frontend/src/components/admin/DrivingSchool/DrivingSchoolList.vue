@@ -96,7 +96,6 @@ const changeStatus = async (id: string) => {
           </th>
         </tr>
         <tr>
-          <th>Id</th>
           <th>Nom</th>
           <th>Adresse</th>
           <th>Code Postal</th>
@@ -113,7 +112,6 @@ const changeStatus = async (id: string) => {
       </thead>
       <tbody>
         <tr v-for="(driving, index) in drivingSchool.value" :key="index">
-          <td>{{ driving.id }}</td>
           <td>{{ driving.name }}</td>
           <td>{{ driving.address }}</td>
           <td>{{ driving.zipcode }}</td>
