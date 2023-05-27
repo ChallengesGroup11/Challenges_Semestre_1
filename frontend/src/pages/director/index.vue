@@ -170,19 +170,6 @@ const editAutoEcole = (id: string) => {
             </div>
           </q-card-section>
         </q-card>
-
-        <!-- <q-card class="my-card q-ma-lg  col ">
-          <q-card-section class="vertical-middle">
-            <div class="text-h4">Nombre d'heure effectué(e)</div>
-            <div v-if="currentUser.value.director" class="vertical text-h1">
-              <span v-if="currentUser.value.director.nbHourDone !== null">
-                {{ currentUser.value.director.nbHourDone }}
-              </span>
-              <span v-else class="vertical text-h1"> 0</span>
-            </div>
-
-          </q-card-section>
-        </q-card> -->
       </div>
     </div>
   </div>
