@@ -34,8 +34,6 @@ class CreateMonitorController extends AbstractController
         // TODO : Secure if not email in body
 
 
-        dd($_ENV['DATABASE_URL']);
-
         $email = json_decode($this->requestStack->getCurrentRequest()->getContent())->email;
         $password = json_decode($this->requestStack->getCurrentRequest()->getContent())->password;
         $firstname = json_decode($this->requestStack->getCurrentRequest()->getContent())->firstname;

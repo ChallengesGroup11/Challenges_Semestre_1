@@ -1,7 +1,18 @@
 <script setup lang="ts">
 import * as R from "ramda"
 import { useStoreUser } from "../../../../stores/user"
+import { useQuasar } from "quasar"
 
+const $q = useQuasar()
+const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
+  $q.notify({
+    icon,
+    color,
+    message,
+    textColor,
+    position,
+  })
+}
 const emit = defineEmits<{
   (e: "on-save"): void
 }>()
@@ -29,31 +40,53 @@ const state = reactive({
 const fn = {
   onClickSaveMonitor: async () => {
     const drivingSchoolId = useStoreUser().drivingSchool.id
-    const requestData = {
-      id: state.monitor.id,
-      firstname: state.monitor.firstname,
-      lastname: state.monitor.lastname,
-      email: state.monitor.email,
-      password: state.monitor.password,
-      roles: ["ROLE_MONITOR"],
-      status: false,
-      createBy: "director",
-      drivingSchoolId: drivingSchoolId,
-    }
+
 
     if (state.monitor.id === "") {
+      const requestData = {
+        firstname: state.monitor.firstname,
+        lastname: state.monitor.lastname,
+        email: state.monitor.email,
+        password: state.monitor.password,
+        roles: ["ROLE_MONITOR"],
+        status: false,
+        createBy: "director",
+        drivingSchoolId: drivingSchoolId,
+      }
+      console.log("here")
       const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/director/create_monitor`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
         },
         body: JSON.stringify(requestData),
       })
       if (response.status === 201) {
         emit("on-save")
+        viewNotif("thumb_up", "green", "Le moniteur à bien été créer", "white", "top-right")
         state.isShownModal = false
       }
+      if (response.status === 400) {
+        viewNotif("thumb_down", "red", "Le moniteur ne peut pas être créer", "white", "top-right")
+        return
+      }
+      if (response.status === 500) {
+        viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
+        return
+      }
     } else {
+      const requestData = {
+        id: state.monitor.id,
+        firstname: state.monitor.firstname,
+        lastname: state.monitor.lastname,
+        email: state.monitor.email,
+        password: state.monitor.password,
+        roles: ["ROLE_MONITOR"],
+        status: false,
+        createBy: "director",
+        drivingSchoolId: drivingSchoolId,
+      }
       const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/users/` + requestData.id, {
         method: "PATCH",
         headers: {
@@ -64,7 +97,16 @@ const fn = {
       })
       if (response.status === 200) {
         emit("on-save")
+        viewNotif("thumb_up", "green", "Le moniteur à bien été modifier", "white", "top-right")
         state.isShownModal = false
+      }
+      if (response.status === 400) {
+        viewNotif("thumb_down", "red", "Le moniteur ne peut pas être créer", "white", "top-right")
+        return
+      }
+      if (response.status === 500) {
+        viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
+        return
       }
     }
   },
