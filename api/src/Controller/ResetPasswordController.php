@@ -44,7 +44,7 @@ class ResetPasswordController extends AbstractController
             $email = (new Email())
                 ->from('support@drivequeen.com')
                 ->to($user->getEmail())
-                ->subject('Confirmation de votre compte')
+                ->subject('Modification du mot de passe')
                 ->html($emailBody);
 
             $this->mailer->send($email);

@@ -67,8 +67,12 @@ class CreateMonitorController extends AbstractController
         $entityManager->flush();
 
 
-
-        $routeCheckAccount = "http://localhost:4010/auth/CheckAccount/" . $user->getId() . "?token=" . $user->getToken();
+        if($_ENV['APP_ENV'] == 'dev'){
+            $routeCheckAccount = "http://localhost:4010/auth/CheckAccount/" . $user->getId() . "?token=" . $user->getToken();
+        }else{
+            $routeCheckAccount = "https://drive-queen.turtletv.fr/auth/CheckAccount/" . $user->getId() . "?token=" . $user->getToken();
+        }
+        // $routeCheckAccount = "http://localhost:4010/auth/CheckAccount/" . $user->getId() . "?token=" . $user->getToken();
         if ($createByAdmin == 'admin') {
             $emailBody = $this->EmailBodyCreateByAdmin($routeCheckAccount, $password);
         } else {
@@ -114,7 +118,7 @@ class CreateMonitorController extends AbstractController
            <img src='https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg' alt='logo drivequeen'>
 
 
-            <h1>Confirmation de votre compte directeur</h1>
+            <h1>Confirmation de votre compte moniteur</h1>
             !<p>Vous avez créé un compte sur DriveQueen</p>
             <p>Vous devez confirmer votre compte en cliquant sur le lien ci-dessous</p>
             <a href='{$routeCheckAccount}'>Confirmer mon compte</a>
@@ -149,7 +153,7 @@ class CreateMonitorController extends AbstractController
            <img src='https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg' alt='logo drivequeen'>
 
 
-            <h1>Confirmation de votre compte directeur</h1>
+            <h1>Confirmation de votre compte moniteur</h1>
             !<p>Vous avez créé un compte sur DriveQueen</p>
             <p>Votre mot de passe par defaut est : {$password}</p>
             <p>Vous devez confirmer votre compte en cliquant sur le lien ci-dessous</p>

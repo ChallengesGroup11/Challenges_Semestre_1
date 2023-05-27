@@ -63,8 +63,12 @@ class SignUpDirectorController extends AbstractController
             $entityManager->persist($director);
             $entityManager->flush();
 
-
-            $routeCheckAccount = "http://localhost:4010/auth/CheckAccount/". $user->getId()."?token=". $user->getToken();
+            if($_ENV['APP_ENV'] == 'dev'){
+                $routeCheckAccount = "http://localhost:4010/auth/CheckAccount/" . $user->getId() . "?token=" . $user->getToken();
+            }else{
+                $routeCheckAccount = "https://drive-queen.turtletv.fr/auth/CheckAccount/" . $user->getId() . "?token=" . $user->getToken();
+            }
+            // $routeCheckAccount = "http://localhost:4010/auth/CheckAccount/". $user->getId()."?token=". $user->getToken();
             if($createByAdmin == 'admin'){
                 $emailBody = $this->EmailBodyCreateByAdmin($routeCheckAccount,$password);
             }else{

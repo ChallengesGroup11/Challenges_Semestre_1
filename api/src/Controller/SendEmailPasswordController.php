@@ -25,7 +25,7 @@ class SendEmailPasswordController extends AbstractController
 
     public function __invoke()
     {
-
+        dd($_ENV['APP_ENV'],$_ENV['DATABASE_URL']);
         // TODO : Secure if not email in body
         $email = json_decode($this->requestStack->getCurrentRequest()->getContent())->email;
         $user = $this->userRepository->findOneBy(['email' => $email]);
@@ -39,14 +39,18 @@ class SendEmailPasswordController extends AbstractController
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-
-        $routeChangeMdp = "http://localhost:4010/auth/ChangeMdp/" . $user->getId() . "?token=" . $user->getToken();
+        if($_ENV['APP_ENV'] == 'dev'){
+            $routeChangeMdp = "http://localhost:4010/auth/ChangeMdp/" . $user->getId() . "?token=" . $user->getToken();
+        }else{
+            $routeChangeMdp = "https://drive-queen.turtletv.fr/auth/ChangeMdp/" . $user->getId() . "?token=" . $user->getToken();
+        }
+        // $routeChangeMdp = "http://localhost:4010/auth/ChangeMdp/" . $user->getId() . "?token=" . $user->getToken();
         $emailBody = $this->EmailBody($routeChangeMdp);
         // TODO : send email
         $email = (new Email())
             ->from('support@drivequeen.com')
             ->to($user->getEmail())
-            ->subject('Confirmation de votre compte')
+            ->subject('Modification de mot de passe')
             ->html($emailBody);
 
         $this->mailer->send($email);
