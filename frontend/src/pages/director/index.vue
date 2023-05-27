@@ -47,7 +47,7 @@ const addKbisAndSiret = (id: string) => {
         <q-card class="my-card q-ma-lg col">
           <q-card-section>
             <div class="text-h4"> {{ currentUser.value?.firstname }} {{ currentUser.value?.lastname }} <q-btn size="sm"
-                round color="warning" @click="editer(currentUser.value?.id)" icon="edit"></q-btn></div>
+                round color="warning" @click="editer(currentUser.value?.director.id)" icon="edit"></q-btn></div>
             <div class="text-left">
               <div class="text-h6">Mon email : {{ currentUser.value?.email }}</div>
               <div class="text-center q-mt-lg" v-if="!currentUser.value?.director?.drivingSchoolId">
