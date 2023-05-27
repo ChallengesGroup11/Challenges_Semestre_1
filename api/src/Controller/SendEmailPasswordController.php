@@ -25,7 +25,6 @@ class SendEmailPasswordController extends AbstractController
 
     public function __invoke()
     {
-        dd($_ENV['APP_ENV'],$_ENV['DATABASE_URL']);
         // TODO : Secure if not email in body
         $email = json_decode($this->requestStack->getCurrentRequest()->getContent())->email;
         $user = $this->userRepository->findOneBy(['email' => $email]);
@@ -78,9 +77,16 @@ class SendEmailPasswordController extends AbstractController
                 p{
                     color: #000;
                 }
+                a{
+                    background-color: #000;
+                    color: #fff;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    text-decoration: none;
+                }
 
             </style>
-           <img src='https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg' alt='logo drivequeen'>
+           <img src='https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg' alt='logo drivequeen' width='100' height='100'>
 
 
             <h1>Modification de mot de passe</h1>

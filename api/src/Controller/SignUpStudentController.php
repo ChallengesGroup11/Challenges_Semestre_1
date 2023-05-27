@@ -102,9 +102,16 @@ class SignUpStudentController extends AbstractController
                 p{
                     color: #000;
                 }
+                a{
+                    background-color: #000;
+                    color: #fff;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    text-decoration: none;
+                }
 
             </style>
-            <img src='https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg' alt='logo drivequeen'>
+            <img src='https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg' alt='logo drivequeen' width='100' height='100'>
 
 
             <h1>Confirmation de votre compte étudiant!</h1>
@@ -136,9 +143,16 @@ class SignUpStudentController extends AbstractController
                 p{
                     color: #000;
                 }
+                a{
+                    background-color: #000;
+                    color: #fff;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    text-decoration: none;
+                }
 
             </style>
-           <img src='https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg' alt='logo drivequeen'>
+           <img src='https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg' alt='logo drivequeen' width='100' height='100'>
 
 
             <h1>Confirmation de votre compte users</h1>
