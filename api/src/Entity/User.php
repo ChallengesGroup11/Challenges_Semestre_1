@@ -29,6 +29,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Controller\UserEditStatusController;
+use App\Controller\GetUserDoneByDrivingSchoolController;
+use App\Controller\GetUserValidateByDrivingSchoolController;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -141,6 +143,18 @@ use App\Controller\UserEditStatusController;
         openapiContext: ['description' => 'Create Monitor'],
         denormalizationContext: ['groups' => ['user_write']],
     ),
+    new Get(
+        uriTemplate: '/users_booking_done/{id}',
+        controller: GetUserDoneByDrivingSchoolController::class,
+        openapiContext: ['description' => 'Get User booking Done'],
+        normalizationContext: ['groups' => ['user_cget']],
+    ),
+    new Get(
+        uriTemplate: '/users_booking_validate/{id}',
+        controller: GetUserValidateByDrivingSchoolController::class,
+        openapiContext: ['description' => 'Get User booking Validate'],
+        normalizationContext: ['groups' => ['user_cget']],
+    )
 ])]
 
 #[GetCollection(
