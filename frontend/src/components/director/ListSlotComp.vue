@@ -329,7 +329,7 @@ loadData()
       <template v-slot:top>
         <q-btn
           color="primary"
-          :disable="state.isLoading || state.rows.length === 0"
+          :disable="state.isLoading"
           label="Ajouter un créneau"
           @click="state.isShownModal = true"
         />
