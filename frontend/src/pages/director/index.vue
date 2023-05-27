@@ -37,6 +37,10 @@ const editer = (id: string) => {
 const addKbisAndSiret = (id: string) => {
   router.push('/director/add/createdrivingschool/' + id)
 }
+
+const editAutoEcole = (id: string) => {
+  router.push('/director/edit/drivingschool/' + id)
+}
 </script>
 
 <template>
@@ -47,7 +51,7 @@ const addKbisAndSiret = (id: string) => {
         <q-card class="my-card q-ma-lg col">
           <q-card-section>
             <div class="text-h4"> {{ currentUser.value?.firstname }} {{ currentUser.value?.lastname }} <q-btn size="sm"
-                round color="warning" @click="editer(currentUser.value?.id)" icon="edit"></q-btn></div>
+                round color="warning" @click="editer(currentUser.value?.director.id)" icon="edit"></q-btn></div>
             <div class="text-left">
               <div class="text-h6">Mon email : {{ currentUser.value?.email }}</div>
               <div class="text-center q-mt-lg" v-if="!currentUser.value?.director?.drivingSchoolId">
@@ -95,6 +99,8 @@ const addKbisAndSiret = (id: string) => {
                   <q-icon style="vertical-align: text-top" size="sm" color="positive" name="check" />
                 </span>
               </div>
+              <q-btn label="Modifier l'auto école" push size="md" @click='editAutoEcole(currentUser.value.director?.drivingSchoolId.id)'
+                  color="positive" icon="add" />
             </div>
           </q-card-section>
         </q-card>

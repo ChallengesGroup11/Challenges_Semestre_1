@@ -56,8 +56,12 @@ class SignUpStudentController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-
-            $routeCheckAccount = "http://localhost:4010/auth/CheckAccount/". $user->getId()."?token=". $user->getToken();
+            if($_ENV['APP_ENV'] == 'dev'){
+                $routeCheckAccount = "http://localhost:4010/auth/CheckAccount/" . $user->getId() . "?token=" . $user->getToken();
+            }else{
+                $routeCheckAccount = "https://drive-queen.turtletv.fr/auth/CheckAccount/" . $user->getId() . "?token=" . $user->getToken();
+            }
+            // $routeCheckAccount = "http://localhost:4010/auth/CheckAccount/". $user->getId()."?token=". $user->getToken();
             if($createByAdmin == 'admin'){
                 $emailBody = $this->EmailBodyCreateByAdmin($routeCheckAccount,$password);
             }else{
@@ -98,9 +102,16 @@ class SignUpStudentController extends AbstractController
                 p{
                     color: #000;
                 }
+                a{
+                    background-color: #000;
+                    color: #fff;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    text-decoration: none;
+                }
 
             </style>
-            <img src='https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg' alt='logo drivequeen'>
+            <img src='https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg' alt='logo drivequeen' width='100' height='100'>
 
 
             <h1>Confirmation de votre compte étudiant!</h1>
@@ -132,9 +143,16 @@ class SignUpStudentController extends AbstractController
                 p{
                     color: #000;
                 }
+                a{
+                    background-color: #000;
+                    color: #fff;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    text-decoration: none;
+                }
 
             </style>
-           <img src='https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg' alt='logo drivequeen'>
+           <img src='https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg' alt='logo drivequeen' width='100' height='100'>
 
 
             <h1>Confirmation de votre compte users</h1>

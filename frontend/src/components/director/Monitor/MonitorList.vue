@@ -1,7 +1,18 @@
 <script setup lang="ts">
 import { reactive } from "vue"
 const router = useRouter()
+import { useQuasar } from "quasar"
 
+const $q = useQuasar()
+const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
+  $q.notify({
+    icon,
+    color,
+    message,
+    textColor,
+    position,
+  })
+}
 const monitors = reactive({ value: [] })
 const currentUser = reactive({ value: [] })
 
@@ -86,6 +97,17 @@ const deleteMonitor = async (id: object) => {
       Authorization: "Bearer " + localStorage.getItem("token"),
     },
   })
+  if (response.status === 400) {
+    viewNotif("thumb_down", "red", "Le moniteur ne peut pas être supprimé", "white", "top-right")
+    return
+  }
+  if (response.status === 500) {
+    viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
+    return
+  }
+  if (response.status === 204) {
+    viewNotif("thumb_up", "green", "Le moniteur à bien été supprimé", "white", "top-right")
+  }
   await fetchMonitor()
 }
 
@@ -99,6 +121,17 @@ const changeStatus = async (id: string) => {
     },
     body: "{}",
   })
+  if (response.status === 400) {
+    viewNotif("thumb_down", "red", "Le moniteur ne peut pas être modifié", "white", "top-right")
+    return
+  }
+  if (response.status === 500) {
+    viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
+    return
+  }
+  if (response.status === 201) {
+    viewNotif("thumb_up", "green", "Le moniteur à bien été modifié", "white", "top-right")
+  }
   await fetchMonitor()
 }
 
@@ -152,7 +185,7 @@ loadData()
           <td>
             <q-btn color="negative" text-color="white" icon="delete" @click="deleteMonitor(monitor)" />
           </td>
-          <td v-if="monitor.status === true">
+          <td v-if="monitor.userId.status === true">
             <q-btn color="secondary" text-color="white" icon="sync" @click="changeStatus(monitor)" />
           </td>
           <td v-else>
