@@ -28,9 +28,10 @@ const fn = {
   },
   takeBooking: async (booking: Booking) => {
     try {
-      await ApiService.patch("bookings", { studentId: [`/students/${useStoreUser().user.student.id}`], id: booking.id })
+      console.log(useStoreUser().user)
+      await ApiService.patch("bookings", { studentId: [useStoreUser().user.student], id: booking.id })
       data.ListInitialBooking = data.ListInitialBooking.filter((item: any) => item.id !== booking.id)
-
+      viewNotif("thumb_up", "green", "Réservation effectuée", "white", "top-right")
       makeListFreeBooking(data.ListInitialBooking)
     } catch (e) {
       viewNotif("thumb_down", "red", "Vous n'avez pas assez de crédit: 2 minimum requis", "white", "top-right")
