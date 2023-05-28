@@ -5,7 +5,7 @@
 
 # https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
 ARG PHP_VERSION=8.1
-ARG CADDY_VERSION=2
+ARG CADDY_VERSION=2.7
 
 # "php" stage
 FROM php:${PHP_VERSION}-fpm-alpine AS api_platform_php
@@ -121,7 +121,7 @@ CMD ["php-fpm"]
 FROM caddy:${CADDY_VERSION}-builder-alpine AS api_platform_caddy_builder
 
 # install Mercure and Vulcain modules
-RUN xcaddy build \
+RUN xcaddy build v2.6.4 \
     --with github.com/dunglas/mercure \
     --with github.com/dunglas/mercure/caddy \
     --with github.com/dunglas/vulcain \
