@@ -123,8 +123,13 @@ FROM caddy:${CADDY_VERSION}-builder-alpine AS api_platform_caddy_builder
 
 # install Mercure and Vulcain modules
 RUN xcaddy build \
-    --with github.com/dunglas/mercure \
-    --with github.com/dunglas/mercure/caddy \
+    --with github.com/dunglas/mercure
+	#@aa1b618d469d2c13feae84c1cde325863b60cd4e
+
+# RUN xcaddy build \
+#     --with github.com/dunglas/mercure/caddy@aa1b618d469d2c13feae84c1cde325863b60cd4e
+
+RUN xcaddy build \
     --with github.com/dunglas/vulcain \
     --with github.com/dunglas/vulcain/caddy
 
