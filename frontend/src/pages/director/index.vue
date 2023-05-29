@@ -3,12 +3,26 @@ import { reactive, defineComponent } from "vue";
 import moment from 'moment';
 import { log } from "console";
 import { Chart, PieController, ArcElement, Legend, Title } from 'chart.js';
+import { useQuasar } from "quasar"
+import { done } from "nprogress";
+
+const $q = useQuasar()
+const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
+  $q.notify({
+    icon,
+    color,
+    message,
+    textColor,
+    position,
+  })
+}
 const router = useRouter()
 
 const currentUser = reactive({ value: [] })
 
 const statisticsChartUserDone = reactive({ value: [] });
 const statisticsChartUserValidate = reactive({ value: [] });
+const ShowStat = reactive({ value: false });
 onMounted(async () => {
   if (localStorage.getItem('token') == null) {
     await router.push('/auth')
@@ -16,7 +30,7 @@ onMounted(async () => {
     await getUser()
     await getUserBookingDone();
     await getUserBookingValidate();
-    await createChart();
+    createChart();
   }
 
 })
@@ -46,10 +60,14 @@ const getUserBookingDone = async () => {
     })
     .then((response) => response.json())
     .then((data) => {
+      if (data.length != 0) {
+        ShowStat.value = true;
+      }
       statisticsChartUserDone.value = data;
       console.log(statisticsChartUserDone.value);
     })
     .catch((error) => {
+      statisticsChartUserDone.value = [];
       console.error('Error:', error)
     })
 }
@@ -63,16 +81,25 @@ const getUserBookingValidate = async () => {
     })
     .then((response) => response.json())
     .then((data) => {
+      console.log(data)
+      if (data.length != 0) {
+        ShowStat.value = true;
+      }
       statisticsChartUserValidate.value = data;
       console.log(statisticsChartUserValidate.value);
+
     })
     .catch((error) => {
+      statisticsChartUserValidate.value = [];
       console.error('Error:', error)
     })
 }
 
 const createChart = () => {
   Chart.register(PieController, Title, ArcElement, Legend);
+  if(ShowStat.value == false){
+    return;
+  }
   new Chart(document.getElementById('statisticsChart'), {
     type: 'pie',
     data: {
@@ -173,8 +200,8 @@ const editAutoEcole = (id: string) => {
       </div>
     </div>
   </div>
-  <div class="q-pa-md  ">
-      <div class=" row ">
+  <div v-if="ShowStat.value" class="q-pa-md  ">
+    <div class=" row ">
       <q-card class="my-card q-ma-lg col-4">
         <h2>Nombre d'heure validé / terminé </h2>
         <canvas id="statisticsChart"></canvas>
