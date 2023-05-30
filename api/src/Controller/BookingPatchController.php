@@ -38,6 +38,7 @@ class BookingPatchController extends AbstractController
             if ($count_credit < 2) {
                 return $this->json(['error' => 'Student has less than 2 count_credit'], 400);
             }
+            $student->setCountCredit($count_credit - 2);
         }
 
         $em->persist($booking);

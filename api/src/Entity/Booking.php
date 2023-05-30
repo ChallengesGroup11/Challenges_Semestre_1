@@ -21,7 +21,7 @@ use App\Controller\BookingPatchController;
 // @ApiResource(attributes={"normalization_context": {"groups"={"todolist"}, "enable_max_depth"=true}})
 #[ApiResource(operations: [
     new Patch (
-        uriTemplate: '/bookings/{id}',
+        uriTemplate: '/bookings/student/{id}',
         controller: BookingPatchController::class,
         openapiContext: [
             'summary' => 'Editer un créneau',
@@ -31,7 +31,7 @@ use App\Controller\BookingPatchController;
     ),
     new Post(
         denormalizationContext: ['groups' => ['booking_write']],
-        security: 'is_granted("ROLE_DIRECTOR") or is_granted("ROLE_ADMIN")',
+        security: '(is_granted("ROLE_DIRECTOR")) or (is_granted("ROLE_ADMIN"))',
     )
 
 ]
@@ -60,7 +60,7 @@ class Booking
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
-    #[Groups(['booking_get','booking_cget','driving_school_get'])]
+    #[Groups(['booking_get','booking_cget','driving_school_get','driving_school_cget'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

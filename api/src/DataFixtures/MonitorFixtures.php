@@ -10,6 +10,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 class MonitorFixtures extends Fixture implements DependentFixtureInterface
 {
 
+    public const MONITOR_REFERENCE = 'monitor';
     public const MONITOR_REFERENCE_GROUP = 'monitor';
     public function load(ObjectManager $manager): void
     {
@@ -26,6 +27,7 @@ class MonitorFixtures extends Fixture implements DependentFixtureInterface
             $this->addReference(self::MONITOR_REFERENCE_GROUP.$i, $monitorGroup);
         }
         $manager->flush();
+        $this->addReference(self::MONITOR_REFERENCE, $monitor);
 
     }
 

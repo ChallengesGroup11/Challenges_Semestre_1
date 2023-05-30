@@ -93,7 +93,7 @@ class Student
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['student_get'])]
+    #[Groups(['student_get','user_get'])]
     private ?int $nbHourDone;
 
     #[ApiProperty(types: ['https://localhost/contentUrl'])]
@@ -130,7 +130,7 @@ class Student
 
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['student_get'])]
+    #[Groups(['student_get','user_get'])]
     private ?int $countCredit = null;
 
     public function __construct()

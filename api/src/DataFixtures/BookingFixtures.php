@@ -20,7 +20,8 @@ class BookingFixtures extends Fixture implements DependentFixtureInterface
             ->setStatusDone((bool)random_int(0, 1))
             ->setStatusValidate((bool)random_int(0, 1))
             ->setComment('Commentaire ')
-            ->addStudentId($this->getReference(StudentFixtures::STUDENT_REFERENCE));
+            ->addStudentId($this->getReference(StudentFixtures::STUDENT_REFERENCE))
+            ->addMonitorId($this->getReference(MonitorFixtures::MONITOR_REFERENCE));
         $manager->persist($booking);
         $manager->flush();
 
@@ -32,7 +33,8 @@ class BookingFixtures extends Fixture implements DependentFixtureInterface
                 ->setStatusDone((bool)random_int(0, 1))
                 ->setStatusValidate((bool)random_int(0, 1))
                 ->setComment('Commentaire ' . $i)
-                ->addStudentId($this->getReference(StudentFixtures::STUDENT_REFERENCE_GROUP . mt_rand(0, 9)));
+                ->addStudentId($this->getReference(StudentFixtures::STUDENT_REFERENCE_GROUP . mt_rand(0, 9)))
+                ->addMonitorId($this->getReference(MonitorFixtures::MONITOR_REFERENCE_GROUP . mt_rand(0, 9)));
 
             $manager->persist($bookingGroup);
             $manager->flush();
