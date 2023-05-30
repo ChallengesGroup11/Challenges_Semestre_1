@@ -145,9 +145,9 @@ loadData()
                 <td>{{ dateJour(bookings.slotBegin) }}</td>
                 <td>{{ dateHeure(bookings.slotBegin) }}</td>
                 <td>{{ dateHeure(bookings.slotEnd) }}</td>
-                <td>{{ bookings.drivingSchoolId[0].name }}</td>
-                <td>{{ bookings.drivingSchoolId[0].phoneNumber }}</td>
-                <td>{{ bookings.drivingSchoolId[0].city }}</td>
+                <td>{{ bookings.drivingSchoolId.name }}</td>
+                <td>{{ bookings.drivingSchoolId.phoneNumber }}</td>
+                <td>{{ bookings.drivingSchoolId.city }}</td>
                 <td v-if="bookings.statusValidate === true">
                   <q-icon name="mood" color="positive" size="20px" />
                 </td>
