@@ -33,7 +33,8 @@ const fn = {
 }
 
 const loadData = () => {
-  const bookingsDrivingSchool = useStoreUser().drivingSchool.bookings
+
+  const bookingsDrivingSchool = useStoreUser().ListBooking
 
   const ListBookingOfCurrentMonitor = bookingsDrivingSchool.filter(
     (booking: any) => booking.monitorId[0] === `/monitors/${state.monitorId}`,

@@ -87,7 +87,7 @@ class DrivingSchool
 
 
     #[ORM\Column(length: 255)]
-    #[Groups(['driving_school_cget', 'driving_school_get', 'driving_school_write', 'monitor_get', 'director_cget', 'monitor_cget'])]
+    #[Groups(['driving_school_cget', 'driving_school_get', 'driving_school_write', 'monitor_get', 'director_cget', 'monitor_cget','booking_get'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
@@ -107,7 +107,7 @@ class DrivingSchool
     private ?string $siret = null;
 
     #[ORM\Column(length: 10)]
-    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write', 'monitor_get'])]
+    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write', 'monitor_get','booking_get'])]
     private ?string $phoneNumber = null;
 
     #[ApiProperty(types: ['https://localhost/contentUrl'])]
@@ -135,7 +135,7 @@ class DrivingSchool
     private Collection $monitors;
 
     #[ORM\OneToMany(mappedBy: 'drivingSchoolId', cascade: ['persist', 'remove'], targetEntity: Booking::class)]
-    #[Groups(['driving_school_get', 'booking_cget', "user_get"])]
+    #[Groups(['driving_school_get', 'driving_school_cget','booking_cget', "user_get"])]
     private Collection $bookings;
 
     public function __construct()
