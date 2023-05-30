@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { reactive } from "vue"
 const router = useRouter()
+
 import { useQuasar } from "quasar"
+import { useStoreUser } from "../../../../stores/user"
+
+const drivingSchool = useStoreUser().drivingSchool
 
 const $q = useQuasar()
 const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
@@ -66,7 +70,9 @@ const getUser = async () => {
 }
 
 const fetchMonitor = async () => {
-  const res = fetch("https://localhost/monitors/getAll", {
+  const idDrivingSchool = drivingSchool.id
+
+  const res = fetch(`https://localhost/driving_schools/${idDrivingSchool}`, {
     headers: {
       accept: "application/ld+json",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -74,11 +80,28 @@ const fetchMonitor = async () => {
   })
     .then((response) => response.json())
     .then((data) => {
-      monitors.value = data["hydra:member"]
-      console.log(monitors.value)
+      debugger
+      monitors.value = data.monitors
+      console.log(data.monitors)
     })
   return res
 }
+
+// const monitors = drivingSchool.monitors
+// console.log(monitors)
+// return monitors
+// const res = fetch("https://localhost/monitors/getAll", {
+//   headers: {
+//     accept: "application/ld+json",
+//     Authorization: `Bearer ${localStorage.getItem("token")}`,
+//   },
+// })
+//   .then((response) => response.json())
+//   .then((data) => {
+//     monitors.value = data["hydra:member"]
+//     console.log(monitors.value)
+//   })
+// return res
 
 const editMonitor = (monitor: any) => {
   state.currentMonitor = fn.makeMonitor(monitor)
@@ -154,7 +177,14 @@ loadData()
           <th colspan="13">
             <div class="text-h4 q-ml-md">
               Liste des moniteurs
-              <q-btn class="float-right" color="positive" text-color="white" icon="add" @click="addMonitor()" :disable="currentUser.value.director?.drivingSchoolId === null" />
+              <q-btn
+                class="float-right"
+                color="positive"
+                text-color="white"
+                icon="add"
+                @click="addMonitor()"
+                :disable="currentUser.value.director?.drivingSchoolId === null"
+              />
             </div>
           </th>
         </tr>
