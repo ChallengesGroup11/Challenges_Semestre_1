@@ -57,7 +57,6 @@ const getUser = async () => {
       <span>Bienvenue {{ currentUser.value.firstname }} sur notre site !</span>
     </q-toolbar>
     <q-toolbar inset>
-      <q-btn flat label="Home" to="/admin" />
       <q-btn flat label="Auto-école" to="/admin/DrivingSchool" />
       <q-btn flat label="Directors" to="/admin/Director" />
       <q-btn flat label="Monitor" to="/admin/Monitor" />

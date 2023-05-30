@@ -52,7 +52,6 @@ const hasProvidedCni = computed(() => {
     </q-toolbar>
     <q-toolbar inset>
       <q-btn icon="home_filled" flat label="Home" to="/student" />
-      <q-btn icon="person" flat label="Mon profil" to="/student/profil" />
       <q-btn v-if="hasProvidedCni" icon="paid" flat label="Acheter des crédits" to="/student/package" />
       <q-btn v-if="hasProvidedCni" icon="list" flat label="Liste des auto-écoles" to="/student/driving_school/list" />
       <q-space />
