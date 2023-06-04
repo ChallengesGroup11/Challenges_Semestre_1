@@ -153,7 +153,7 @@ const fn = {
     }
 
     const res = await ApiService.insert(API_URL.BOOKINGS, newRowDb)
-    viewNotif("thumb_up", "green", "Votre session à bien été créer", "white", "top-right")
+    viewNotif("thumb_up", "green", "Votre session à bien été créée", "white", "top-right")
 
     //mettre monitor et student à vide avant de push
     res.firstname = ""
@@ -161,9 +161,7 @@ const fn = {
     res.Monitorfirstname = ""
     res.Monitorlastname = ""
 
-
     state.rows.push(res)
-
 
     state.isShownModal = false
   },
@@ -180,14 +178,31 @@ const fn = {
 
   verifySlot(slotBegin: string, slotEnd: string) {
     if (slotBegin > slotEnd)
-      return viewNotif("thumb_down", "red", "La date de début doit être inférieure à la date de fin", "white", "top-right")
+      return viewNotif(
+        "thumb_down",
+        "red",
+        "La date de début doit être inférieure à la date de fin",
+        "white",
+        "top-right",
+      )
 
     if (slotBegin === slotEnd)
-      return viewNotif("thumb_down", "red", "La date de début doit être inférieure à la date de fin", "white", "top-right")
-
+      return viewNotif(
+        "thumb_down",
+        "red",
+        "La date de début doit être inférieure à la date de fin",
+        "white",
+        "top-right",
+      )
 
     if (slotBegin < moment().add(1, "days").format("YYYY-MM-DD"))
-      return viewNotif("thumb_down", "red", "La date de début doit être supérieure à la date du jour", "white", "top-right")
+      return viewNotif(
+        "thumb_down",
+        "red",
+        "La date de début doit être supérieure à la date du jour",
+        "white",
+        "top-right",
+      )
 
     const resDif = moment(slotEnd).diff(moment(slotBegin), "minutes")
 
@@ -199,7 +214,7 @@ const fn = {
 }
 
 const fetchAll = async () => {
-  if( useStoreUser().drivingSchool.id === undefined) return
+  if (useStoreUser().drivingSchool.id === undefined) return
   const response = await ApiService.fetchbById(API_URL.DRIVING_SHCOOLS, useStoreUser().drivingSchool.id)
   const ListBooking = response.bookings
   console.log(ListBooking)

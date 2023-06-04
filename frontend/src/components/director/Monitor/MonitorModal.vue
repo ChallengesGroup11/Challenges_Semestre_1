@@ -41,7 +41,6 @@ const fn = {
   onClickSaveMonitor: async () => {
     const drivingSchoolId = useStoreUser().drivingSchool.id
 
-
     if (state.monitor.id === "") {
       const requestData = {
         firstname: state.monitor.firstname,
@@ -64,7 +63,7 @@ const fn = {
       })
       if (response.status === 201) {
         emit("on-save")
-        viewNotif("thumb_up", "green", "Le moniteur à bien été créer", "white", "top-right")
+        viewNotif("thumb_up", "green", "Le moniteur à bien été créé", "white", "top-right")
         state.isShownModal = false
       }
       if (response.status === 400) {
@@ -97,7 +96,7 @@ const fn = {
       })
       if (response.status === 200) {
         emit("on-save")
-        viewNotif("thumb_up", "green", "Le moniteur à bien été modifier", "white", "top-right")
+        viewNotif("thumb_up", "green", "Le moniteur à bien été modifié", "white", "top-right")
         state.isShownModal = false
       }
       if (response.status === 400) {

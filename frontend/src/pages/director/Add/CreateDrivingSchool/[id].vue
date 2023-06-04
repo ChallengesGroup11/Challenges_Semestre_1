@@ -93,10 +93,10 @@ const onSubmit = async () => {
         console.log(response)
         isLoading.value = false
         if (response.ok) {
-          viewNotif("thumb_up", "green", "Votre auto école à bien été créer", "white", "top-right")
+          viewNotif("thumb_up", "green", "Votre auto école à bien été créée", "white", "top-right")
           await router.push("/director")
         } else {
-          viewNotif("thumb_down", "red", "Votre auto école n'à pas été créer", "white", "top-right")
+          viewNotif("thumb_down", "red", "Votre auto école n'à pas été créée", "white", "top-right")
         }
       } else {
         viewNotif("thumb_down", "red", "Vos documents ne sont pas valides, veuillez réessayer", "white", "top-right")
@@ -120,10 +120,17 @@ const onSubmit = async () => {
             <q-input filled v-model="user.city" label="Ville" />
             <q-input filled v-model="user.zipCode" label="Code postal" />
             <q-input filled v-model="user.phone_number" label="Numéro de téléphone" />
-            <q-file @update:model-value="(val) => {
-                file = val[0]
-              }
-              " filled label="Ajouter votre Kbis" type="file" v-model="user.filePathKbis">
+            <q-file
+              @update:model-value="
+                (val) => {
+                  file = val[0]
+                }
+              "
+              filled
+              label="Ajouter votre Kbis"
+              type="file"
+              v-model="user.filePathKbis"
+            >
               <template v-slot:append>
                 <q-icon name="attach_file" />
               </template>
@@ -133,8 +140,16 @@ const onSubmit = async () => {
               <q-btn label="Valider" type="submit" color="primary" />
             </div>
           </q-form>
-          <q-circular-progress v-if="isLoading" indeterminate size="50px" :thickness="0.22" rounded color="lime"
-            track-color="grey-3" class="q-ma-md" />
+          <q-circular-progress
+            v-if="isLoading"
+            indeterminate
+            size="50px"
+            :thickness="0.22"
+            rounded
+            color="lime"
+            track-color="grey-3"
+            class="q-ma-md"
+          />
         </div>
       </q-card>
     </div>

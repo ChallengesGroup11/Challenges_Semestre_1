@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\DrivingSchoolEditStatusController;
+use App\Controller\DrivingSchoolAllMonitorController;
 use App\Repository\DrivingSchoolRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -58,6 +59,16 @@ use Symfony\Component\HttpFoundation\File\File;
             openapiContext: ['description' => 'Get User booking Validate'],
             normalizationContext: ['groups' => ['driving_school_cget']],
         ),
+
+        new GetCollection(
+            uriTemplate: '/driving_schools/{id}/allMonitor',
+            controller: DrivingSchoolAllMonitorController::class,
+            openapiContext: ['description' => 'Get all monitors by driving school'],
+            normalizationContext: ['groups' => ['driving_school_cget']],
+            security: '(is_granted("ROLE_DIRECTOR")) or (is_granted("ROLE_ADMIN"))',
+        ),
+
+
     ],
 )]
 #[GetCollection(

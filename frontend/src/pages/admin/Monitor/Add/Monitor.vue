@@ -1,6 +1,5 @@
-<script setup lang='ts'>
-
-import { ref } from 'vue'
+<script setup lang="ts">
+import { ref } from "vue"
 import { useQuasar } from "quasar"
 
 const $q = useQuasar()
@@ -21,8 +20,8 @@ const user = reactive({
   lastname: "",
   email: "",
   password: "",
-});
-const drivingSchoolSelected = ref('')
+})
+const drivingSchoolSelected = ref("")
 const drivingSchools = reactive({ value: [] })
 
 const initProvisoryPassword = () => {
@@ -68,7 +67,7 @@ const onSubmit = async () => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(requestData),
-  });
+  })
   if (response.status === 400) {
     viewNotif("thumb_down", "red", "Le moniteur ne peut pas être créer", "white", "top-right")
     return
@@ -78,12 +77,9 @@ const onSubmit = async () => {
     return
   }
   if (response.status === 201) {
-    viewNotif("thumb_up", "green", "Le moniteur à bien été créer", "white", "top-right")
+    viewNotif("thumb_up", "green", "Le moniteur à bien été créé", "white", "top-right")
     await router.push("/admin/Monitor")
-
   }
-
-
 }
 </script>
 
