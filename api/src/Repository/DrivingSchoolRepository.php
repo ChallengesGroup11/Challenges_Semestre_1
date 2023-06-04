@@ -42,7 +42,7 @@ class DrivingSchoolRepository extends ServiceEntityRepository
     public function findAllMonitorByDrivingSchool($id)
     {
         $qb = $this->createQueryBuilder('d')
-            ->select('u.firstname, u.lastname, u.email, u.status, u.id')
+            ->select('u.firstname, u.lastname, u.email, u.status, u.id, m.id as monitorId')
             ->join('d.monitors', 'm')
             ->join('m.userId', 'u')
             ->where('d.id = :id')

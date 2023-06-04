@@ -46,12 +46,11 @@ const fn = {
   },
 
   makeMonitor(monitor: any) {
-    debugger
     return {
-      id: monitor.userId.id,
-      firstname: monitor.userId.firstname,
-      lastname: monitor.userId.lastname,
-      email: monitor.userId.email,
+      id: monitor.id,
+      firstname: monitor.firstname,
+      lastname: monitor.lastname,
+      email: monitor.email,
       password: "",
     }
   },
@@ -74,7 +73,6 @@ const getUser = async () => {
 
 const fetchMonitor = async () => {
   const idDrivingSchool = drivingSchool.id
-  debugger
   const res = fetch(`https://localhost/driving_schools/${idDrivingSchool}/allMonitor`, {
     headers: {
       accept: "application/ld+json",
@@ -84,29 +82,11 @@ const fetchMonitor = async () => {
     .then((response) => response.json())
     .then((data) => {
       monitors.value = data
-      debugger
     })
   return res
 }
 
-// const monitors = drivingSchool.monitors
-// console.log(monitors)
-// return monitors
-// const res = fetch("https://localhost/monitors/getAll", {
-//   headers: {
-//     accept: "application/ld+json",
-//     Authorization: `Bearer ${localStorage.getItem("token")}`,
-//   },
-// })
-//   .then((response) => response.json())
-//   .then((data) => {
-//     monitors.value = data["hydra:member"]
-//     console.log(monitors.value)
-//   })
-// return res
-
 const editMonitor = (monitor: any) => {
-  debugger
   state.currentMonitor = fn.makeMonitor(monitor)
 }
 
@@ -115,8 +95,8 @@ const addMonitor = () => {
   console.log(state.currentMonitor)
 }
 
-const deleteMonitor = async (id: object) => {
-  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/monitors/` + id.id, {
+const deleteMonitor = async (monitor: object) => {
+  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/monitors/` + monitor.monitorId, {
     method: "DELETE",
     headers: {
       accept: "application/ld+json",
@@ -138,7 +118,7 @@ const deleteMonitor = async (id: object) => {
 }
 
 const changeStatus = async (id: string) => {
-  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/users/` + id.userId.id + "/edit_status", {
+  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/users/` + id.id + "/edit_status", {
     method: "PATCH",
     headers: {
       accept: "application/ld+json",
@@ -222,7 +202,7 @@ loadData()
             <q-btn color="negative" text-color="white" icon="delete" @click="deleteMonitor(monitor)" />
           </td>
           <td v-if="monitor.status === true">
-            <q-btn color="secondary" text-color="white" icon="sync" @click="changeStatus(monitor)" />
+            <q-btn color="secondary" text-color="white" icon="sync" />
           </td>
           <td v-else>
             <q-btn color="warning" text-color="white" icon="sync" @click="changeStatus(monitor)" />
