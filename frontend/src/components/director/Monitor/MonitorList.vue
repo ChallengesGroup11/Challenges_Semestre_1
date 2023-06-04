@@ -23,6 +23,7 @@ const currentUser = reactive({ value: [] })
 
 const state = reactive({
   currentMonitor: null as any,
+  isLoading: true,
 })
 
 const fn = {
@@ -45,6 +46,7 @@ const fn = {
   },
 
   makeMonitor(monitor: any) {
+    debugger
     return {
       id: monitor.userId.id,
       firstname: monitor.userId.firstname,
@@ -81,9 +83,8 @@ const fetchMonitor = async () => {
   })
     .then((response) => response.json())
     .then((data) => {
+      monitors.value = data
       debugger
-      monitors.value = data.monitors
-      console.log(data.monitors)
     })
   return res
 }
@@ -105,6 +106,7 @@ const fetchMonitor = async () => {
 // return res
 
 const editMonitor = (monitor: any) => {
+  debugger
   state.currentMonitor = fn.makeMonitor(monitor)
 }
 
@@ -161,6 +163,7 @@ const changeStatus = async (id: string) => {
 
 const loadData = async () => {
   await fetchMonitor()
+  state.isLoading = false
 }
 
 loadData()
@@ -172,6 +175,7 @@ loadData()
   </Teleport>
   <!--    Tableau qui liste les auto école -->
   <div class="q-pt-lg window-height window-width row justify-center">
+    <span> </span>
     <q-markup-table>
       <thead>
         <tr>
@@ -199,12 +203,13 @@ loadData()
           <th>Changer le statut</th>
         </tr>
       </thead>
+
       <tbody>
         <tr v-for="(monitor, index) in monitors.value" :key="index">
           <td>{{ monitor.id }}</td>
-          <td>{{ monitor.userId.lastname }}</td>
-          <td>{{ monitor.userId.firstname }}</td>
-          <td v-if="monitor.userId.status === true">
+          <td>{{ monitor.lastname }}</td>
+          <td>{{ monitor.firstname }}</td>
+          <td v-if="monitor.status === true">
             <span> Activé </span>
           </td>
           <td v-else>
@@ -216,7 +221,7 @@ loadData()
           <td>
             <q-btn color="negative" text-color="white" icon="delete" @click="deleteMonitor(monitor)" />
           </td>
-          <td v-if="monitor.userId.status === true">
+          <td v-if="monitor.status === true">
             <q-btn color="secondary" text-color="white" icon="sync" @click="changeStatus(monitor)" />
           </td>
           <td v-else>
