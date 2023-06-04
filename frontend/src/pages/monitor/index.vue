@@ -18,13 +18,6 @@ const ListColumn = [
     sortable: true,
     field: (row: any) => fn.formatDisplayDate(row.slotEnd),
   },
-  // {
-  //   name: "studentName",
-  //   label: "nom de l'élève",
-  //   align: "left",
-  //   sortable: true,
-  //   field: (row: any) => row.studentName,
-  // },
 ]
 
 const state = reactive({
@@ -88,7 +81,7 @@ const loadData = async () => {
   }
 
   await getUser()
-console.log(state.ListBookingToConfirm)
+  console.log(state.ListBookingToConfirm)
   state.ListRow = state.ListBookingToConfirm.map((item: any) => {
     return {
       id: item.id,

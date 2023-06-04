@@ -33,7 +33,6 @@ const fn = {
 }
 
 const loadData = () => {
-
   const bookingsDrivingSchool = useStoreUser().ListBooking
 
   const ListBookingOfCurrentMonitor = bookingsDrivingSchool.filter(
