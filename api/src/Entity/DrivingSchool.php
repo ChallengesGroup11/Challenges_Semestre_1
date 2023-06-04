@@ -19,6 +19,8 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\OpenApi\Model;
+use App\Controller\GetUserDoneByDrivingSchoolController;
+use App\Controller\GetUserValidateByDrivingSchoolController;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\File;
@@ -26,33 +28,48 @@ use Symfony\Component\HttpFoundation\File\File;
 
 #[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: DrivingSchoolRepository::class)]
-#[ApiResource(operations: [
-    new Patch(
-        uriTemplate: '/driving_schools/{id}/edit_status',
-        controller: DrivingSchoolEditStatusController::class,
-        openapiContext: [
-            'summary' => 'Editer le status d\'une auto-école',
-        ],
-        denormalizationContext: ['groups' => ['driving_school_patch']],
-        security: '(is_granted("ROLE_DIRECTOR")) or (is_granted("ROLE_ADMIN"))',
-        name: 'driving_school_edit_status'
-    ),
-    new Post(
-        inputFormats: ['multipart' => ['multipart/form-data']],
-        normalizationContext: ['groups' => ['driving_school_get']],
-        denormalizationContext: ['groups' => ['driving_school_write']],
-        security: 'is_granted("ROLE_ADMIN") or is_granted("ROLE_DIRECTOR")',
-    ),
+#[ApiResource(
+    operations: [
+        new Patch(
+            uriTemplate: '/driving_schools/{id}/edit_status',
+            controller: DrivingSchoolEditStatusController::class,
+            openapiContext: [
+                'summary' => 'Editer le status d\'une auto-école',
+            ],
+            denormalizationContext: ['groups' => ['driving_school_patch']],
+            security: '(is_granted("ROLE_DIRECTOR")) or (is_granted("ROLE_ADMIN"))',
+            name: 'driving_school_edit_status'
+        ),
 
-    new GetCollection(
-        uriTemplate: '/driving_schools/{id}/allMonitor',
-        controller: DrivingSchoolAllMonitorController::class,
-        openapiContext: ['description' => 'Get all monitors by driving school'],
-        normalizationContext: ['groups' => ['driving_school_cget']],
-        security: '(is_granted("ROLE_DIRECTOR")) or (is_granted("ROLE_ADMIN"))',
-    ),
+        new Post(
+            inputFormats: ['multipart' => ['multipart/form-data']],
+            normalizationContext: ['groups' => ['driving_school_get']],
+            denormalizationContext: ['groups' => ['driving_school_write']],
+            security: 'is_granted("ROLE_ADMIN") or is_granted("ROLE_DIRECTOR")',
+        ),
+        new Get(
+            uriTemplate: '/users_booking_done/{id}',
+            controller: GetUserDoneByDrivingSchoolController::class,
+            openapiContext: ['description' => 'Get User booking Done'],
+            normalizationContext: ['groups' => ['driving_school_cget']],
+        ),
+        new Get(
+            uriTemplate: '/users_booking_validate/{id}',
+            controller: GetUserValidateByDrivingSchoolController::class,
+            openapiContext: ['description' => 'Get User booking Validate'],
+            normalizationContext: ['groups' => ['driving_school_cget']],
+        ),
 
-],
+        new GetCollection(
+            uriTemplate: '/driving_schools/{id}/allMonitor',
+            controller: DrivingSchoolAllMonitorController::class,
+            openapiContext: ['description' => 'Get all monitors by driving school'],
+            normalizationContext: ['groups' => ['driving_school_cget']],
+            security: '(is_granted("ROLE_DIRECTOR")) or (is_granted("ROLE_ADMIN"))',
+        ),
+
+
+    ],
 )]
 #[GetCollection(
     normalizationContext: ['groups' => ['driving_school_cget']],
@@ -81,19 +98,19 @@ class DrivingSchool
 
 
     #[ORM\Column(length: 255)]
-    #[Groups(['driving_school_cget', 'driving_school_get', 'driving_school_write','monitor_get','director_cget','monitor_cget'])]
+    #[Groups(['driving_school_cget', 'driving_school_get', 'driving_school_write', 'monitor_get', 'director_cget', 'monitor_cget','booking_get'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write','monitor_get'])]
+    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write', 'monitor_get'])]
     private ?string $address;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write','monitor_get'])]
+    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write', 'monitor_get'])]
     private ?string $city;
 
     #[ORM\Column(length: 5)]
-    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write','monitor_get'])]
+    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write', 'monitor_get'])]
     private ?string $zipcode;
 
     #[ORM\Column(length: 14)]
@@ -101,11 +118,11 @@ class DrivingSchool
     private ?string $siret = null;
 
     #[ORM\Column(length: 10)]
-    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write','monitor_get'])]
+    #[Groups(['director_get', 'driving_school_cget', 'driving_school_get', 'driving_school_write', 'monitor_get','booking_get'])]
     private ?string $phoneNumber = null;
 
     #[ApiProperty(types: ['https://localhost/contentUrl'])]
-    #[Groups(['driving_school_get','driving_school_cget'])]
+    #[Groups(['driving_school_get', 'driving_school_cget'])]
     public ?string $contentUrl = null;
 
     #[Vich\UploadableField(mapping: "media_object", fileNameProperty: "filePath")]
@@ -120,16 +137,16 @@ class DrivingSchool
     #[Groups(['driving_school_cget'])]
     private ?bool $status = false;
 
-    #[ORM\OneToOne(mappedBy: 'drivingSchoolId', cascade: ['persist', 'remove'],fetch: "EAGER")]
+    #[ORM\OneToOne(mappedBy: 'drivingSchoolId', cascade: ['persist', 'remove'], fetch: "EAGER")]
     #[Groups(['driving_school_cget', 'driving_school_get', 'driving_school_write'])]
     private ?Director $director = null;
 
-    #[ORM\OneToMany(mappedBy: 'drivingSchoolId', cascade: ['persist', 'remove'] ,targetEntity: Monitor::class,fetch: "EAGER")]
-    #[Groups(['driving_school_get','driving_school_cget'])]
+    #[ORM\OneToMany(mappedBy: 'drivingSchoolId', cascade: ['persist', 'remove'], targetEntity: Monitor::class, fetch: "EAGER")]
+    #[Groups(['driving_school_get', 'driving_school_cget'])]
     private Collection $monitors;
 
     #[ORM\OneToMany(mappedBy: 'drivingSchoolId', cascade: ['persist', 'remove'], targetEntity: Booking::class)]
-    #[Groups(['driving_school_get','booking_cget',"user_get"])]
+    #[Groups(['driving_school_get', 'driving_school_cget','booking_cget', "user_get"])]
     private Collection $bookings;
 
     public function __construct()

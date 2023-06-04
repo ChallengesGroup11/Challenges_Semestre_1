@@ -47,7 +47,7 @@ const fn = {
         monitorId: [`/monitors/${useStoreUser().user.monitor.id}`],
       })
       // update in useStoreUser the list of bookings with the new booking
-      const currentBookingInStore = useStoreUser().drivingSchool.bookings.find(
+      const currentBookingInStore = useStoreUser().ListBooking.find(
         (item: any) => item.id === state.ListCurrentItemSelected[i].id,
       )
       currentBookingInStore.monitorId = [`/monitors/${useStoreUser().user.monitor.id}`]
@@ -88,7 +88,7 @@ const loadData = async () => {
   }
 
   await getUser()
-
+console.log(state.ListBookingToConfirm)
   state.ListRow = state.ListBookingToConfirm.map((item: any) => {
     return {
       id: item.id,

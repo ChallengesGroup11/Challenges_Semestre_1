@@ -49,7 +49,7 @@ const onClickSignin = async (e: { preventDefault: () => void }) => {
       const token = localStorage.getItem("token")
       const user = parseJwt(token)
       if (user.roles.includes("ROLE_ADMIN")) {
-        await router.push("/admin")
+        await router.push("/admin/Director")
       } else if (user.roles.includes("ROLE_DIRECTOR")) {
         await router.push("/director")
       } else if (user.roles.includes("ROLE_MONITOR")) {

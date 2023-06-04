@@ -5,6 +5,7 @@ import { ApiService } from '~/services/api'
 import { useStoreUser } from '../../../stores/user'
 import moment from 'moment'
 import { useQuasar } from "quasar"
+import { boolean } from 'zod'
 
 const $q = useQuasar()
 const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
@@ -39,6 +40,8 @@ const props = defineProps({
   },
 })
 
+
+
 const state = reactive({
   booking: R.clone(props?.booking),
   isShownModal: true,
@@ -48,7 +51,12 @@ const state = reactive({
 
 const fn = {
   onClickSaveBooking: async () => {
-    const resVerification = fn.verifySlot(state.booking.slotBegin, state.booking.slotEnd)
+
+    if(state.booking.statusValidate === false && state.booking.statusDone === false) {
+      var resVerification = fn.verifySlot(state.booking.slotBegin, state.booking.slotEnd)
+    }else{
+      resVerification = true;
+    }
 
     if (resVerification !== true) {
       return alert(resVerification)

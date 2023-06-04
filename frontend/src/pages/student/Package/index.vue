@@ -42,24 +42,73 @@ const payement = (item: any) => {
 <template>
   <q-page>
     <div class="row">
-      <q-card v-for="item in packageItem.value" :key="item.id" class="my-card q-ma-lg col">
-        <q-img :src="'../public/images/package_'+item.nbCredit+'.png'"></q-img>
+      <q-card v-for="item in packageItem.value" :key="item.id" class="my-card q-ma-lg col bg-secondary text-white">
         <q-card-section>
           <div class="text-h4"> {{ item.name }} </div>
-          <div class="text-left">
-            <div class="text-h10">Description : {{ item.description }} </div>
-            <div class="text-h6">Prix : {{ item.price }} €</div>
-            <div class="text-h6">Crédits : {{ item.nbCredit }} </div>
+          <hr/>
+          <div class="text-h4 text-center mt-2">
+            {{ item.nbCredit }} Crédits *
           </div>
-          <div class="text-center">
-            <q-btn label="Acheter" @click="payement(item)" color="positive" icon="monetization_ons"></q-btn>
+          <div class="text-h10 text-center mt-8">
+            Description : {{ item.description }}
           </div>
+          <div class="text-price text-center mt-2">
+            {{ item.price }} €
+          </div>
+          <q-btn label="Acheter" @click="payement(item)" class="btn-primary" ></q-btn>
         </q-card-section>
 
       </q-card>
     </div>
   </q-page>
 </template>
+
+<style scoped>
+.row {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.my-card {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.text-h4 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.text-h6 {
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.text-h10 {
+  font-size: 14px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.btn-primary {
+  background-color: #1e88e5;
+}
+
+.text-price {
+font-weight: 700;
+font-size: 64px;
+line-height: 150px;
+color: #E76F51;
+-webkit-text-stroke: 2px whitesmoke
+}
+</style>
 
 <route lang="yaml">
 meta:
