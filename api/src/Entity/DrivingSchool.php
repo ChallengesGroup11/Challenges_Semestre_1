@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\DrivingSchoolEditStatusController;
+use App\Controller\DrivingSchoolAllMonitorController;
 use App\Repository\DrivingSchoolRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -36,13 +37,21 @@ use Symfony\Component\HttpFoundation\File\File;
         security: '(is_granted("ROLE_DIRECTOR")) or (is_granted("ROLE_ADMIN"))',
         name: 'driving_school_edit_status'
     ),
-
     new Post(
         inputFormats: ['multipart' => ['multipart/form-data']],
         normalizationContext: ['groups' => ['driving_school_get']],
         denormalizationContext: ['groups' => ['driving_school_write']],
         security: 'is_granted("ROLE_ADMIN") or is_granted("ROLE_DIRECTOR")',
     ),
+
+    new GetCollection(
+        uriTemplate: '/driving_schools/{id}/allMonitor',
+        controller: DrivingSchoolAllMonitorController::class,
+        openapiContext: ['description' => 'Get all monitors by driving school'],
+        normalizationContext: ['groups' => ['driving_school_cget']],
+        security: '(is_granted("ROLE_DIRECTOR")) or (is_granted("ROLE_ADMIN"))',
+    ),
+
 ],
 )]
 #[GetCollection(

@@ -17,6 +17,7 @@ const viewNotif = (icon: any, color: string, message: string, textColor: string,
     position,
   })
 }
+
 const monitors = reactive({ value: [] })
 const currentUser = reactive({ value: [] })
 
@@ -71,8 +72,8 @@ const getUser = async () => {
 
 const fetchMonitor = async () => {
   const idDrivingSchool = drivingSchool.id
-
-  const res = fetch(`https://localhost/driving_schools/${idDrivingSchool}`, {
+  debugger
+  const res = fetch(`https://localhost/driving_schools/${idDrivingSchool}/allMonitor`, {
     headers: {
       accept: "application/ld+json",
       Authorization: `Bearer ${localStorage.getItem("token")}`,

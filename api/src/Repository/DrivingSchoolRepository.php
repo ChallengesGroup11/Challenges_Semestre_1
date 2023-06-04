@@ -39,6 +39,19 @@ class DrivingSchoolRepository extends ServiceEntityRepository
         }
     }
 
+    public function findAllMonitorByDrivingSchool($id)
+    {
+        $qb = $this->createQueryBuilder('d')
+            ->select('*')
+            ->join('d.monitors', 'm')
+            ->where('d.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery();
+
+        return $qb->execute();
+
+    }
+
 //    /**
 //     * @return DrivingSchool[] Returns an array of DrivingSchool objects
 //     */
