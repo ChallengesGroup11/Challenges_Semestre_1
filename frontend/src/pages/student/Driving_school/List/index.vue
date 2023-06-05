@@ -53,19 +53,13 @@ const showAvailability = (id: any) => {
   <q-page>
     <div class="container">
       <div class="row">
-        <div class="col-12">
-          <h1 class="text-center">Liste des auto-écoles</h1>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12">
+        
         <q-input class="col-6" v-model="filterVille.value" label="Ville" outlined />
-        <q-btn label="Rechercher" @click="getDrivingSchool()" class="btn-primary"></q-btn>
+
+        <q-btn label="Rechercher" @click="getDrivingSchool()" class="btn-primary researcb-btn" />
       </div>
-    </div>
     <div class="row">
-      <q-card v-for="item in filteredDrivingSchool.value" :key="item.id" class="my-card q-ma-lg col bg-secondary text-white">
+      <q-card v-for="item in filteredDrivingSchool.value" :key="item.id" class="my-card col-12 mb-5 bg-secondary text-white">
         <q-card-section>
           <div class="text-h4">{{ item.name }}</div>
           <hr/>
@@ -84,6 +78,7 @@ const showAvailability = (id: any) => {
         </q-card-section>
       </q-card>
     </div>
+    </div>
   </q-page>
 </template>
 
@@ -93,12 +88,17 @@ const showAvailability = (id: any) => {
 }
 
 .row {
-  margin-bottom: 20px;
+  justify-content: center;
+  align-items: center;
 }
 
 .my-card {
   max-width: 400px;
-  margin: 0 auto;
+  margin: 20px 8px 0 8px;
+}
+
+.my-card:last-child {
+  margin-bottom: 20px;
 }
 
 .text-h4 {
@@ -137,6 +137,11 @@ const showAvailability = (id: any) => {
 .btn-secondary {
   background-color: #4ECB71;
   color: whitesmoke;
+}
+
+.researcb-btn {
+  height: 40px;
+  margin-left: 10px;
 }
 </style>
 

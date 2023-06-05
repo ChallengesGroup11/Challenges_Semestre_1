@@ -40,7 +40,7 @@ const payement = (item: any) => {
 
 
 <template>
-  <q-page>
+  <q-page class="container">
     <div class="row">
       <q-card v-for="item in packageItem.value" :key="item.id" class="my-card q-ma-lg col bg-secondary text-white">
         <q-card-section>
@@ -64,9 +64,21 @@ const payement = (item: any) => {
 </template>
 
 <style scoped>
-.row {
+
+.container {
+  display: flex;
+  justify-content: center;
+  height: 100%;
   margin-top: 20px;
   margin-bottom: 20px;
+  align-items: center;
+}
+.row {
+  /* height: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  align-items: center; */
+  width: 100%;
 }
 
 .my-card {
@@ -98,12 +110,13 @@ const payement = (item: any) => {
 }
 
 .btn-primary {
-  background-color: #1e88e5;
+  background: #9999C3;
+
 }
 
 .text-price {
 font-weight: 700;
-font-size: 64px;
+font-size: 96px;
 line-height: 150px;
 color: #E76F51;
 -webkit-text-stroke: 2px whitesmoke

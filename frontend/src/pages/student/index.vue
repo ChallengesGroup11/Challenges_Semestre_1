@@ -72,7 +72,12 @@ loadData()
           </div>
           <div v-else class="vertical text-counter">0</div>
           <div>
-            <q-btn  class="btn-primary" label="Acheter des crédits" push size="md" @click='addCodeAndCni(currentUser.value.id)'
+            <q-btn  
+              class="btn-primary" 
+              label="Acheter des crédits" 
+              push size="md" 
+              @click='addCodeAndCni(currentUser.value.id)'
+              :disable="!currentUser?.value?.student?.contentUrlCode && !currentUser?.value?.student?.contentUrlCni"
           />
           </div>
         </q-card-section>
@@ -89,8 +94,12 @@ loadData()
           </div>
           <span v-else class="vertical text-counter">0</span>
           <div>
-            <q-btn class="btn-primary" label="Réserver des heures" push size="md" @click='addCodeAndCni(currentUser.value.id)'
-
+            <q-btn 
+              class="btn-primary" 
+              label="Réserver des heures" 
+              push size="md" 
+              @click='addCodeAndCni(currentUser.value.id)'
+              :disable="!currentUser?.value?.student?.contentUrlCode && !currentUser?.value?.student?.contentUrlCni"
                 />
           </div>
         </q-card-section>
@@ -100,10 +109,10 @@ loadData()
     <div>
       <q-card class="my-card q-ma-lg bg-primary column">
         <q-card-section class="column">
-          <div class="text-h4">
+          <div class="text-h4 row-center">
             {{ currentUser.value.firstname }} {{ currentUser.value.lastname }}
-            <q-icon v-if="currentUser.value.status" style="vertical-align: text-top" size="sm" color="positive" name="o_check_circle" />
-            <q-icon v-else style="vertical-align: text-top" size="sm" color="warning" name="o_error" />
+            <q-icon v-if="currentUser?.value?.student?.contentUrlCode && currentUser?.value?.student?.contentUrlCni" style="margin-left: 8px;" color="positive" name="o_check_circle" />
+            <q-icon v-else style="margin-left: 8px; color: #C10015;" size="sm" color="error" name="o_cancel" />
           </div>
           <div style="align-self: center;">
             <div class="text-left text-h6 ">{{ currentUser.value.email }}</div>
@@ -120,12 +129,12 @@ loadData()
             <div v-if="currentUser.value.student" class="text-left text-h6">
               Code de la route
                 <q-icon  v-if="currentUser.value.student.contentUrlCode" style="vertical-align: text-top" size="sm" color="positive" name="check" />
-                <q-icon v-else style="vertical-align: text-top" size="sm" color="error" name="o_cancel" />
+                <q-icon v-else style="vertical-align: text-top; color: #C10015;" size="sm" color="error" name="o_cancel" />
             </div>
             <div v-if="currentUser.value.student" class="text-left text-h6">
               CNI
                 <q-icon v-if="currentUser.value.student.contentUrlCni" style="vertical-align: text-top" size="sm" color="positive" name="check" />
-                <q-icon v-else style="vertical-align: text-top" size="sm" color="error" name="o_cancel" />
+                <q-icon v-else style="vertical-align: text-top; color: #C10015;" size="sm" color="error" name="o_cancel" />
               </div>
           </div>
 
@@ -175,9 +184,9 @@ loadData()
                 <td>{{ dateJour(bookings.slotBegin) }}</td>
                 <td>{{ dateHeure(bookings.slotBegin) }}</td>
                 <td>{{ dateHeure(bookings.slotEnd) }}</td>
-                <td>{{ bookings.drivingSchoolId[0].name }}</td>
-                <td>{{ bookings.drivingSchoolId[0].phoneNumber }}</td>
-                <td>{{ bookings.drivingSchoolId[0].city }}</td>
+                <td>{{ bookings.drivingSchoolId.name }}</td>
+                <td>{{ bookings.drivingSchoolId.phoneNumber }}</td>
+                <td>{{ bookings.drivingSchoolId.city }}</td>
                 <td v-if="bookings.statusValidate === true">
                   <q-icon name="mood" color="positive" size="20px" />
                 </td>
@@ -207,6 +216,9 @@ loadData()
 
 <style>
 .text-h4 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 1.5rem;
   font-weight: 500;
   line-height: 2rem;
