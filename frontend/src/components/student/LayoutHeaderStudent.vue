@@ -48,12 +48,11 @@ const hasProvidedCni = computed(() => {
         </q-avatar>
         DRIVE QUEEN
       </q-toolbar-title>
-      <span>Bienvenue {{ currentUser.value.firstname }} sur notre site !</span>
-    </q-toolbar>
-    <q-toolbar inset>
+
+      <q-space />
       <q-btn icon="home_filled" flat label="Home" to="/student" />
-      <q-btn v-if="hasProvidedCni" icon="paid" flat label="Acheter des crédits" to="/student/package" />
-      <q-btn v-if="hasProvidedCni" icon="list" flat label="Liste des auto-écoles" to="/student/driving_school/list" />
+      <q-btn v-if="currentUser?.value?.student?.contentUrlCode && currentUser?.value?.student?.contentUrlCni" icon="paid" flat label="Acheter des crédits" to="/student/package" />
+      <q-btn v-if="currentUser?.value?.student?.contentUrlCode && currentUser?.value?.student?.contentUrlCni" icon="list" flat label="Liste des auto-écoles" to="/student/driving_school/list" />
       <q-space />
       <q-btn @click="logoutUser" icon="logout" flat label="Déconnexion" />
     </q-toolbar>
