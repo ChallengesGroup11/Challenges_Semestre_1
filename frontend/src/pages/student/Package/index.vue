@@ -46,7 +46,7 @@ const payement = (item: any) => {
         <q-card-section>
           <div class="text-h4"> {{ item.name }} </div>
           <hr/>
-          <div class="text-h4 text-center mt-2">
+          <div class="text-h4 text-center mt-8">
             {{ item.nbCredit }} Crédits *
           </div>
           <div class="text-h10 text-center mt-8">
@@ -56,6 +56,12 @@ const payement = (item: any) => {
             {{ item.price }} €
           </div>
           <q-btn label="Acheter" @click="payement(item)" class="btn-primary" ></q-btn>
+
+          <p class="mt-2 text-center">
+            <small>
+            *Deux crédits = Une heures de conduites 
+            </small>
+          </p>
         </q-card-section>
 
       </q-card>
@@ -87,7 +93,7 @@ const payement = (item: any) => {
 }
 
 .text-h4 {
-  font-size: 24px;
+  font-size: 38px;
   font-weight: bold;
   margin-bottom: 10px;
 }

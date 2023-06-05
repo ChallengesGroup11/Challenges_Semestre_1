@@ -39,6 +39,16 @@ const addCodeAndCni = (id: string) => {
   router.push("/student/add/codecertification/" + id)
 }
 
+const redirectToBuyPackage = () => {
+  router.push("/student/package")
+}
+
+const redirectToDrivingSchoolList = () => {
+  router.push("/student/driving_school/list")
+}
+
+
+
 const fn = {
   async cancelBooking(booking: any) {
     await ApiService.patch("bookings", {
@@ -64,9 +74,9 @@ loadData()
       <q-card class="my-card q-ma-lg bg-secondary col">
         <q-card-section>
           <div class="text-h4">Mes crédits</div>
-          <div v-if="currentUser.value.student" class="vertical text-counter">
-            <span v-if="currentUser.value.student.countCredit !== NULL ">
-              {{ currentUser.value.student.countCredit }}
+          <div v-if="currentUser?.value?.student" class="vertical text-counter">
+            <span v-if="currentUser?.value?.student?.countCredit !== null ">
+              {{ currentUser?.value?.student.countCredit }}
             </span>
             <span v-else class="vertical text-counter"> 0</span>
           </div>
@@ -76,7 +86,7 @@ loadData()
               class="btn-primary" 
               label="Acheter des crédits" 
               push size="md" 
-              @click='addCodeAndCni(currentUser.value.id)'
+              @click='redirectToBuyPackage()'
               :disable="!currentUser?.value?.student?.contentUrlCode && !currentUser?.value?.student?.contentUrlCni"
           />
           </div>
@@ -87,7 +97,7 @@ loadData()
         <q-card-section class="vertical-middle">
           <div class="text-h4">Mes heures effectuées</div>
           <div v-if="currentUser.value.student" class="vertical text-counter">
-            <span v-if="currentUser.value.student.nbHourDone !== NULL">
+            <span v-if="currentUser.value.student.nbHourDone !== null">
               {{ currentUser.value.student.nbHourDone }}
             </span>
             <span v-else class="vertical text-counter">0</span>
@@ -98,7 +108,7 @@ loadData()
               class="btn-primary" 
               label="Réserver des heures" 
               push size="md" 
-              @click='addCodeAndCni(currentUser.value.id)'
+              @click='redirectToDrivingSchoolList()'
               :disable="!currentUser?.value?.student?.contentUrlCode && !currentUser?.value?.student?.contentUrlCni"
                 />
           </div>

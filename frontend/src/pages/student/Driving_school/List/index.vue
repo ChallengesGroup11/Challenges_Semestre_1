@@ -110,6 +110,7 @@ const showAvailability = (id: any) => {
 .text-h6 {
   font-size: 16px;
   margin-top: 10px;
+  color: whitesmoke;
 }
 
 .color-icon {
