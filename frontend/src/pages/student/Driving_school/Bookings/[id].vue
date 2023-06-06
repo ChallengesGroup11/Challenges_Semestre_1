@@ -28,9 +28,10 @@ const fn = {
   },
   takeBooking: async (booking: Booking) => {
     try {
-      await ApiService.patch("bookings", { studentId: [`/students/${useStoreUser().user.student.id}`], id: booking.id })
+      console.log(useStoreUser().user)
+      await ApiService.patch("bookings/student", { studentId: [`/students/${useStoreUser().user.student.id}`], id: booking.id })
       data.ListInitialBooking = data.ListInitialBooking.filter((item: any) => item.id !== booking.id)
-
+      viewNotif("thumb_up", "green", "Réservation effectuée", "white", "top-right")
       makeListFreeBooking(data.ListInitialBooking)
     } catch (e) {
       viewNotif("thumb_down", "red", "Vous n'avez pas assez de crédit: 2 minimum requis", "white", "top-right")
@@ -123,9 +124,9 @@ loadData()
     </q-dialog>
     <h1 class="text-center">Disponibilités</h1>
     <div class="row">
-      <q-card v-for="day in Object.keys(state.ListSlot)" class="container-card col-3">
+      <q-card v-for="day in Object.keys(state.ListSlot)" class="container-card col-3 m-2 bg-secondary text-white">
         <h2>{{ day }}</h2>
-        <q-chip clickable @click="fn.onClickBooking(slot)" v-for="slot in state.ListSlot[day]" class="q-my-lg">
+        <q-chip clickable @click="fn.onClickBooking(slot)" v-for="slot in state.ListSlot[day]" class="q-my-lg btn-primary">
           {{ moment(slot.slotBegin).format("hh:ss") }} -
           {{ moment(slot.slotEnd).format("hh:ss") }}
         </q-chip>
@@ -140,6 +141,13 @@ loadData()
 }
 .container-card {
   gap: 1;
+}
+
+.btn-primary {
+  background-color:  #9999C3;
+  color: whitesmoke;
+  font-size: 16px;
+  font-weight: bold;
 }
 </style>
 

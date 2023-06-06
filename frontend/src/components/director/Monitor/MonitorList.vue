@@ -2,11 +2,28 @@
 import { reactive } from "vue"
 const router = useRouter()
 
+import { useQuasar } from "quasar"
+import { useStoreUser } from "../../../../stores/user"
+
+const drivingSchool = useStoreUser().drivingSchool
+
+const $q = useQuasar()
+const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
+  $q.notify({
+    icon,
+    color,
+    message,
+    textColor,
+    position,
+  })
+}
+
 const monitors = reactive({ value: [] })
 const currentUser = reactive({ value: [] })
 
 const state = reactive({
   currentMonitor: null as any,
+  isLoading: true,
 })
 
 const fn = {
@@ -30,10 +47,10 @@ const fn = {
 
   makeMonitor(monitor: any) {
     return {
-      id: monitor.userId.id,
-      firstname: monitor.userId.firstname,
-      lastname: monitor.userId.lastname,
-      email: monitor.userId.email,
+      id: monitor.id,
+      firstname: monitor.firstname,
+      lastname: monitor.lastname,
+      email: monitor.email,
       password: "",
     }
   },
@@ -55,7 +72,8 @@ const getUser = async () => {
 }
 
 const fetchMonitor = async () => {
-  const res = fetch("https://localhost/monitors/getAll", {
+  const idDrivingSchool = drivingSchool.id
+  const res = fetch(`https://localhost/driving_schools/${idDrivingSchool}/allMonitor`, {
     headers: {
       accept: "application/ld+json",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -63,8 +81,7 @@ const fetchMonitor = async () => {
   })
     .then((response) => response.json())
     .then((data) => {
-      monitors.value = data["hydra:member"]
-      console.log(monitors.value)
+      monitors.value = data
     })
   return res
 }
@@ -78,19 +95,30 @@ const addMonitor = () => {
   console.log(state.currentMonitor)
 }
 
-const deleteMonitor = async (id: object) => {
-  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/monitors/` + id.id, {
+const deleteMonitor = async (monitor: object) => {
+  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/monitors/` + monitor.monitorId, {
     method: "DELETE",
     headers: {
       accept: "application/ld+json",
       Authorization: "Bearer " + localStorage.getItem("token"),
     },
   })
+  if (response.status === 400) {
+    viewNotif("thumb_down", "red", "Le moniteur ne peut pas être supprimé", "white", "top-right")
+    return
+  }
+  if (response.status === 500) {
+    viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
+    return
+  }
+  if (response.status === 204) {
+    viewNotif("thumb_up", "green", "Le moniteur à bien été supprimé", "white", "top-right")
+  }
   await fetchMonitor()
 }
 
 const changeStatus = async (id: string) => {
-  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/users/` + id.userId.id + "/edit_status", {
+  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/users/` + id.id + "/edit_status", {
     method: "PATCH",
     headers: {
       accept: "application/ld+json",
@@ -99,11 +127,23 @@ const changeStatus = async (id: string) => {
     },
     body: "{}",
   })
+  if (response.status === 400) {
+    viewNotif("thumb_down", "red", "Le moniteur ne peut pas être modifié", "white", "top-right")
+    return
+  }
+  if (response.status === 500) {
+    viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
+    return
+  }
+  if (response.status === 201) {
+    viewNotif("thumb_up", "green", "Le moniteur à bien été modifié", "white", "top-right")
+  }
   await fetchMonitor()
 }
 
 const loadData = async () => {
   await fetchMonitor()
+  state.isLoading = false
 }
 
 loadData()
@@ -115,13 +155,21 @@ loadData()
   </Teleport>
   <!--    Tableau qui liste les auto école -->
   <div class="q-pt-lg window-height window-width row justify-center">
+    <span> </span>
     <q-markup-table>
       <thead>
         <tr>
           <th colspan="13">
             <div class="text-h4 q-ml-md">
               Liste des moniteurs
-              <q-btn class="float-right" color="positive" text-color="white" icon="add" @click="addMonitor()" :disable="currentUser.value.director?.drivingSchoolId === null" />
+              <q-btn
+                class="float-right"
+                color="positive"
+                text-color="white"
+                icon="add"
+                @click="addMonitor()"
+                :disable="currentUser.value.director?.drivingSchoolId === null"
+              />
             </div>
           </th>
         </tr>
@@ -135,12 +183,13 @@ loadData()
           <th>Changer le statut</th>
         </tr>
       </thead>
+
       <tbody>
         <tr v-for="(monitor, index) in monitors.value" :key="index">
           <td>{{ monitor.id }}</td>
-          <td>{{ monitor.userId.lastname }}</td>
-          <td>{{ monitor.userId.firstname }}</td>
-          <td v-if="monitor.userId.status === true">
+          <td>{{ monitor.lastname }}</td>
+          <td>{{ monitor.firstname }}</td>
+          <td v-if="monitor.status === true">
             <span> Activé </span>
           </td>
           <td v-else>
@@ -153,7 +202,7 @@ loadData()
             <q-btn color="negative" text-color="white" icon="delete" @click="deleteMonitor(monitor)" />
           </td>
           <td v-if="monitor.status === true">
-            <q-btn color="secondary" text-color="white" icon="sync" @click="changeStatus(monitor)" />
+            <q-btn color="secondary" text-color="white" icon="sync" />
           </td>
           <td v-else>
             <q-btn color="warning" text-color="white" icon="sync" @click="changeStatus(monitor)" />

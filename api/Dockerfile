@@ -5,7 +5,7 @@
 
 # https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
 ARG PHP_VERSION=8.1
-ARG CADDY_VERSION=2
+ARG CADDY_VERSION=2.7
 
 # "php" stage
 FROM php:${PHP_VERSION}-fpm-alpine AS api_platform_php
@@ -65,7 +65,6 @@ RUN apk add --no-cache --virtual .pgsql-deps postgresql-dev; \
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 RUN ln -s $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
-
 COPY docker/php/conf.d/api-platform.prod.ini $PHP_INI_DIR/conf.d/api-platform.ini
 
 COPY docker/php/php-fpm.d/zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
@@ -89,12 +88,12 @@ RUN set -eux; \
 
 # copy only specifically what we need
 COPY .env ./
-COPY bin ./bin/
-COPY config ./config/
-COPY migrations ./migrations/
-COPY public ./public/
-COPY src ./src/
-COPY templates ./templates/
+COPY bin bin/
+COPY config config/
+COPY migrations migrations/
+COPY public public/
+COPY src src/
+COPY templates templates/
 
 RUN set -eux; \
 	mkdir -p var/cache var/log; \
@@ -122,7 +121,7 @@ CMD ["php-fpm"]
 FROM caddy:${CADDY_VERSION}-builder-alpine AS api_platform_caddy_builder
 
 # install Mercure and Vulcain modules
-RUN xcaddy build \
+RUN xcaddy build v2.6.4 \
     --with github.com/dunglas/mercure \
     --with github.com/dunglas/mercure/caddy \
     --with github.com/dunglas/vulcain \
@@ -135,5 +134,3 @@ WORKDIR /srv/api
 COPY --from=api_platform_caddy_builder /usr/bin/caddy /usr/bin/caddy
 COPY --from=api_platform_php /srv/api/public public/
 COPY docker/caddy/Caddyfile /etc/caddy/Caddyfile
-
-

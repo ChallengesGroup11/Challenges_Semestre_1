@@ -72,13 +72,11 @@ loadData()
         </q-avatar>
         DRIVE QUEEN
       </q-toolbar-title>
-      <span>Bienvenue {{ currentUser.value.firstname }} sur notre site !</span>
-    </q-toolbar>
-    <q-toolbar inset>
+    <q-space />
       <q-btn icon="home_filled" flat label="Home" to="/monitor" />
       <q-btn icon="person" flat label="Mon profil" to="/monitor/profil" />
-      <q-space />
       <q-btn @click="logoutUser" icon="logout" flat label="Déconnexion" />
     </q-toolbar>
+      
   </q-header>
 </template>

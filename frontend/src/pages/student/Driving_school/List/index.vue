@@ -49,8 +49,102 @@ const showAvailability = (id: any) => {
 
 </script>
 
-
 <template>
+    <div class="container-package">
+      <div class="row">
+        
+        <q-input class="col-6" v-model="filterVille.value" label="Ville" outlined />
+
+        <q-btn label="Rechercher" @click="getDrivingSchool()" class="btn-primary researcb-btn" />
+      </div>
+    <div class="row">
+      <q-card v-for="item in filteredDrivingSchool.value" :key="item.id" class="my-card col-12 mb-5 bg-secondary text-white">
+        <q-card-section>
+          <div class="text-h4">{{ item.name }}</div>
+          <hr/>
+          <div class="text-left">
+            <div class="text-h6">
+              <q-icon name="location_on" class="color-icon"></q-icon>
+              {{ item.address }}, {{ item.city }} {{ item.zipcode }}</div>
+            <div class="text-h6">
+              <q-icon name="phone" class="color-icon"></q-icon>
+              {{ item.phoneNumber }}
+            </div>
+          </div>
+          <div class="text-center">
+            <q-btn label="Disponibilités" @click="showAvailability(item.id)" class="btn-primary"></q-btn>
+          </div>
+        </q-card-section>
+      </q-card>
+    </div>
+    </div>
+</template>
+
+<style scoped>
+.container-package {
+  margin-top: 20px;
+}
+
+.row {
+  justify-content: center;
+  align-items: center;
+}
+
+.my-card {
+  max-width: 400px;
+  margin: 20px 8px 0 8px;
+}
+
+.my-card:last-child {
+  margin-bottom: 20px;
+}
+
+.text-h4 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.text-h6 {
+  font-size: 16px;
+  margin-top: 10px;
+  color: whitesmoke;
+}
+
+.color-icon {
+  color: #E76F51;
+}
+
+.text-h10 {
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.btn-primary {
+  background-color:  #9999C3;
+  color: whitesmoke;
+}
+
+.btn-secondary {
+  background-color: #4ECB71;
+  color: whitesmoke;
+}
+
+.researcb-btn {
+  height: 40px;
+  margin-left: 10px;
+}
+</style>
+
+<!-- <template>
   <q-page>
     <div class="container">
       <div class="row">
@@ -81,7 +175,7 @@ const showAvailability = (id: any) => {
       </q-card>
     </div>
   </q-page>
-</template>
+</template> -->
 
 <route lang="yaml">
 meta:

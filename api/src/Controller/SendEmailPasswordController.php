@@ -25,7 +25,6 @@ class SendEmailPasswordController extends AbstractController
 
     public function __invoke()
     {
-
         // TODO : Secure if not email in body
         $email = json_decode($this->requestStack->getCurrentRequest()->getContent())->email;
         $user = $this->userRepository->findOneBy(['email' => $email]);
@@ -39,14 +38,18 @@ class SendEmailPasswordController extends AbstractController
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-
-        $routeChangeMdp = "http://localhost:4010/auth/ChangeMdp/" . $user->getId() . "?token=" . $user->getToken();
+        if($_ENV['APP_ENV'] == 'dev'){
+            $routeChangeMdp = "http://localhost:4010/auth/ChangeMdp/" . $user->getId() . "?token=" . $user->getToken();
+        }else{
+            $routeChangeMdp = "https://drive-queen.turtletv.fr/auth/ChangeMdp/" . $user->getId() . "?token=" . $user->getToken();
+        }
+        // $routeChangeMdp = "http://localhost:4010/auth/ChangeMdp/" . $user->getId() . "?token=" . $user->getToken();
         $emailBody = $this->EmailBody($routeChangeMdp);
         // TODO : send email
         $email = (new Email())
             ->from('support@drivequeen.com')
             ->to($user->getEmail())
-            ->subject('Confirmation de votre compte')
+            ->subject('Modification de mot de passe')
             ->html($emailBody);
 
         $this->mailer->send($email);
@@ -74,9 +77,16 @@ class SendEmailPasswordController extends AbstractController
                 p{
                     color: #000;
                 }
+                a{
+                    background-color: #000;
+                    color: #fff;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    text-decoration: none;
+                }
 
             </style>
-           <img src='https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg' alt='logo drivequeen'>
+           <img src='https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg' alt='logo drivequeen' width='100' height='100'>
 
 
             <h1>Modification de mot de passe</h1>

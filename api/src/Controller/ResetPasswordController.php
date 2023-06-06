@@ -44,7 +44,7 @@ class ResetPasswordController extends AbstractController
             $email = (new Email())
                 ->from('support@drivequeen.com')
                 ->to($user->getEmail())
-                ->subject('Confirmation de votre compte')
+                ->subject('Modification du mot de passe')
                 ->html($emailBody);
 
             $this->mailer->send($email);
@@ -75,9 +75,15 @@ class ResetPasswordController extends AbstractController
                 p{
                     color: #000;
                 }
-
+                a{
+                    background-color: #000;
+                    color: #fff;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    text-decoration: none;
+                }
             </style>
-           <img src='https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg' alt='logo drivequeen'>
+           <img src='https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg' alt='logo drivequeen' width='100' height='100'>
 
 
             <h1>Modification de mot de passe</h1>

@@ -57,14 +57,10 @@ loadData()
         </q-avatar>
         DRIVE QUEEN
       </q-toolbar-title>
-      <span>Bienvenue {{ currentUser.value.firstname }} sur notre site !</span>
-    </q-toolbar>
-    <q-toolbar inset>
+      <q-space />
       <q-btn icon="home_filled" flat label="Home" to="/director" />
       <q-btn icon="person" flat label="Liste des moniteurs" to="/director/monitor" />
       <q-btn icon="school" flat label="Créneaux" to="/director/slots" />
-      <!-- <q-btn icon="paid" flat label="Acheter des crédits" to="/student/package"/> -->
-      <q-space />
       <q-btn @click="logoutUser" icon="logout" flat label="Déconnexion" />
     </q-toolbar>
   </q-header>
