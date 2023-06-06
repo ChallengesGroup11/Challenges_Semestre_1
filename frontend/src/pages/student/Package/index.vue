@@ -40,8 +40,7 @@ const payement = (item: any) => {
 
 
 <template>
-  <q-page class="container">
-    <div class="row">
+    <div class="row container-package">
       <q-card v-for="item in packageItem.value" :key="item.id" class="my-card q-ma-lg col bg-secondary text-white">
         <q-card-section>
           <div class="text-h4"> {{ item.name }} </div>
@@ -66,15 +65,14 @@ const payement = (item: any) => {
 
       </q-card>
     </div>
-  </q-page>
 </template>
 
 <style scoped>
 
-.container {
+.container-package {
   display: flex;
   justify-content: center;
-  height: 100%;
+  height: 90vh;
   margin-top: 20px;
   margin-bottom: 20px;
   align-items: center;

@@ -146,7 +146,7 @@ const editAutoEcole = (id: string) => {
               <q-icon v-if="currentUser.value?.director?.drivingSchoolId" name="o_check_circle" color="green"  />
               <q-icon v-else name="o_cancel" color="red" />
               </div>
-            <div class="container">
+            <div class="container-index">
 
               <div v-if="currentUser.value?.email" class="container-infos">
                 <q-icon name="email" class="color-icon" size="2em" />
@@ -218,7 +218,7 @@ const editAutoEcole = (id: string) => {
 
 <style lang="scss" scoped>
 
-.container {
+.container-index {
   display: flex;
   flex-direction: column;
   align-items: center;
