@@ -55,7 +55,7 @@ const onSubmit = async () => {
       })
       if (response.ok) {
           viewNotif("thumb_up", "green", "Vos fichiers ont bien été ajoutées", "white", "top-right")
-          await router.push("/student/profil")
+          await router.push("/student")
         } else {
           viewNotif("thumb_down", "red", "Vos fichiers n'ont pas été ajoutées", "white", "top-right")
         }

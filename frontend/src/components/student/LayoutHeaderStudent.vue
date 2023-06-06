@@ -11,6 +11,12 @@ onMounted(async () => {
   } else {
     await getUser()
   }
+
+  isActiveButton()
+})
+
+onUpdated(async () => {
+  isActiveButton()
 })
 
 const logoutUser = async () => {
@@ -37,6 +43,17 @@ const getUser = async () => {
 const hasProvidedCni = computed(() => {
   return useStoreUser().user.student !== null
 })
+
+const isActiveButton = async() => {
+
+  const path = await router.currentRoute.value.path
+
+  console.log(path);
+    
+}
+
+
+
 </script>
 
 <template>
@@ -53,7 +70,6 @@ const hasProvidedCni = computed(() => {
       <q-btn icon="home_filled" flat label="Home" to="/student" />
       <q-btn v-if="currentUser?.value?.student?.contentUrlCode && currentUser?.value?.student?.contentUrlCni" icon="paid" flat label="Acheter des crédits" to="/student/package" />
       <q-btn v-if="currentUser?.value?.student?.contentUrlCode && currentUser?.value?.student?.contentUrlCni" icon="list" flat label="Liste des auto-écoles" to="/student/driving_school/list" />
-      <q-space />
       <q-btn @click="logoutUser" icon="logout" flat label="Déconnexion" />
     </q-toolbar>
   </q-header>

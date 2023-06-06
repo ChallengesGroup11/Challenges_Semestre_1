@@ -92,7 +92,7 @@ const changeStatus = async (id: string) => {
       <thead>
         <tr>
           <th colspan="13">
-            <div class="text-h4 q-ml-md">
+            <div class="text-h4 q-ml-md" color="primary">
               Liste des students
               <q-btn class="float-right" color="positive" text-color="white" icon="add" @click="addStudent()" />
             </div>
@@ -139,4 +139,10 @@ const changeStatus = async (id: string) => {
   </div>
 </template>
 
-<style></style>
+<style>
+
+.text-h4 {
+  color: primary;
+}
+
+</style>

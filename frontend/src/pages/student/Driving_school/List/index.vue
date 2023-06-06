@@ -50,8 +50,7 @@ const showAvailability = (id: any) => {
 </script>
 
 <template>
-  <q-page>
-    <div class="container">
+    <div class="container-package">
       <div class="row">
         
         <q-input class="col-6" v-model="filterVille.value" label="Ville" outlined />
@@ -79,11 +78,10 @@ const showAvailability = (id: any) => {
       </q-card>
     </div>
     </div>
-  </q-page>
 </template>
 
 <style scoped>
-.container {
+.container-package {
   margin-top: 20px;
 }
 
