@@ -33,8 +33,8 @@ const getUser = async () => {
 }
 
 const loadData = async () => {
-  // state.monitor = await ApiService.fetchbById(API_URL.STUDENTS, domUtil.extractIdRouter())
-
+  // Mattéo : Requete qui récupère les infos de l'élève ud monitor en connecter
+  // LE QUERY BUILDER EST DANS MONITOR REPOSITORy et le controller c'est GetStudentByMonitorController
   return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/monitors/` + + currentUser.value?.monitor.id + `/student`, {
     method: "GET",
     headers: {
@@ -55,9 +55,7 @@ const loadData = async () => {
 
 loadData()
 
-// const state = reactive ({
-//   monitor:
-// })
+
 </script>
 <template>
   <div>
