@@ -77,7 +77,7 @@ loadData()
     <q-toolbar inset>
       <q-btn icon="home_filled" flat label="Home" to="/monitor" />
       <q-btn icon="person" flat label="Mon profil" to="/monitor/profil" />
-      <q-btn icon="people" flat label="Mes élèves" to="/monitor/students" />
+      <q-btn icon="people" flat label="Mes élèves" to="/monitor/student" />
       <q-space />
       <q-btn @click="logoutUser" icon="logout" flat label="Déconnexion" />
     </q-toolbar>

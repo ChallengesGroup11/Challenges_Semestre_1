@@ -49,6 +49,20 @@ class MonitorRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findStudentByMonitor($id)
+    {
+        $qb = $this->createQueryBuilder('m')
+            ->select('u.firstname', 'u.lastname', 'u.email','b.comment','b.slotBegin','b.slotEnd','b.statusValidate','b.statusDone')
+            ->join('m.bookings', 'b')
+            ->join('b.studentId', 's')
+            ->join('s.userId', 'u')
+            ->where('m.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery();
+
+        return $qb->execute();
+    }
+
 //    /**
 //     * @return Monitor[] Returns an array of Monitor objects
 //     */
