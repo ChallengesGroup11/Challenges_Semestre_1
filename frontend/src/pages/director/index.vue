@@ -138,20 +138,23 @@ const editAutoEcole = (id: string) => {
 
 <template>
   <div>
-    <h1>Directeur</h1>
-    <div class="q-pa-md  ">
+    <div class="q-pa-md">
       <div class=" row ">
-        <q-card class="my-card q-ma-lg col">
+        <q-card class="my-card q-ma-lg col bg-primary" >
           <q-card-section class="q-pa-md col">
-            <div class="text-h4"> {{ currentUser.value?.firstname }} {{ currentUser.value?.lastname }} 
-              <!-- <q-btn size="sm"
-                round color="warning" @click="editer(currentUser.value?.id)" icon="edit"></q-btn> -->
-              <q-icon v-if="currentUser.value?.director?.drivingSchoolId" name="o_check_circle" color="green" size="2em" />
-              <q-icon v-else name="o_close_circle" color="red" size="2em" />
+            <div color="white" class="text-h4"> {{ currentUser.value?.firstname }} {{ currentUser.value?.lastname }} 
+              <q-icon v-if="currentUser.value?.director?.drivingSchoolId" name="o_check_circle" color="green"  />
+              <q-icon v-else name="o_cancel" color="red" />
               </div>
-              <div class="text-h6">{{ currentUser.value?.email }}</div>
+            <div class="container-index">
 
-            <div class="container">
+              <div v-if="currentUser.value?.email" class="container-infos">
+                <q-icon name="email" class="color-icon" size="2em" />
+                <span>
+                  <p class="text-infos">{{ currentUser.value?.email }}</p>
+                </span>
+              </div>
+
               <div class="text-center q-mt-lg" v-if="!currentUser.value?.director?.drivingSchoolId">
                 <q-btn label="Ajouter votre auto-ecole" push size="md" @click='addKbisAndSiret(currentUser.value.id)'
                   color="secondary" icon="add" />
@@ -160,14 +163,14 @@ const editAutoEcole = (id: string) => {
               <div v-if="currentUser.value.director?.drivingSchoolId" class="container-infos">
                 <q-icon name="directions_car" class="color-icon" size="2em" />
                 <span v-if="currentUser.value.director?.drivingSchoolId?.name">
-                  <p>{{ currentUser.value.director.drivingSchoolId.name }}</p>
+                  <p class="text-infos">{{ currentUser.value.director.drivingSchoolId.name }}</p>
                 </span>
               </div>
 
               <div v-if="currentUser.value.director?.drivingSchoolId" class="container-infos">
                 <q-icon name="location_on" class="color-icon" size="2em" />
                 <span v-if="currentUser.value.director?.drivingSchoolId?.address && currentUser.value.director?.drivingSchoolId?.zipcode && currentUser.value.director?.drivingSchoolId?.city">
-                  <p>{{ currentUser.value.director.drivingSchoolId.address }}, 
+                  <p class="text-infos">{{ currentUser.value.director.drivingSchoolId.address }}, 
                     {{ currentUser.value.director.drivingSchoolId.zipcode }} {{ currentUser.value.director.drivingSchoolId.city }}
                   </p>
                 </span>
@@ -178,24 +181,24 @@ const editAutoEcole = (id: string) => {
               <div v-if="currentUser.value.director?.drivingSchoolId" class="container-infos">
                 <q-icon name="phone" class="color-icon" size="2em" />
                 <span v-if="currentUser.value.director?.drivingSchoolId?.phoneNumber">
-                  <p>{{ currentUser.value.director.drivingSchoolId.phoneNumber }}</p>
+                  <p class="text-infos">{{ currentUser.value.director.drivingSchoolId.phoneNumber }}</p>
                 </span>
               </div>
 
               <div v-if="currentUser.value.director?.drivingSchoolId" class="container-infos">
-                N° SIRET
+                <p class="text-infos">N° SIRET</p>
                 <span v-if="currentUser.value.director?.drivingSchoolId?.siret">
                   <q-icon style="vertical-align: text-top" size="sm" color="positive" name="check" />
                 </span>
               </div>
               <div v-if="currentUser.value.director?.drivingSchoolId" class="container-infos">
-                N° Kbis
+                <p class="text-infos">N° Kbis</p>
                 <span v-if="currentUser.value.director?.drivingSchoolId?.contentUrl">
                   <q-icon style="vertical-align: text-top" size="sm" color="positive" name="check" />
                 </span>
               </div>
               <q-btn label="Modifier l'auto école" push size="md"
-                @click='editAutoEcole(currentUser.value.director?.drivingSchoolId.id)' color="positive" icon="add" />
+                @click='editAutoEcole(currentUser.value.director?.drivingSchoolId.id)' class="btn-primary" />
             </div>
           </q-card-section>
         </q-card>
@@ -214,13 +217,8 @@ const editAutoEcole = (id: string) => {
 </template>
 
 <style lang="scss" scoped>
-// .my-card {
-//   max-width: 400px;
-//   min-width: 300px;
-// }
 
-
-.container {
+.container-index {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -233,7 +231,22 @@ const editAutoEcole = (id: string) => {
 }
 
 .color-icon {
+  font-size: 8px;
+  margin-right: 8px;
   color: #E76F51;
+}
+
+.text-infos {
+  font-size: 24px;
+  margin: 0;
+  font-weight: bold;
+  color: whitesmoke;
+}
+
+.btn-primary {
+  margin-top: 8px;
+  background-color:  #9999C3;
+  color: whitesmoke;
 }
 </style>
 

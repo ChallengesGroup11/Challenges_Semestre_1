@@ -96,7 +96,7 @@ loadData()
 </script>
 
 <template>
-  <div class="container">
+  <div>
     <h1>Monitor</h1>
     <h2>Mon auto-école: {{ state.drivingSchoolName }}</h2>
     <h2>Nombre de réservations à confirmer: {{ state.ListBookingToConfirm.length }}</h2>

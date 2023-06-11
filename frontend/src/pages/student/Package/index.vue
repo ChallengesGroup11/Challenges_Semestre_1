@@ -40,13 +40,12 @@ const payement = (item: any) => {
 
 
 <template>
-  <q-page>
-    <div class="row">
+    <div class="row container-package">
       <q-card v-for="item in packageItem.value" :key="item.id" class="my-card q-ma-lg col bg-secondary text-white">
         <q-card-section>
           <div class="text-h4"> {{ item.name }} </div>
           <hr/>
-          <div class="text-h4 text-center mt-2">
+          <div class="text-h4 text-center mt-8">
             {{ item.nbCredit }} Crédits *
           </div>
           <div class="text-h10 text-center mt-8">
@@ -56,17 +55,34 @@ const payement = (item: any) => {
             {{ item.price }} €
           </div>
           <q-btn label="Acheter" @click="payement(item)" class="btn-primary" ></q-btn>
+
+          <p class="mt-2 text-center">
+            <small>
+            *Deux crédits = Une heures de conduites 
+            </small>
+          </p>
         </q-card-section>
 
       </q-card>
     </div>
-  </q-page>
 </template>
 
 <style scoped>
-.row {
+
+.container-package {
+  display: flex;
+  justify-content: center;
+  height: 90vh;
   margin-top: 20px;
   margin-bottom: 20px;
+  align-items: center;
+}
+.row {
+  /* height: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  align-items: center; */
+  width: 100%;
 }
 
 .my-card {
@@ -75,7 +91,7 @@ const payement = (item: any) => {
 }
 
 .text-h4 {
-  font-size: 24px;
+  font-size: 38px;
   font-weight: bold;
   margin-bottom: 10px;
 }
@@ -98,12 +114,13 @@ const payement = (item: any) => {
 }
 
 .btn-primary {
-  background-color: #1e88e5;
+  background: #9999C3;
+
 }
 
 .text-price {
 font-weight: 700;
-font-size: 64px;
+font-size: 96px;
 line-height: 150px;
 color: #E76F51;
 -webkit-text-stroke: 2px whitesmoke
