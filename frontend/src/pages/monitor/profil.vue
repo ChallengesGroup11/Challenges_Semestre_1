@@ -15,6 +15,7 @@ const fn = {
     await ApiService.patch("bookings", {
       id: booking.id,
       statusValidate: true,
+      comment : booking.comment,
     }),
       await Promise.all([
         await ApiService.patchDecrementCountCredit(booking.studentId[0].split("/")[2], {
@@ -33,7 +34,6 @@ const fn = {
 }
 
 const loadData = () => {
-
   const bookingsDrivingSchool = useStoreUser().ListBooking
 
   const ListBookingOfCurrentMonitor = bookingsDrivingSchool.filter(
