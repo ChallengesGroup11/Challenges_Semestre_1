@@ -26,7 +26,7 @@ class DecrementCreditController extends AbstractController
       // $this->em->persist($drivingSchool);
       // $this->em->flush();
 
-      
+
 
       $parameters = json_decode($this->requestStack->getCurrentRequest()->getContent(), true);
       $numberCreditToDecrement = $parameters['countCredit'];

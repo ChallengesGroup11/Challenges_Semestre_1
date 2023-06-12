@@ -72,7 +72,7 @@ class Booking
     private ?\DateTimeInterface $slotEnd = null;
 
     #[ORM\Column(length: 255,nullable: true)]
-    #[Groups(['booking_get','get', 'booking_cget','driving_school_get'])]
+    #[Groups(['booking_get','get', 'booking_cget','driving_school_get','booking_write'])]
     private ?string $comment = null;
 
     #[ORM\Column]

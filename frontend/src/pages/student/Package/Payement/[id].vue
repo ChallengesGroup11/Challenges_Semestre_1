@@ -93,7 +93,7 @@ const OnSubmit = async (id: string | string[]) => {
     return
   }else {
     loading.value = false
-    await router.push('/student/profil')
+    await router.push('/student')
     viewNotif('thumb_up', 'green-4', data.message, 'white', 'top-right')
   }
 }
