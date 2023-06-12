@@ -74,7 +74,7 @@ const onSubmit = async () => {
     formData.append("phoneNumber", user.phone_number)
     try {
       isLoading.value = true
-      const checked = await fetch(`${import.meta.env.VITE_KYC_URL}/director`, {
+      const checked = await fetch(`${import.meta.env.VITE_KYC_URL}/api/director`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },

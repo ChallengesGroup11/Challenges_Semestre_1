@@ -78,7 +78,7 @@ const onSubmit = async () => {
     }
     try {
       isLoading.value = true
-      const checked = await fetch(`${import.meta.env.VITE_KYC_URL}/director`, {
+      const checked = await fetch(`${import.meta.env.VITE_KYC_URL}/api/director`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
