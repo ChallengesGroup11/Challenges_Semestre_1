@@ -15,7 +15,7 @@ const fn = {
     await ApiService.patch("bookings", {
       id: booking.id,
       statusValidate: true,
-      comment : booking.comment,
+      comment: booking.comment,
     }),
       await Promise.all([
         await ApiService.patchDecrementCountCredit(booking.studentId[0].split("/")[2], {
@@ -62,36 +62,39 @@ loadData()
   <div>
     <h1>Mon profil</h1>
     <h2>Bonjour {{ state.name }}</h2>
+
     <h2>Mes créneaux</h2>
+    <q-card>
+      <h3>Créneaux passés à finaliser ({{ state.ListBookingToValidate.length }})</h3>
+      <div class="row">
+        <q-card v-for="bookingToValidate in state.ListBookingToValidate" class="container-card col-3">
+          <q-chip class="q-my-lg">
+            {{ moment(bookingToValidate.slotBegin).locale("fr").format("DD/MM/YYYY à hh:ss") }} -
+            {{ moment(bookingToValidate.slotEnd).format("hh:ss") }}
+          </q-chip>
 
-    <h3>Créneaux passés à finaliser ({{ state.ListBookingToValidate.length }})</h3>
-    <div class="row">
-      <q-card v-for="bookingToValidate in state.ListBookingToValidate" class="container-card col-3">
-        <q-chip class="q-my-lg">
-          {{ moment(bookingToValidate.slotBegin).locale("fr").format("DD/MM/YYYY à hh:ss") }} -
-          {{ moment(bookingToValidate.slotEnd).format("hh:ss") }}
-        </q-chip>
-
-        <q-input type="textarea" label="commentaire" outlined v-model="bookingToValidate.comment" />
-        <q-btn flat label="Confirmer" color="primary" @click="fn.validateBooking(bookingToValidate)" />
-      </q-card>
-    </div>
-
-    <h3>Créneaux à venir({{ state.ListBookingInFuture.length }})</h3>
-    <div class="row">
-      <q-card v-for="bookingInFuture in state.ListBookingInFuture" class="container-card col-3">
-        <q-chip class="q-my-lg">
-          {{ moment(bookingInFuture.slotBegin).locale("fr").format("DD/MM/YYYY à hh:ss") }} -
-          {{ moment(bookingInFuture.slotEnd).format("hh:ss") }}
-        </q-chip>
-        <q-btn
-          flat
-          label="Libérer le créneau"
-          color="primary"
-          @click="fn.deleteBookingSlotByTheMonitor(bookingInFuture)"
-        />
-      </q-card>
-    </div>
+          <q-input type="textarea" label="commentaire" outlined v-model="bookingToValidate.comment" />
+          <q-btn flat label="Confirmer" color="primary" @click="fn.validateBooking(bookingToValidate)" />
+        </q-card>
+      </div>
+    </q-card>
+    <q-card class="mt-3">
+      <h3>Créneaux à venir({{ state.ListBookingInFuture.length }})</h3>
+      <div class="row">
+        <q-card v-for="bookingInFuture in state.ListBookingInFuture" class="container-card col-3">
+          <q-chip class="q-my-lg">
+            {{ moment(bookingInFuture.slotBegin).locale("fr").format("DD/MM/YYYY à hh:ss") }} -
+            {{ moment(bookingInFuture.slotEnd).format("hh:ss") }}
+          </q-chip>
+          <q-btn
+            flat
+            label="Libérer le créneau"
+            color="primary"
+            @click="fn.deleteBookingSlotByTheMonitor(bookingInFuture)"
+          />
+        </q-card>
+      </div>
+    </q-card>
   </div>
 </template>
 

@@ -97,7 +97,7 @@ loadData()
 
 <template>
   <div>
-    <h1>Monitor</h1>
+    <h1>Tableau de bord</h1>
     <h2>Mon auto-école: {{ state.drivingSchoolName }}</h2>
     <h2>Nombre de réservations à confirmer: {{ state.ListBookingToConfirm.length }}</h2>
     <q-table
@@ -108,6 +108,7 @@ loadData()
       :columns="state.ListColumn"
       row-key="id"
       :loading="state.isLoading"
+      class="mx-6"
     >
       <template v-slot:top>
         <template v-if="state.ListCurrentItemSelected[0]">

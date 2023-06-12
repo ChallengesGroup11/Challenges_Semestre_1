@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const router = useRouter()
+import moment from "moment"
 
 const currentUser = reactive({ value: [] })
 
@@ -80,23 +81,27 @@ const loadData = async () => {
 loadData()
 </script>
 <template>
-  <div>
-    <q-card v-for="email in Object.keys(state.students)" key="student" class="mb-3 mt-3">
-      <q-card-section>
-        <q-item-label header
-          >{{ state.students[email][0].firstname }} {{ state.students[email][0].lastname }} ({{ email }})</q-item-label
-        >
-      </q-card-section>
-
-      <q-separator />
+  <div class="px-8">
+    <h1>Créneaux passés</h1>
+    <q-card v-for="email in Object.keys(state.students)" key="student" class="mb-3 mt-3 flex">
+      <q-item-label header class="justify-start"
+        >{{ state.students[email][0].firstname }} {{ state.students[email][0].lastname }} ({{ email }})</q-item-label
+      >
 
       <q-card-section>
-        <q-item-label header>Slots</q-item-label>
         <q-item v-for="(slot, index) in state.students[email]" :key="slot.id">
           <q-item-section>
-            <span> {{ index + 1 }} :</span>
-            <q-item-label>{{ slot.date }}</q-item-label>
-            <q-item-label>{{ slot.comment }}</q-item-label>
+            <q-card>
+              <q-card-section>
+                <div class="flex justify-start">
+                  <div class="mr-3">
+                    <strong>{{ index + 1 }}: </strong>
+                  </div>
+                  <div>{{ moment(slot.slotBegin).format("DD/MM/YYYY hh:mm") }}</div>
+                </div>
+                <q-item-label class="border-2 radius-2 rounded-md">{{ slot.comment }}</q-item-label>
+              </q-card-section>
+            </q-card>
           </q-item-section>
         </q-item>
       </q-card-section>
