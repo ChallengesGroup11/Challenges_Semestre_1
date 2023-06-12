@@ -1,6 +1,4 @@
 <script setup lang="ts">
-console.log(3)
-
 useHead({
   title: "Default Title",
   meta: [{ name: "description", content: "Default Content" }],

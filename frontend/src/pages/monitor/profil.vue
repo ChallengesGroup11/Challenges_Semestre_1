@@ -6,7 +6,7 @@ import { ApiService } from "~/services/api"
 const state = reactive({
   name: useStoreUser().user.firstname + " " + useStoreUser().user.lastname,
   monitorId: useStoreUser().user.monitor.id,
-  ListBookingToValidate: [],
+  ListBookingToDone: [],
   ListBookingInFuture: [],
 })
 
@@ -14,7 +14,8 @@ const fn = {
   validateBooking: async (booking: any) => {
     await ApiService.patch("bookings", {
       id: booking.id,
-      statusValidate: true,
+      statusDone: true,
+      comment: booking.comment,
     }),
       await Promise.all([
         await ApiService.patchDecrementCountCredit(booking.studentId[0].split("/")[2], {
@@ -22,6 +23,7 @@ const fn = {
           countCredit: 2,
         }),
       ])
+      state.ListBookingToDone = state.ListBookingToDone.filter((item: any) => item.id !== booking.id)
   },
   deleteBookingSlotByTheMonitor: async (booking: any) => {
     await ApiService.patch("bookings", {
@@ -33,23 +35,23 @@ const fn = {
 }
 
 const loadData = () => {
-
   const bookingsDrivingSchool = useStoreUser().ListBooking
 
   const ListBookingOfCurrentMonitor = bookingsDrivingSchool.filter(
     (booking: any) => booking.monitorId[0] === `/monitors/${state.monitorId}`,
   )
 
-  state.ListBookingToValidate = ListBookingOfCurrentMonitor.filter(
+  state.ListBookingToDone = ListBookingOfCurrentMonitor.filter(
     (booking: any) =>
-      booking.statusValidate === false &&
+      booking.statusDone === false &&
+      booking.statusValidate === true &&
       moment(booking.slotBegin).isBefore(moment()) &&
       moment(booking.slotEnd).isBefore(moment()),
   ).sort((a: any, b: any) => moment(a.slotBegin).unix() - moment(b.slotBegin).unix())
 
   state.ListBookingInFuture = ListBookingOfCurrentMonitor.filter(
     (booking: any) =>
-      booking.statusValidate === false &&
+      booking.statusDone === false &&
       moment(booking.slotBegin).isAfter(moment()) &&
       moment(booking.slotEnd).isAfter(moment()),
   ).sort((a: any, b: any) => moment(a.slotBegin).unix() - moment(b.slotBegin).unix())

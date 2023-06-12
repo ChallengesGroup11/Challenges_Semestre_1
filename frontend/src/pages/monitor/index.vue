@@ -18,13 +18,6 @@ const ListColumn = [
     sortable: true,
     field: (row: any) => fn.formatDisplayDate(row.slotEnd),
   },
-  // {
-  //   name: "studentName",
-  //   label: "nom de l'élève",
-  //   align: "left",
-  //   sortable: true,
-  //   field: (row: any) => row.studentName,
-  // },
 ]
 
 const state = reactive({
@@ -44,6 +37,7 @@ const fn = {
     for (let i = 0; i < state.ListCurrentItemSelected.length; i++) {
       await ApiService.patch("bookings", {
         id: state.ListCurrentItemSelected[i].id,
+        statusValidate: true,
         monitorId: [`/monitors/${useStoreUser().user.monitor.id}`],
       })
       // update in useStoreUser the list of bookings with the new booking

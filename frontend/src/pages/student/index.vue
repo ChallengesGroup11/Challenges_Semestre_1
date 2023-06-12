@@ -69,23 +69,23 @@ loadData()
 <template>
   <div class="q-pa-md">
     <div class="row">
-     
+
 
       <q-card class="my-card q-ma-lg bg-secondary col">
         <q-card-section>
           <div class="text-h4">Mes crédits</div>
           <div v-if="currentUser?.value?.student" class="vertical text-counter">
-            <span v-if="currentUser?.value?.student?.countCredit !== null ">
+            <span v-if="currentUser?.value?.student?.countCredit !== null &&  currentUser?.value?.student?.countCredit > 0">
               {{ currentUser?.value?.student.countCredit }}
             </span>
             <span v-else class="vertical text-counter"> 0</span>
           </div>
           <div v-else class="vertical text-counter">0</div>
           <div>
-            <q-btn  
-              class="btn-primary" 
-              label="Acheter des crédits" 
-              push size="md" 
+            <q-btn
+              class="btn-primary"
+              label="Acheter des crédits"
+              push size="md"
               @click='redirectToBuyPackage()'
               :disable="!currentUser?.value?.student?.contentUrlCode && !currentUser?.value?.student?.contentUrlCni"
           />
@@ -104,10 +104,10 @@ loadData()
           </div>
           <span v-else class="vertical text-counter">0</span>
           <div>
-            <q-btn 
-              class="btn-primary" 
-              label="Réserver des heures" 
-              push size="md" 
+            <q-btn
+              class="btn-primary"
+              label="Réserver des heures"
+              push size="md"
               @click='redirectToDrivingSchoolList()'
               :disable="!currentUser?.value?.student?.contentUrlCode && !currentUser?.value?.student?.contentUrlCni"
                 />
@@ -156,7 +156,7 @@ loadData()
               size="md"
               @click='addCodeAndCni(currentUser.value.id)'
             />
-            <q-btn 
+            <q-btn
               class="btn-primary q-ml-md"
               label="Modifier mes informations"
               push

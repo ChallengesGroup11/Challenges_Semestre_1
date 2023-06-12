@@ -19,6 +19,7 @@ const viewNotif = (icon: any, color: string, message: string, textColor: string,
 }
 const data = {
   ListInitialBooking: [] as any[],
+  nameAutoEcole: "",
 }
 const state = reactive({ ListSlot: [] as Booking[], isShownModal: false, bookingClicked: {} as Booking })
 const fn = {
@@ -98,6 +99,7 @@ const loadData = async () => {
   const { params } = useRoute()
   const { id } = params
   const aData = await getListFreeSlot(id)
+  data.nameAutoEcole = aData.name;
   data.ListInitialBooking = R.clone(aData.bookings)
   makeListFreeBooking(data.ListInitialBooking)
 }
@@ -106,7 +108,7 @@ loadData()
 </script>
 
 <template>
-  <div class="container">
+  <div class="container-booking">
     <q-dialog v-model="state.isShownModal">
       <q-card>
         <q-card-section>
@@ -122,14 +124,20 @@ loadData()
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <h1 class="text-center">Disponibilités</h1>
-    <div class="row">
+    <h1 class="text-center">Les disponibilités pour l'auto école {{ data.nameAutoEcole }} </h1>
+    <div class="row" v-if="Object.keys(state.ListSlot).length > 0">
       <q-card v-for="day in Object.keys(state.ListSlot)" class="container-card col-3 m-2 bg-secondary text-white">
         <h2>{{ day }}</h2>
-        <q-chip clickable @click="fn.onClickBooking(slot)" v-for="slot in state.ListSlot[day]" class="q-my-lg btn-primary">
+        <q-chip clickable @click="fn.onClickBooking(slot)" v-for="slot in state.ListSlot[day]"
+          class="q-my-lg btn-primary">
           {{ moment(slot.slotBegin).format("hh:ss") }} -
           {{ moment(slot.slotEnd).format("hh:ss") }}
         </q-chip>
+      </q-card>
+    </div>
+    <div v-else>
+      <q-card class="container-card col-3 m-2 bg-secondary text-white">
+        <h2>Il n'y a pas de créneau disponible</h2>
       </q-card>
     </div>
   </div>
@@ -139,12 +147,13 @@ loadData()
 .container-card:first-child {
   gap: none !important;
 }
+
 .container-card {
   gap: 1;
 }
 
 .btn-primary {
-  background-color:  #9999C3;
+  background-color: #9999C3;
   color: whitesmoke;
   font-size: 16px;
   font-weight: bold;

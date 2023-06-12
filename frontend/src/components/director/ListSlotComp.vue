@@ -133,7 +133,7 @@ const fn = {
     state.isShownModalEditing = false
   },
   formatDisplayDate(date: moment.MomentInput) {
-    return moment(date).format("DD/MM/YYYY - hh:ss")
+    return moment(date).format("DD/MM/YYYY HH:ss")
   },
 
   async onClickSaveBooking() {
@@ -347,15 +347,29 @@ loadData()
           :disable="state.isLoading"
           label="Ajouter un créneau"
           @click="state.isShownModal = true"
+          class="mr-1"
         />
         <template v-if="state.currentItemSelected[0]">
-          <q-btn v-if="state.currentItemSelected" color="primary" label="Modifier" @click="fn.onClickModifyRow" />
-          <q-btn v-if="state.currentItemSelected" color="primary" label="Supprimer" @click="fn.onClickDeleteRow" />
+          <q-btn
+            v-if="state.currentItemSelected"
+            color="primary"
+            label="Modifier"
+            @click="fn.onClickModifyRow"
+            class="mr-1"
+          />
+          <q-btn
+            v-if="state.currentItemSelected"
+            color="primary"
+            label="Supprimer"
+            @click="fn.onClickDeleteRow"
+            class="mr-1"
+          />
           <q-btn
             v-if="state.currentItemSelected"
             color="primary"
             label="Liberer le créneau"
             @click="fn.onClickResetRow"
+            class="mr-1"
           />
         </template>
         <q-space />

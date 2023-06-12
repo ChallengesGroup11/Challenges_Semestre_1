@@ -41,6 +41,8 @@ class StudentRepository extends ServiceEntityRepository
     public function decrementCountCredit(Student $student,  $numberCreditToDecrement,  bool $flush = false): void
     {
         $student->setCountCredit($student->getCountCredit() - $numberCreditToDecrement);
+        $nbHour = $student->getNbHourDone();
+        $student->setNbHourDone($nbHour + 1);
         $this->getEntityManager()->persist($student);
         if ($flush) {
             $this->getEntityManager()->flush();
