@@ -88,7 +88,7 @@ const loadData = async () => {
   }
 
   await getUser()
-console.log(state.ListBookingToConfirm)
+  console.log(state.ListBookingToConfirm)
   state.ListRow = state.ListBookingToConfirm.map((item: any) => {
     return {
       id: item.id,
@@ -103,27 +103,16 @@ loadData()
 </script>
 
 <template>
-  <div>
-    <h1>Monitor</h1>
-    <h2>Mon auto-école: {{ state.drivingSchoolName }}</h2>
+  <div class="q-pa-md max-w-1280">
+
+    <h1>Mon auto-école: {{ state.drivingSchoolName }}</h1>
     <h2>Nombre de réservations à confirmer: {{ state.ListBookingToConfirm.length }}</h2>
-    <q-table
-      v-model:selected="state.ListCurrentItemSelected"
-      title="Créneaux à confirmer"
-      selection="multiple"
-      :rows="state.ListRow"
-      :columns="state.ListColumn"
-      row-key="id"
-      :loading="state.isLoading"
-    >
+    <q-table v-model:selected="state.ListCurrentItemSelected" title="Créneaux à confirmer" selection="multiple"
+      :rows="state.ListRow" :columns="state.ListColumn" row-key="id" :loading="state.isLoading">
       <template v-slot:top>
         <template v-if="state.ListCurrentItemSelected[0]">
-          <q-btn
-            v-if="state.ListCurrentItemSelected"
-            color="primary"
-            label="Prendre les créneaux"
-            @click="fn.handleTakingSlots"
-          />
+          <q-btn v-if="state.ListCurrentItemSelected" color="primary" label="Prendre les créneaux"
+            @click="fn.handleTakingSlots" />
         </template>
         <q-space />
         <q-input borderless dense debounce="300" color="primary">

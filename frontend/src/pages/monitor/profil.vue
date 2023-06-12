@@ -59,41 +59,61 @@ loadData()
 </script>
 
 <template>
-  <div>
-    <h1>Mon profil</h1>
-    <h2>Bonjour {{ state.name }}</h2>
-    <h2>Mes créneaux</h2>
+  <q-card class="q-pa-md m-4">
+    <q-card-section class="q-pa-md mr-4">
 
-    <h3>Créneaux passés à finaliser ({{ state.ListBookingToValidate.length }})</h3>
-    <div class="row">
-      <q-card v-for="bookingToValidate in state.ListBookingToValidate" class="container-card col-3">
-        <q-chip class="q-my-lg">
-          {{ moment(bookingToValidate.slotBegin).locale("fr").format("DD/MM/YYYY à hh:ss") }} -
-          {{ moment(bookingToValidate.slotEnd).format("hh:ss") }}
-        </q-chip>
+      <div>
+        <h1>Bonjour {{ state.name }}</h1>
+        <h2>Mes créneaux</h2>
 
-        <q-input type="textarea" label="commentaire" outlined v-model="bookingToValidate.comment" />
-        <q-btn flat label="Confirmer" color="primary" @click="fn.validateBooking(bookingToValidate)" />
-      </q-card>
-    </div>
+        <q-card class="q-mt-md bg-primary">
+          <q-card-section>
+            <h3 style="color: #E76F51; font-size: 1.5em">
+              Créneaux passés à finaliser ({{ state.ListBookingToValidate.length }})</h3>
+            <div class="row">
+              <q-card v-for="bookingToValidate in state.ListBookingToValidate" class="container-card col-3 bg-secondary">
+                <q-chip class="q-my-lg" style="background-color: #E76F51;">
+                  {{ moment(bookingToValidate.slotBegin).locale("fr").format("DD/MM/YYYY à hh:ss") }} -
+                  {{ moment(bookingToValidate.slotEnd).format("hh:ss") }}
+                </q-chip>
 
-    <h3>Créneaux à venir({{ state.ListBookingInFuture.length }})</h3>
-    <div class="row">
-      <q-card v-for="bookingInFuture in state.ListBookingInFuture" class="container-card col-3">
-        <q-chip class="q-my-lg">
-          {{ moment(bookingInFuture.slotBegin).locale("fr").format("DD/MM/YYYY à hh:ss") }} -
-          {{ moment(bookingInFuture.slotEnd).format("hh:ss") }}
-        </q-chip>
-        <q-btn
-          flat
-          label="Libérer le créneau"
-          color="primary"
-          @click="fn.deleteBookingSlotByTheMonitor(bookingInFuture)"
-        />
-      </q-card>
-    </div>
-  </div>
+                <q-input type="textarea" label="commentaire" outlined v-model="bookingToValidate.comment" class="m-4" />
+                <q-btn flat label="Confirmer" @click="fn.validateBooking(bookingToValidate)" class="btn-primary m-4" />
+              </q-card>
+            </div>
+          </q-card-section>
+        </q-card>
+
+
+        <q-card class="q-mt-md bg-primary">
+          <q-card-section>
+            <h3 class="q-mb-md" style="color: #E76F51; font-size: 1.5em">
+              Créneaux à venir ({{ state.ListBookingInFuture.length }})</h3>
+            <div class="row gap-2">
+              <q-card v-for="bookingInFuture in state.ListBookingInFuture"
+                class="container-card col-3 bg-secondary rounded-2">
+                <q-chip class="q-my-lg rounded-2" style="background-color: #E76F51;">
+                  {{ moment(bookingInFuture.slotBegin).locale("fr").format("DD/MM/YYYY à hh:ss") }} -
+                  {{ moment(bookingInFuture.slotEnd).format("hh:ss") }}
+                </q-chip>
+                <q-btn flat label="Libérer le créneau" class="btn-primary m-4"
+                  @click="fn.deleteBookingSlotByTheMonitor(bookingInFuture)" />
+              </q-card>
+            </div>
+
+          </q-card-section>
+        </q-card>
+      </div>
+    </q-card-section>
+  </q-card>
 </template>
+
+<style lang="scss" scoped>
+.btn-primary {
+  background: #9999C3;
+
+}
+</style>
 
 <route lang="yaml">
 meta:
