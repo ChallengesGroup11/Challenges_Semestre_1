@@ -45,6 +45,10 @@ const loadData = async () => {
   emit("on-loaded", true)
 }
 
+const onClickTab = (tab: string) => {
+  router.push(`/director/${tab}`)
+}
+
 loadData()
 </script>
 
@@ -61,6 +65,7 @@ loadData()
       <q-btn icon="home_filled" flat label="Home" to="/director" />
       <q-btn icon="person" flat label="Liste des moniteurs" to="/director/monitor" />
       <q-btn icon="school" flat label="Créneaux" to="/director/slots" />
+      <q-space />
       <q-btn @click="logoutUser" icon="logout" flat label="Déconnexion" />
     </q-toolbar>
   </q-header>
