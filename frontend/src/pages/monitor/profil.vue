@@ -71,9 +71,9 @@ loadData()
         <q-card class="q-mt-md bg-primary">
           <q-card-section>
             <h3 style="color: #E76F51; font-size: 1.5em">
-              Créneaux passés à finaliser ({{ state.ListBookingToValidate.length }})</h3>
+              Créneaux passés à finaliser ({{ state.ListBookingToDone.length }})</h3>
             <div class="row">
-              <q-card v-for="bookingToValidate in state.ListBookingToValidate" class="container-card col-3 bg-secondary">
+              <q-card v-for="bookingToValidate in state.ListBookingToDone" class="container-card col-3 bg-secondary">
                 <q-chip class="q-my-lg" style="background-color: #E76F51;">
                   {{ moment(bookingToValidate.slotBegin).locale("fr").format("DD/MM/YYYY à hh:ss") }} -
                   {{ moment(bookingToValidate.slotEnd).format("hh:ss") }}
