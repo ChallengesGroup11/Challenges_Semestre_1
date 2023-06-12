@@ -5,6 +5,7 @@ import { log } from "console"
 import { Chart, PieController, ArcElement, Legend, Title } from "chart.js"
 import { useQuasar } from "quasar"
 import { done } from "nprogress"
+import { empty } from "ramda"
 
 const $q = useQuasar()
 const viewNotif = (icon: any, color: string, message: string, textColor: string, position: any) => {
@@ -60,7 +61,7 @@ const getUserBookingDone = async () => {
   )
     .then((response) => response.json())
     .then((data) => {
-      if (data.length != 0) {
+      if (data.length != 0 && !empty(data)) {
         ShowStat.value = true
       }
       statisticsChartUserDone.value = data
@@ -84,7 +85,7 @@ const getUserBookingValidate = async () => {
     .then((response) => response.json())
     .then((data) => {
       console.log(data)
-      if (data.length != 0) {
+      if (data.length != 0 && !empty(data)) {
         ShowStat.value = true
       }
       statisticsChartUserValidate.value = data

@@ -38,11 +38,9 @@ class SendEmailPasswordController extends AbstractController
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        if($_ENV['APP_ENV'] == 'dev'){
-            $routeChangeMdp = "http://localhost:4010/auth/ChangeMdp/" . $user->getId() . "?token=" . $user->getToken();
-        }else{
-            $routeChangeMdp = "https://drive-queen.turtletv.fr/auth/ChangeMdp/" . $user->getId() . "?token=" . $user->getToken();
-        }
+
+        $routeChangeMdp = "https://drive-queen.turtletv.fr/auth/ChangeMdp/" . $user->getId() . "?token=" . $user->getToken();
+
         // $routeChangeMdp = "http://localhost:4010/auth/ChangeMdp/" . $user->getId() . "?token=" . $user->getToken();
         $emailBody = $this->EmailBody($routeChangeMdp);
         // TODO : send email
