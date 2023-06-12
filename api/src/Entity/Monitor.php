@@ -41,7 +41,7 @@ use App\Controller\GetStudentByMonitorController;
             normalizationContext: ['groups' => ['monitor_cget']],
         ),
         new GetCollection(
-            uriTemplate: '/monitors/{id}/student/',
+            uriTemplate: '/monitors/{id}/student',
             controller: GetStudentByMonitorController::class,
             openapiContext: ['description' => 'Get all student by monitor'],
             normalizationContext: ['groups' => ['monitor_cget']],
