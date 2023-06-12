@@ -37,6 +37,7 @@ const fn = {
     for (let i = 0; i < state.ListCurrentItemSelected.length; i++) {
       await ApiService.patch("bookings", {
         id: state.ListCurrentItemSelected[i].id,
+        statusValidate: true,
         monitorId: [`/monitors/${useStoreUser().user.monitor.id}`],
       })
       // update in useStoreUser the list of bookings with the new booking

@@ -133,7 +133,7 @@ const fn = {
     state.isShownModalEditing = false
   },
   formatDisplayDate(date: moment.MomentInput) {
-    return moment(date).format("DD/MM/YYYY - hh:ss")
+    return moment(date).format("DD/MM/YYYY HH:ss")
   },
 
   async onClickSaveBooking() {
