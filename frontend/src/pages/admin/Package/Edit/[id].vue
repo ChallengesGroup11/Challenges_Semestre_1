@@ -49,11 +49,13 @@ const fetchOnePackage = async (id: string | string[]) => {
     })
 };
 
-const onSubmit = async (id: string, e: { preventDefault: () => void; }) => {
-  e.preventDefault();
+const onSubmit = async (id: string) => {
   const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/packages/` + id, {
     method: 'PATCH',
     headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'PATCH, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
       'Content-Type': 'application/merge-patch+json',
       'Authorization': 'Bearer ' + localStorage.getItem('token'),
     },
