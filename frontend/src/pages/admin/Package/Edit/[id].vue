@@ -50,30 +50,31 @@ const fetchOnePackage = async (id: string | string[]) => {
 };
 
 const onSubmit = async (id: string) => {
-  const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/packages/` + id, {
+  return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/packages/` + id, {
     method: 'PATCH',
     headers: {
-      'Access-Control-Allow-Headers':'*',
-      'Access-Control-Allow-Methods': 'PATCH, OPTIONS',
       'Content-Type': 'application/merge-patch+json',
       'Authorization': 'Bearer ' + localStorage.getItem('token'),
     },
     body: JSON.stringify(packageDS),
-  });
-  if (response.status === 400) {
-    viewNotif("thumb_down", "red", "Le package ne peut pas être modifié", "white", "top-right")
-    return
-  }
-  if (response.status === 500) {
-    viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
-    return
-  }
-  if (response.status === 200) {
-    viewNotif("thumb_up", "green", "Le package à bien été modifié", "white", "top-right")
-    await router.push('/admin/Package')
-  }
+  })
+    .then((response) => {
+      response.json()
+      viewNotif("thumb_up", "green", "Le package à bien été modifié", "white", "top-right")
+      router.push('/admin/Package')
 
-};
+    })
+    .catch((error) => {
+      if (error.status === 400) {
+        viewNotif("thumb_down", "red", "Le package ne peut pas être modifié", "white", "top-right")
+        return
+      }
+      if (error.status === 500) {
+        viewNotif("thumb_down", "red", "Une erreur est survenue", "white", "top-right")
+        return
+      }
+    })
+  };
 </script>
 
 <template>
