@@ -11,6 +11,7 @@ use App\Repository\PaymentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PaymentRepository::class)]
@@ -23,12 +24,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
     )
     ]
 )]
-#[GetCollection(normalizationContext: ['groups' => ['payment_cget']],security: 'is_granted("ADMIN")')]
+#[GetCollection(
+    normalizationContext: ['groups' => ['payment_cget']],
+    security: 'is_granted("ROLE_ADMIN")'
+    )]
 #[Get(normalizationContext: ['groups' => ['payment_get']])]
 #[Post(
     normalizationContext: ['groups' => ['payment_get']],
     denormalizationContext: ['groups' => ['payment_write']],
 )]
+#[Delete(security: 'is_granted("ROLE_ADMIN")')]
 class Payment
 {
     use Timer;

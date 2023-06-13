@@ -59,8 +59,8 @@ const fn = {
 const getUser = async () => {
   return fetch("https://localhost/me", {
     headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
   })
     .then((response) => response.json())
     .then((data) => {
@@ -76,7 +76,7 @@ const fetchMonitor = async () => {
   const res = fetch(`https://localhost/driving_schools/${idDrivingSchool}/allMonitor`, {
     headers: {
       accept: "application/ld+json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: "Bearer " + localStorage.getItem("token"),
     },
   })
     .then((response) => response.json())
