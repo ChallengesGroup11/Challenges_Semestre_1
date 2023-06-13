@@ -17,6 +17,14 @@ export namespace ApiService {
     },
   })
 
+  const apiPut = axios.create({
+    baseURL: import.meta.env.VITE_CHALLENGE_URL,
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+      'Content-Type': 'application/json',
+    },
+  })
+
   export const fetchbById = async (url: string, id: string) => {
     const response = await api.get(`${url}/${id}`)
     return response.data
@@ -32,8 +40,13 @@ export namespace ApiService {
     return response.data
   }
 
+  export const put = async (url: string, data: any) => {
+    const response = await apiPut.put(`${url}/${data.id}`, data)
+    return response.data
+  }
+
   export const patch = async (url: string, data: any) => {
-    const response = await apiPatch.patch(`${url}/${data.id}`, data)
+    const response = await apiPatch.put(`${url}/${data.id}`, data)
     return response.data
   }
 

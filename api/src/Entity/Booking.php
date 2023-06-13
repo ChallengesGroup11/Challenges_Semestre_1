@@ -14,13 +14,23 @@ use App\Entity\Traits\Timer;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Put;
 use Symfony\Component\Serializer\Annotation\Groups;
 use App\Controller\BookingPatchController;
 
 #[ORM\Entity(repositoryClass: BookingRepository::class)]
 // @ApiResource(attributes={"normalization_context": {"groups"={"todolist"}, "enable_max_depth"=true}})
 #[ApiResource(operations: [
-    new Patch (
+    // new Patch (
+    //     uriTemplate: '/bookings/student/{id}',
+    //     controller: BookingPatchController::class,
+    //     openapiContext: [
+    //         'summary' => 'Editer un créneau',
+    //     ],
+    //     denormalizationContext: ['groups' => ['booking_write']],
+    //     name: 'booking_patch'
+    // ),
+    new Put (
         uriTemplate: '/bookings/student/{id}',
         controller: BookingPatchController::class,
         openapiContext: [

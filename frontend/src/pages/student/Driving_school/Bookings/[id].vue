@@ -30,7 +30,7 @@ const fn = {
   takeBooking: async (booking: Booking) => {
     try {
       console.log(useStoreUser().user)
-      await ApiService.patch("bookings/student", { studentId: [`/students/${useStoreUser().user.student.id}`], id: booking.id })
+      await ApiService.put("bookings/student", { studentId: [`/students/${useStoreUser().user.student.id}`], id: booking.id })
       data.ListInitialBooking = data.ListInitialBooking.filter((item: any) => item.id !== booking.id)
       viewNotif("thumb_up", "green", "Réservation effectuée", "white", "top-right")
       makeListFreeBooking(data.ListInitialBooking)
