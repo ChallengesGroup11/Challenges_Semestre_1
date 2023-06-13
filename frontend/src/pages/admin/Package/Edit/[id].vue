@@ -53,7 +53,7 @@ const onSubmit = async (id: string) => {
   return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/packages/` + id, {
     method: 'PATCH',
     headers: {
-      'Content-Type': 'application/merge-patch+json',
+      'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + localStorage.getItem('token'),
     },
     body: JSON.stringify(packageDS),
