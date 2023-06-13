@@ -53,9 +53,8 @@ const onSubmit = async (id: string) => {
   const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/packages/` + id, {
     method: 'PATCH',
     headers: {
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers':'*',
       'Access-Control-Allow-Methods': 'PATCH, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
       'Content-Type': 'application/merge-patch+json',
       'Authorization': 'Bearer ' + localStorage.getItem('token'),
     },
@@ -84,13 +83,13 @@ const onSubmit = async (id: string) => {
         <h2 class="text-h5 w-100 q-mb-xl">Editer un package</h2>
         <q-form @submit="onSubmit(packageDS.id)" class="q-gutter-md">
           <q-input v-model="packageDS.name" label="Nom du package" filled lazy-rules
-            :rules="[((val: string | any[]): string | any[]) => val && val.length > 0 || 'Veuillez écrire quelque chose']" />
+            :rules="[val => val && val.length > 0 || 'Veuillez écrire quelque chose']" />
           <q-input filled v-model="packageDS.description" label="Description" lazy-rules
-            :rules="[((val: string | any[]): string | any[]) => val && val.length > 0 || 'Veuillez écrire quelque chose']" />
+            :rules="[val => val && val.length > 0 || 'Veuillez écrire quelque chose']" />
           <q-input filled v-model.number="packageDS.nbCredit" label="Nombre de crédit" lazy-rules
-            :rules="[((val: number): number) => val && val > 0 || 'Veuillez écrire quelque chose']" />
+            :rules="[val => val && val > 0 || 'Veuillez écrire quelque chose']" />
           <q-input filled v-model.number="packageDS.price" label="Prix" lazy-rules
-            :rules="[((val: number): number) => val && val > 0 || 'Veuillez écrire quelque chose']" />
+            :rules="[val => val && val > 0 || 'Veuillez écrire quelque chose']" />
           <div>
             <q-btn label="Valider" type="submit" color="primary" />
           </div>
