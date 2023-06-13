@@ -32,7 +32,6 @@ const fetchOnePackage = async (id: string | string[]) => {
   return fetch(`${import.meta.env.VITE_CHALLENGE_URL}/packages/` + id,
     {
       headers: {
-        'Access-Control-Allow-Headers':'*',
         'Authorization': 'Bearer ' + localStorage.getItem('token'),
       }
     }
@@ -54,6 +53,7 @@ const onSubmit = async (id: string) => {
   const response = await fetch(`${import.meta.env.VITE_CHALLENGE_URL}/packages/` + id, {
     method: 'PATCH',
     headers: {
+      'Access-Control-Allow-Headers':'*',
       'Content-Type': 'application/merge-patch+json',
       'Authorization': 'Bearer ' + localStorage.getItem('token'),
     },
